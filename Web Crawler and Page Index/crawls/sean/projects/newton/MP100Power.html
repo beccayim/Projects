@@ -1,0 +1,724 @@
+<HTML>
+<HEAD>
+<TITLE>The Newton MessagePad 100 Power-Off Page</TITLE
+</HEAD>
+<BODY BGCOLOR=WHITE>
+
+<H1>The Newton MessagePad 100 Power-Off Page</H1>
+
+<p align="RIGHT"><i>To add to this document, please contact <a href="mailto:seanl@cs.umd.edu">Sean Luke (seanl@cs.umd.edu)</a></i>.
+
+<H2>The Problem</h2>
+
+<p>Every Newton MessagePad 100 eventually develops a maddening sickness where it turns itself off just after you turn it on.
+
+<p>The conditions involved are:
+
+<ul>
+<li>The newton will only exhibit this when the fore application demands a lot of heap memory (internal DRAM).  The Extras drawer, for example, causes this.  ScrollEx makes it even worse.  The Notepad only causes the problem when it is filled with lots of data, especially pictures.  For me, the Dates application (which is typically empty) does not cause the problem at all.
+<li>The newton does this only if it needs high power drain, such as that coming from a Flash RAM card.
+<li>The situation is known to occur with most forms of batteries, including Alkalines, Renewals, NiMH batteries, and the Apple rechargeable NiCad battery pack.
+<li>The situation does not occur as often when the batteries are alkaline and completely full (suggesting a voltage issue).
+<li>In the <b>initial</b> stage of the condition (the first year or so that it happens), the Newton will stay on so long as you hold down the power switch.  But in <b>later stages</b>, the Newton will power down even if the power switch is held down on startup.
+<li> The condition rarely, if ever, happens when the power supply is plugged in.
+<li> Repeated pressing of the power switch will eventually get you in, but it may take quite some time.
+<li> Apple has never acknowledged the problem.
+</ul>
+
+<H2>A Workaround</H2>
+
+<p>For the initial stage of the condition (see above), the workaround is to hold the power switch down, bring a low-memory application to the fore (Dates works for me, as it's totally empty), let go of the power switch (the Newton will turn itself of as usual), then press the power switch again.  And you're in!  Works every time.
+
+<p>For the later stage of the condition, where you cannot hold down the power switch to keep the Newton on, it turns out that if you plug in a serial cable (the Newton Keyboard works for me) and turn the Newton on, it will turn itself off as usual, then promptly bounce back on again!  You can then unplug the cable and go about your business.
+
+<H2>The Theory</H2>
+
+<p>It has been speculated that this problem is caused by problems in the power switch.  The Newton MP100 uses a startup sequence does <i>something</i> that checks the current power drain across the switch, comparing it with the power draw caused by the Newton, and the flash RAM and DRAM currently being drawn by the fore application.  If the Newton thinks there's not enough power, it turns itself off for some reason.  After considerable use, the Newton develops corrosion on the switch and possibly other contacts (in the battery compartment) which raise the resistance in the switch and cause enough voltage drop to fool the Newton into thinking it doesn't have enough juice.
+
+<p>This speculation was not thought up by me.  It was brought up by an early poster, who actually cracked his MP100 open and cleaned the switch, reporting a complete elimination of the problem.  I've done the same (see below), and so far have had success.
+
+<p>Another possible problem may be switch bounce -- the switch incorrectly indicates two hits.  However, this is unlikely as (1) the Newton never turns itself <i>on</i> after you turn it <i>off</i>, and (2) the situation is clearly affected by memory consumption (see above).
+
+<H2>The Solution (?)</H2>
+<p> As we have no known software workaround for this, the only possible solution we are aware of, if it works at all, is to crack the MP100 open and clean the switch contacts.  This has worked in at least two cases, including mine. <b>Opening your Newton is not for the faint of heart.  On the other hand, this model now costs less than $100 used. <FONT COLOR=BLUE>These instructions apply ONLY to the MP100.  Opening an MP110, 120, or 130 can destroy them as soon as you pop open the case.</FONT></b>
+
+<p><b><FONT COLOR=RED>WARNING: I will not be responsible for any damage or loss of information resulting from breaking open your Newton MessagePad using these instructions  -- they are provided AS IS, with no warranty or guarantee of any kind.  They may be totally false.  I will not be responsible if you follow them to the letter and your MessagePad suffers damage or information loss as a result!</FONT></b>. 
+
+<p>You should perform this operation only if you're really desperate, or if you recognize the danger of opening the device, and are still willing to explore the device, even if this procedure doesn't solve your problem.  It would also really help if you performed this with someone with a fair amount of delicate computer or electronics experience.  To perform this operation, you'll need:
+<ul>
+<li>A Philips jeweler's-size screwdriver (for some <i>very</i> small screws)
+<li>Containers to hold different kinds of screws, and paper and pencil to write down screw types and locations.
+<li>A contact cleaning solution which doesn't damage plastic or rubber; we use Isopropyl Rubbing Alcohol, but you might be able to get something better at an electronics supply store.
+<li>A swab (a Qtip is fine)
+<li>A thin, hard, unbendable, flat, blunt object (perhaps a large flat screwdriver) to pry along the external seam of the MessagePad to crack it open without any damage to the plastic.
+<li>Fine sandpaper and/or steel wool
+</ul>
+
+<p>The zeroth step is to BACK YOUR MESSAGEPAD UP, then remove the battery, the battery door, any PCMCIA card, and the stylus.  You may want to remove the backup battery as well, though we've performed this operation successfully on two MessagePads without removing it.  You may also want to perform last rights: your MessagePad may not survive this.
+
+<p>The first step is to open your MessagePad up.  There are two stages to this: first, removing all the screws from the outside body and removing the case, and secondly, removing internal screws to open the assembly and get at the switch.
+
+<p>In order to open the MessagePad, you'll need to remove EIGHT black screws.  Two long screws are along the back of the body.  Three medium screws are visible when you remove the battery cover.  Two small screws are visible when you remove the battery case.  And one very tiny screw is hidden behind a small circular sticker covering a hole next to the PCMCIA card slot.  The sticker looks like part of the plastic case, but it isn't.  Carefully pry the sticker out, doing as little damage as you can to it (you'll need to put it back on again!) and remove the screw behind it.
+
+<p>There is an additional screw you can see if you press down the PCMCIA eject button.  This screw does not hold the body case together; you don't need to remove it (which is good, as it's tough to get out!)
+
+<p>Next, you need to pry the case open.  The case is held together by small tabs along the side which click into place, holding the top and bottom pieces together.  The stylus-side of the case is easily cracked open, but the switch-side is tough.  Just carefully go through the seam on the switch side, prying as you go.  You'll get it; just give it time.  Ultimately, you'll be able to pop the back of the MessagePad off.
+
+<p>Inside there are many screws, but they're of three basic types:
+<ul>
+<li>Black screws which hold the assembly together.  Note one screw is located behind the PCMCIA eject switch.  I don't recall if you need to remove this.  Pray that you don't.
+<li>Flat brass screws which hold the screen to the assembly.
+<li>Two bulbous brass screws
+</ul>
+
+<p>I do not remember which screws you absolutely need to remove; I've always removed them all, except <i>possibly</i> (my memory fails me) the nasty one behind the PCMCIA card eject switch.  When removing these screws, write down where they were located, and <b>store them in a different place than the screws used for the external case</b>.  Most have a unique symbol (a filled or hollow arrow, or a triangle) next to the hole indicating the type of screw which goes there.  Take care to study this, so you can get the right screws back in the right places!  <b>You have been warned.</b>
+
+<p>The MessagePad comes in several layers.  On top, which you've removed, is the back external housing.  Then comes the circuit board.  Under this is a layer which handles subcomponents like the PCMCIA card housing.  Under this is the screen.  Last comes the external front housing.
+
+<p>Next, you'll want to separate the front housing from the internals.  Note that there is a tiny tab along the switch side which clicks in, holding the circuit board to the external housing.  You'll need to carefully pry that tab open in order to completely remove the front case.  Also note that the speaker is embedded in the front case, with wires that connect it to the circuit board. Be careful not to break these!
+
+<p>In separating the circuit board from the PCMCIA housing and the screen, take <b>extreme caution</b> in not damaging the flimsy film-ribbon which connects them electrically.  You cannot remove this ribbon!  So you'll have to deal with this umbillical cord as you go.  The circuit board also is connected to the battery contact spring things; you'll need to pop them out of the battery compartment area in order to remove the board. 
+
+<p><font color="red">Note:</font> A loyal reader wrote in with the following information about the ribbon:
+
+<blockquote>I just read your article about cleaning the MP100 and wanted to let you know that you can remove the ribbon cable from the logic board so that you can open up the whole thing and make the cleaning process easier.  The ribbon cable is connected to the logic board using what is called a ZIF connector.  ZIF is for Zero Insertion Force.  To remove the cable from the board all you need to do is carefully slip the two white tabs forward, out from the black bar (in the direction of the cable) that the cable slides into.  This releases the cable and it slides right out.  To put the cable back just slide it in using very little force (Zero Insertion Force) and slide the tabs back into place to lock the cable down.</blockquote>
+
+<p>The actual electrical switch component is a tiny switch located on the UNDERSIDE of the circuit board, which is pushed by the big external switch button.  You cannot open it up; the best you can do is to put contact cleaner inside it and rub back and forth by pushing the switch up and down.  The way you get the cleaner inside it is by pushing the switch all the way to one side, which exposes a hole, then dripping the cleaner inside from your Qtip.  Don't be frugal with the liquid.  There are holes on both sides of the switch.  Once you have added cleaner to the inside of the switch, rub the switch back and forth many times.  Repeat.  Perhaps more than once.
+
+<p>Once this is complete, reassemble the MessagePad in reverse order as described above.
+
+<p>Lastly, for good measure, clean the battery spring contacts and the backup battery contacts with the steel wool and/or sandpaper.  Don't let the steel wool touch a live battery contact!  It'll spring into fire, even with this low of a voltage.
+
+<p> Try your MessagePad for a few days and see if it works.  <b>It worked great for us!</b>  Let me know.
+
+
+<H2>USENET History</H2>
+
+<p>These articles, posted to the USENET from 1995 to 1998, are all I've been able to find with regard to this problem.  Some time ago an article appeared discussing the association with the power switch, power resistance, and the startup sequence (hence my articles at the end of this list), but a search of <a http://www.dejanews.com>DejaNews</a> does not reveal this article; it may be from before 1994.  Let me know if you know where it is.  Also, I previously found one single article on Apple's Newton boards about this problem, but have since lost the URL, sorry.
+
+<TT><PRE>
+
+Re: Newton switches off!
+Author:                  Daniel Aharonoff
+Email:                  ilink@primenet.com
+Date:                  1995/03/29
+Forums:                  comp.sys.newton.misc
+
+In article &lt;3l9a4j$do1@pandora.sdsu.edu&gt; Andrew Wong
+&lt;wongs@rohan.sdsu.edu&gt; writes:
+&gt;From: Andrew Wong &lt;wongs@rohan.sdsu.edu&gt;
+&gt;Subject: Newton switches off!
+&gt;Date: 28 Mar 1995 15:31:31 GMT
+
+&gt;Check out this url:
+&gt;news:comp.sys.newton.misc
+&gt;I have an MP100, when ever I leave it at the Names screen and turn it
+&gt;off, the next time I switch it back on, it comes on and then
+&gt;automatically and immediatley swithces off again. This keeps on
+&gt;happening as long as it is on the Names list directory. I have to race
+&gt;with the Newton so that when I turn it on, I have a split second to tap
+&gt;the exit button before it turns off. As long as it was not left on the
+&gt;Names screen, this auto off does not happen. Any body have any ideas?
+
+&gt;Andrew
+
+
+I've noticed the same thing happening on my MP100. However I haven't been able
+to isolate it to the Names listing. I always thought that I kept the button
+down to long in duration and it quickly turned on and off.
+
+Are you sure that this not what is happening to you?
+
+Daniel
+
+
+
+
+
+Re: Newton switches off!
+Author:                  WONG YEN FERN
+Email:                  fba30308@leonis.nus.sg
+Date:                  1995/04/03
+Forums:                  comp.sys.newton.misc
+
+Andrew Wong (wongs@rohan.sdsu.edu) wrote:
+: Check out this url:
+: news:comp.sys.newton.misc
+: I have an MP100, when ever I leave it at the Names screen and turn it
+: off, the next time I switch it back on, it comes on and then
+: automatically and immediatley swithces off again. This keeps on
+: happening as long as it is on the Names list directory. I have to race
+: with the Newton so that when I turn it on, I have a split second to tap
+: the exit button before it turns off. As long as it was not left on the
+: Names screen, this auto off does not happen. Any body have any ideas?
+
+: Andrew
+
+Hey you have the same problem I am encountering as well. BUT the
+difference is that it not on the Names list. I notice that using the RAM
+card would have this problem. When I first bought the MP I didnt use the
+card and had not encountered such prob before until I use it. I am not
+too sure about this problem. I narrowed down to the apps that I installed
+in my MP but it still doesn't make sense!! :( Guru's wanna reply??
+
+Cheers
+
+
+
+Re: Newton Turns Off
+Author:                  Jeffrey Thomas Sheldon
+Email:                  jeff@tiger.lsu.edu
+Date:                  1995/06/15
+Forums:                  comp.sys.newton.misc
+
+: &gt; I turn Newton on, screen goes on, but almost immediately turns off.
+: &gt; If I do this repeatedly a number of times it stays on finally.
+
+: I was just about to post the same problem - its very disturbing!
+: Any Hints ????
+:  Thorsten
+
+So was I!!
+
+Apparently this is a common problem.  I have a MP100 w/ the 110 upgrade
+and call is OS fix (I think 3.4somethin').  Maybe it decided that on a
+certain day we'd all be affected :)
+
+-Jeff
+
+
+
+
+
+
+Re: Newton Turns Off
+Author:                  Andrew Templeman
+Email:                  andy@amtmtc.demon.co.uk
+Date:                  1995/06/16
+Forums:                  comp.sys.newton.misc
+
+In article &lt;3rqi5e$1be9@tiger3.ocs.lsu.edu&gt; jeff@tiger.lsu.edu (Jeffrey Thomas
+Sheldon) writes:
+&gt;: &gt; I turn Newton on, screen goes on, but almost immediately turns off.
+&gt;: &gt; If I do this repeatedly a number of times it stays on finally.
+&gt;
+&gt;: I was just about to post the same problem - its very disturbing!
+&gt;: Any Hints ????
+&gt;:  Thorsten
+&gt;
+&gt;So was I!!
+&gt;
+&gt;Apparently this is a common problem.  I have a MP100 w/ the 110 upgrade
+&gt;and call is OS fix (I think 3.4somethin').  Maybe it decided that on a
+&gt;certain day we'd all be affected :)
+&gt;
+
+I find this happens with the extras drawer and the calculator
+open when the battery is less than full power. Every time.
+
+----------------------------------------------------------------
+Andrew Templeman   *********************************************
+VMS programmer at work ---------&gt; a_templeman@morgns.demon.co.uk
+Mac user at home ----------------------&gt; andy@amtmtc.demon.co.uk
+----------------------------------------------------------------
+
+
+
+
+
+Re: MP 100 Problem - HELP!
+Author:                  Kevin Brislin
+Email:                  dkimchee@eworld.com
+Date:                  1995/12/15
+Forums:                  comp.sys.newton.misc
+
+In article &lt;30D04107.1580@sirius.com&gt;, funchess@sirius.com wrote:
+
+&gt; When turning ON my Messagepad 100, is sometimes comes On but
+&gt; then turns off right away. I have to then turn it BACK on - in which case it
+&gt; USUALY stays on.
+&gt;
+&gt; The occurs with battery and AC power. I have replaced the batteries and
+&gt; have used two  AD adapters.
+&gt;
+&gt; Any ideas?
+&gt;
+&gt;
+&gt; Frank
+
+Actually, I don't know of *any* MP100 that doesn't do this little trick. I
+think the technical explanation is power fluctuations, but the bottom line
+is that there isn't anything that can (or will) be done about it. It's
+just a minor glitch that doesn't affect anything.
+
+Kevin (dkimchee@eworld.com)
+
+
+
+
+
+Re: MP 100 Problem - HELP!
+Author:                  Frank / Juliet
+Email:                  funchess@sirius.com
+Date:                  1995/12/15
+Forums:                  comp.sys.newton.misc
+
+Kevin Brislin wrote:
+&gt;
+&gt; In article &lt;30D04107.1580@sirius.com&gt;, funchess@sirius.com wrote:
+&gt;
+&gt; &gt; When turning ON my Messagepad 100, is sometimes comes On but
+&gt; &gt; then turns off right away. I have to then turn it BACK on - in which case it
+&gt; &gt; USUALY stays on.
+&gt; &gt;
+&gt; &gt; The occurs with battery and AC power. I have replaced the
+batteries and
+&gt; &gt; have used two  AD adapters.
+&gt; &gt;
+&gt; &gt; Any ideas?
+&gt; &gt;
+&gt; &gt;
+&gt; &gt; Frank
+&gt;
+&gt; Actually, I don't know of *any* MP100 that doesn't do this little trick. I
+&gt; think the technical explanation is power fluctuations, but the bottom line
+&gt; is that there isn't anything that can (or will) be done about it. It's
+&gt; just a minor glitch that doesn't affect anything.
+&gt;
+&gt; Kevin (dkimchee@eworld.com)
+
+Is this little glitch fixed with MP120/2.0?
+
+Frank
+
+
+
+
+
+
+Won't Stay On!
+Author:                  Rick D. Wintheiser
+Email:                  rickw@individual.puug.pt
+Date:                  1996/04/07
+Forums:                  comp.sys.newton.misc
+
+Does anyone have an idea why the following is occurring:
+
+Turn on Newton, get start up screen and glimpse of application. Then
+newton turns off! I must go through this several times until it stays
+on. It is also intermittent so sometimes it happens and others not! I
+have an MP100 1.3 ROM and 2mb Apple Mem Card. Anyone with ideas would be
+most helpful? Apple told me to "reset" the Newton, but this does not
+help, only short term.
+
+
+
+
+
+
+
+Re: Won't Stay On!
+Author:                  PB4USKI
+Email:                  pb4uski@aol.com
+Date:                  1996/04/07
+Forums:                  comp.sys.newton.misc
+
+I have the same model and experience the same problem.  Newt goes spastic.
+Only found two solutions: tap or scribble on screen when the thing
+"flashes" sometimes catches it - or - reset.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+Does anyone have an idea why the following is occurring:
+
+Turn on Newton, get start up screen and glimpse of application. Then
+newton turns off! I must go through this several times until it stays
+on. It is also intermittent so sometimes it happens and others not! I
+have an MP100 1.3 ROM and 2mb Apple Mem Card. Anyone with ideas would be
+most helpful? Apple told me to "reset" the Newton, but this does not
+help, only short term.
+
+
+
+
+
+
+Re: Won't Stay On!
+Author:                  Christian Schweizer
+Email:                  cschweizer@access.ch
+Date:                  1996/04/08
+Forums:                  comp.sys.newton.misc
+
+&gt; Turn on Newton, get start up screen and glimpse of application. Then
+&gt; newton turns off! I must go through this several times until it stays
+&gt; on. It is also intermittent so sometimes it happens and others not! I
+&gt; have an MP100 1.3 ROM and 2mb Apple Mem Card. Anyone with ideas would be
+&gt; most helpful? Apple told me to "reset" the Newton, but this does not
+&gt; help, only short term.
+
+Same thing happend to my MP120 1.3. There's no known fix to that problem.
+I heard that this problem is somehow related to some corrupted internal
+Powerhandlers (whatever that exactly means).
+
+Christian Schweizer
+cschweizer@access.ch
+P.S. Please e-mail me as my server seems to sometimes lose messages
+
+
+
+
+Re: Won't Stay On!
+Author:                  Mike Jacobsen
+Email:                  mike@sineware.com
+Date:                  1996/04/08
+Forums:                  comp.sys.newton.misc
+
+&gt; &gt; Turn on Newton, get start up screen and glimpse of application. Then
+&gt; &gt; newton turns off! I must go through this several times until it stays
+&gt; &gt; on. It is also intermittent so sometimes it happens and others not! I
+&gt; &gt; have an MP100 1.3 ROM and 2mb Apple Mem Card. Anyone with ideas would be
+&gt; &gt; most helpful? Apple told me to "reset" the Newton, but this does not
+&gt; &gt; help, only short term.
+&gt;
+&gt; Same thing happend to my MP120 1.3. There's no known fix to that problem.
+&gt; I heard that this problem is somehow related to some corrupted internal
+&gt; Powerhandlers (whatever that exactly means).
+I have noticed that this only happens when I have left a package open when
+turning off the Newton or when it sleeps, leaving a package open. I have
+since stopped leaving packages open and have had no problems.
+
+Mike
+
+__________________________    Sine of the Times
+_________________________
+email: mike@sineware.com |-----------|||-----------|
+http://www.sineware.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~Innovation is our
+Passion~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+Re: Won't Stay On!
+Author:                  Mark Sumner
+Email:                  range@inlink.com
+Date:                  1996/04/08
+Forums:                  comp.sys.newton.misc
+
+Rick D. Wintheiser wrote:
+&gt;
+&gt; Does anyone have an idea why the following is occurring:
+&gt;
+&gt; Turn on Newton, get start up screen and glimpse of application. Then
+&gt; newton turns off! I must go through this several times until it stays
+&gt; on. It is also intermittent so sometimes it happens and others not! I
+&gt; have an MP100 1.3 ROM and 2mb Apple Mem Card. Anyone with ideas would be
+&gt; most helpful? Apple told me to "reset" the Newton, but this does not
+&gt; help, only short term.
+
+First off, are the batteries good?  Even if they're brand new, you might
+want to try the AC adapter or another set.  A single "bum" battery in
+the pack can easily give this behavior.
+
+If it persists, even when using another fresh set of batteries, try
+starting the Newton with the card out.  On occassion, I've had a card
+pull the power down at start up, causing the Newt to turn off.  If that
+fixes it, you can then power off and see if you can get the card to boot.
+
+Mark
+--
+Visit my home page at http://www.greyware.com/authors/Sumner
+or check out the DEVIL'S TOWER Preview page at
+http://www.inlink.com/~range
+
+
+
+
+
+Re: Won't Stay On!
+Author:                  John Elliott IV
+Email:                  iv@fuzzy.engr.sgi.com
+Date:                  1996/04/08
+Forums:                  comp.sys.newton.misc
+
+"Rick D. Wintheiser" &lt;rickw@individual.puug.pt&gt; writes:
+
+&gt;Does anyone have an idea why the following is occurring:
+
+&gt;Turn on Newton, get start up screen and glimpse of application. Then
+&gt;newton turns off! I must go through this several times until it stays
+&gt;on. It is also intermittent so sometimes it happens and others not! I
+&gt;have an MP100 1.3 ROM and 2mb Apple Mem Card. Anyone with ideas would be
+&gt;most helpful? Apple told me to "reset" the Newton, but this does not
+&gt;help, only short term.
+
+The only time I ever ran into this on my MP100 was when I put a
+rather thirsty PCMCIA modem card in.  It drew so much current that
+the Renewals I was using went low, making the Newton think the
+batteries were dead. *ick*
+--
+IV (aka John Elliott IV)           Domain: iv@fuzzy.engr.sgi.COM
+SiliconGraphics Inc.
+2011 N. Shoreline Blvd.             Phone: 415/933-3483
+Mountain View, CA 94039-7311         Home: 408/464-8466
+
+
+
+
+
+HELP: Newton turns itself off!
+Author:                  Eric "the" Hsu
+Email:                  user@maclab.berkeley.edu
+Date:                  1996/12/06
+Forums:                  comp.sys.newton.misc
+
+A few weeks back I remember someone complaining that their Newton turned
+itself off right after turning it on. I am experiencing that same problem
+with a Newton I just acquired. I flick the switch on and it turns on for a
+second and then shuts down. I can only get around this by hitting reset
+just as the Newton turns on, or every now and then it stays on.
+
+Does anyone remember the solution to this problem? I'm using an MP100 with
+the Apple rechargeable batteriy pack.
+
+E-mail me privately please, but of course feel free to send a copy to the
+newsgroup if you have the answer.
+
+Eric
+
+
+
+
+Re: HELP: Newton turns itself off!
+Author:                  Trembath
+Email:                  trembath@smbvoc.ballarat.edu.au
+Date:                  1996/12/08
+Forums:                  comp.sys.newton.misc
+
+In article &lt;user-0612961244380001@agate.berkeley.edu&gt;,
+user@maclab.berkeley.edu (Eric "the" Hsu) wrote:
+
+&gt; A few weeks back I remember someone complaining that their Newton turned
+&gt; itself off right after turning it on. I am experiencing that same problem
+&gt; with a Newton I just acquired. I flick the switch on and it turns on for a
+&gt; second and then shuts down. I can only get around this by hitting reset
+&gt; just as the Newton turns on, or every now and then it stays on.
+&gt;
+&gt; Does anyone remember the solution to this problem? I'm using an MP100 with
+&gt; the Apple rechargeable batteriy pack.
+&gt;
+&gt; E-mail me privately please, but of course feel free to send a copy to the
+&gt; newsgroup if you have the answer.
+&gt;
+&gt; Eric
+
+It would seem to me that one possible explination is that the battery pack
+has developed a 'memory' and no longer recharges fully. THis happends when
+you recharge a battery pack or rechargable battery when it is not
+completely empty (thats why new chargers empty them before they charge).
+Over time the battery begins to charge less and less untill it doesnt work
+any more. Or the battery pack is just worn out or stuffed, it happends.
+Either way try using the newton with some batteries or a batterypack you
+know works well.
+
+Hope you work it out :)
+
+Cheers
+
+Trembath
+
+
+
+
+
+Re: On-Off problem MP100
+Author:                  Seth M Powsner
+Email:                  Seth.Powsner@Yale.edu
+Date:                  1997/10/23
+Forums:                  comp.sys.newton.misc
+
+   Thomas Gruber &lt;thomas.gruber@munich.ixos.de&gt; wrote of his old Newton
+&gt;It goes off immediately after turning it on. I have to turn it
+&gt;on a few times until it stays on. On some days, it works perfectly, then
+&gt;suddenly it doesn't let me turn it on again.
+ 
+   Sounds like the same problem.
+
+&gt;...it's the power switch getting old. In german we say the switch "prellt" (don't know
+&gt;the english word) which means it sends two or more short signals when pulled once.
+
+   We talk of "contact bounce."
+
+&gt;...seems Apple used a hardware solution, which is getting old now.
+
+   One hardware solution was to use a capacitor.
+
+&gt;... clean the power switch with "Kontaktspray" (german word).
+
+   We call it "contact cleaner."
+
+Interesting idea. Can anyone verify this? Anyone know if contact cleaner works?
+
+
+
+
+
+
+
+Re: Misc MP100 problems
+Author:                  Sean Luke
+Email:                  seanlNoSpam@carmi.cs.umd.edu
+Date:                  1997/07/09
+Forums:                  comp.sys.newton.misc
+
+Michael Bellman (msbellman1@mmm.com) wrote:
+&gt;I have a few really annoying problems with my Netwon 100, I hope someone
+&gt;can help me:
+&gt;
+&gt;(1) When turning on, many times will blink out and turn off.  The only
+&gt;way to keep it on is to restart or hold down the on switch and tap
+&gt;something...
+
+
+If I recall, this was an integrated hardware/software bug in the MP100
+that arrives with age. But I'd sure like to know more information about
+this, because IT'S DRIVING ME CRAZY TOO.
+
+You push down the power switch.  The system blinks on, but as soon as you
+let go of that switch, it turns off automatically.  You have to repeat
+this process about a half-dozen times before it finally stays on.
+
+I too have also found that holding down the power switch, and choosing
+something (like Dates or Names) eliminates the onset of the bug for that
+session.  What a pain!
+
+Anyone?
+
+
+&gt;(3) the date and time keep messing up and losing track.  This really
+&gt;makes me mad!
+
+This is mostly happening because you are often rebooting your newt, which
+often causes it to lose a large chunk of time (another bug).
+
+_____________________________________________________________________________
+Sean Luke    Spam Must Die! "I've discovered that P==NP, but the proof is too
+U Maryland at College Park   large to fit in the margins of this signature."
+seanlNoSpam@cs.umd.edu       URL: http://nospam.www.cs.umd.edu/~seanl/
+
+
+
+
+
+
+Re: Newton 100 sys 1.11 Power up problem
+Author:                  Sean Luke
+Email:                  seanl@cs.umd.edu
+Date:                  1998/07/11
+Forums:                  comp.sys.newton.misc
+
+liladigs@together.net wrote:
+: My newton but it has to be plugged in. It will only run on AC power.
+: All batteries are new and good. Are there any reset sequences that
+: would reset the system. It has been in storage for about six months.
+: All data is there. But the display goes blank if it is unplugged. Any
+: help would be appreciated. Private replys OK of post if applicable
+
+Sounds like you didn't post your entire message, so I can only guess as to
+what's going on, but here are some features of the MP100 and power:
+
+1) the MP100 takes AAA batteries, and only Alkalines or Renewals
+(rechargeable Alkalines) provide the voltage (1.5v per battery) necessary
+to drive it. NiCADs and NiMHs do *not* work (1.2v per battery).
+
+2) The reset button is recessed in a small hole inside the battery
+compartment, designed so it should be only be pressed by your stylus.
+
+3) Older MP100s develop switch problems, probably due to gunk getting in
+the switch and raising its resistance.  As a result, if you have an
+application to the fore which uses a lot of heap (that is, DRAM), turning
+on the machine will require more power drain than a less-loaded document,
+and the MP100 will promptly turn itself back off again because it can't
+push that much power through the switch. MP100s with memory cards (an
+additional source of amperage drain) are especially suspectable to this
+problem.
+
+You may be able to convince it to stay on after turning itself on several
+times, but the simplest solution is to hold the on switch down, bring the
+dates application to the fore (for me this is usually a relatively
+low-memory-consumption app), let go of the power switch thus letting the
+Newt turn itself off, then press the power switch again.  And your in!
+Another odd approach is to plug in a serial device or the newton keyboard,
+press the power switch, and watch as the machine turns itself on, turns
+itself back off, then for some reason turns itself *back* on again.
+
+4) To completely erase all data on the machine, press the reset button
+while holding down the power switch.  You'll get a prompt asking if you
+want to really erase all the data.
+
+Sean
+
+
+
+
+
+Newton 100 power probs
+Author:                 Tim & De Skrastins &lt;skratch@gate.net&gt;
+Date:                   1999/03/21
+Forums:                 comp.sys.newton.misc
+
+I have 2 old Newton 100s and they are now both experiencing power problems,
+whenever you turn it on, it turns itself right back off. This happens with
+the rechargeable battery pack, fresh batteries or the AC adapter. If I use
+the AC adapter I can sometimes get the power to stay on and then use it but
+sooner or later it goes back to the same problem. Has anyone else
+experienced this and does anyone know of a fix for this?
+
+
+
+
+
+Re: Newton 100 power probs
+Author:                 Jeff Sheldon &lt;jeff@sasami.jurai.net&gt;
+Date:                   1999/03/21
+Forums:                 comp.sys.newton.misc
+
+Tim & De Skrastins &lt;skratch@gate.net&gt; wrote:
+&gt; I have 2 old Newton 100s and they are now both experiencing power problems,
+&gt; whenever you turn it on, it turns itself right back off. This happens with
+
+I had this problem for about 3 years with my Newton and in the early days
+no one had any suggestions and few people were speaking up about it.
+Apple suggested it was a logic board problem.  So I lived on with it and
+found myself using my Newton less.  I've since found a solution thanks to
+the direction on &lt;www.cs.umd.edu/~seanl/newton/MP100Power.html&gt;.
+
+It involves opening your Newton and making some adjustments, so it's not
+for the squeamish, but it *works*.  I now use my MP100 all the time and am
+programming for it again.
+
+Apparently these early Newtons are so sensitive to power drain, that if it
+thinks it's running too low on energy at a given moment, it powers off.
+The theory is that dirt or miscellaneous build-up is the culprit, which
+can conduct just enough extra voltage to fool the Newton into thinking
+too much energy is being drained at power-on time.  Much of this has to do
+with the Notepad application using a lot of heap space as it is, but one
+suggestion is to hold down the power switch, open the "dates" book, let it
+turn off, then turn it back on and it'll stay on and you can then quit
+back to the notepad ("dates" uses less heap space).  However, the actual
+fix is to properly clean all battery contacts, power switch, and I even
+cleaned the circuit-board part of where the power connector attaches.  No
+problems since.  My interest in my Newton has soared again now that it's
+back to it's pre-2.0 self again (sigh).
+
+Now if only I can get my hands on a good MP2100 system w/ keyboard &
+NetwonWorks for cheap.   ;)
+
+Good luck!
+-Jeff
+
+
+
+
+</PRE></TT>
+</BODY>
+</HTML>

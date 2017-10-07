@@ -1,0 +1,214 @@
+<html>
+<head>
+<title>Using xmodmap</title>
+
+<STYLE TYPE="text/css">
+body {
+                margin :0px;
+                font-family:Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+                background-color: #ffffff;
+        }
+.text { font-family:Verdana,Helvetica,Geneva,Arial,Sans-Serif; font-size:12px; }
+.mainbody
+        {
+        margin-left:10px;
+        margin-right:10px;
+        }
+.header {
+        margin: 0px 0px 0px 0px
+        font: 36px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    font-weight: 900;
+        background-color : #303050;
+        color : white;
+        padding-left : 20px;
+        padding-bottom : 20px;
+        padding-top : 20px;
+        }
+
+.headertext     {
+        font: 24px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight: 900;
+        background-color : #303050;
+        color : white;
+        }
+.smallheadertext        {
+        font: 14px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    font-weight: 900;
+        background-color : #303050;
+        color : white;
+        }
+.bullettext     {
+        font: 12px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        padding-left : 15px;
+        padding-right:  35px;
+        padding-bottom: 12px;
+        }
+
+.bullettitle    {
+        color : #303050;
+        font: 12px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight:900;
+        padding-bottom: 12px;
+        width:130px;
+        left:5px;
+        }
+H2
+        {
+        margin-top: 3em;
+        border-bottom: solid 5px #303050;
+        font-size: 120%;
+        font-name: Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight: 900;
+	padding-bottom: 3px;
+        }
+
+
+</STYLE>
+
+</head>
+<body>
+
+<iframe align=right style="width: 200px; height:400px; padding-left:10px; padding-bottom:10px; border:0px;" src="https://cs.gmu.edu/~sean/stuff/n800/nav.html" scrolling="no"></iframe>
+
+
+<div class="header">
+<div class="headertext">Using Xmodmap (the old way)</div>
+</div>
+<div class="mainbody">
+
+<p>The first step is to install the <b>xmodmap</b> and <b>xev</b> programs.  The N800 versions of the programs may be found <a href="http://maemo.lancode.de/">here</a>.
+
+<h4>xev</h4>
+
+<p><b>xev</b> is a command-line program which pops up a simple window that traps and prints out all the events (cursor movement, keyboard taps, etc.).  For example, if you fire it up, type "N", and then close the window, you'll get back something that says "<tt>KeyRelease event .... keycode 57 (keysym 0x63, n) ....</tt>".  This indicates that the key you pressed is keycode 57 (in decimal), and that it's associated with the "key symbol" (keysym) "n".  The crucial thing to use <b>xev</b> for is to identify the keycodes of the control, command, option/alt, fn, eject, and various function keys.  Unfortunately, you'll need them in hexadecimal for the next step, rather than decimal.  To avoid having to convert, here are the important ones pre-converted for you:
+
+<p><table cellpadding=0 cellspacing=0 border=0>
+<tr><td><b>Key</b><td><b>Keycode</b>
+<tr><td>esc<td>0x09
+<tr><td>F1<td>0x43
+<tr><td>F2<td>0x44
+<tr><td>F3<td>0x45
+<tr><td>F4<td>0x46
+<tr><td>F5<td>0x47
+<tr><td>F6<td>0x48
+<tr><td>F7<td>0x49
+<tr><td>F8<td>0x4a
+<tr><td>F9<td>0x4b
+<tr><td>F10<td>0x4c
+<tr><td>F11<td>0x5f
+<tr><td>F12<td>0x60
+<tr><td>eject<td>0xfd
+<tr><td>left alt<td>0x40 (likely mapped to "Alt_L" keysym)
+<tr><td>left command<td>0x73 (likely mapped to "Super_L" keysym)
+<tr><td>right command<td>0x74 (likely mapped to "Super_R" keysym)
+<tr><td>right alt<td>0x71 (likely mapped to "Alt_R" keysym)
+</table>
+
+<p>You can refer to other keys by their <b>"keysym"</b> key symbols: <tt>a, b, c, 4</tt>, etc.  Some special keysym names: <tt>minus, equal, comma, period, slash, backslash, bracketleft, bracketright, apostrophe, semicolon, space, grave </tt>(for the <b>`</b> key),<tt> Return, Tab, BackSpace, Caps_Lock, Up, Down, Left, Right</tt> (note the capitalization and spelling).
+
+<p>Notice the key that's missing: the <b>fn</b> key.  This key does not generate X events, and so is, as far as we're concerned, totally dead.   You can't use it.
+
+<h4>xmodmap</h4>
+
+<p>Now we move on to <b>xmodmap</b>, an old X11 program which remaps keys to various functions.  xmodmap responds to commands which you can issue either one-by-one on the command line (<tt>xmodmap -e "<i>put command here</i>"</tt>) or by sticking them, one to a line, in a file and calling <tt>xmodmap <i>filename</i></tt>).  Traditionally the filename you use is called <tt>.xmodmap</tt>, stored in your home directory, since in a more typical X windows scenario it'd get called automatically: but as maemo doesn't do that, you can call it whatever you like since you'll have to manually call the xmodmap program anyway.  The important commands are:
+
+<ol>
+<p><li><b>keysym <i>key symbol</i> = <i>keymapping</i></b>
+<br>Indicates that the key presently associated with <i>key symbol</i> should be used with the given keymapping.  A keymapping is up to four key symbols representing the (1) standard keypress, (2) shifted keypress, (3) "mode switched" keypress (a second shift key, what Mac users would call "option" and european PC users would call "AltGr") and (4) shifted+mode switched keypress.  You don't have to provide all four: for example, you can provide just the first two if you like.
+
+<p>Examples:<br>
+<tt>keysym equal = equal plus notequal plusminus<br>
+keysym z = z Z Greek_omega Greek_OMEGA<br>
+keysym a = a A agrave Agrave<br>
+keysym j = j J
+</tt>
+
+<p><li><b>keycode <i>key code</i> = <i>keymapping</i></b>
+<br>Same as the <b>keysym</b> command, only using the key associated with a given key code.  This is useful for keys which don't presently have associated key symbols.  Keep in mind that the key code has to be in hexadecimal.
+
+<p>Examples:<br>
+<tt>keycode 0xfd = Page_Down<br>
+keycode 0x5f = End twosuperior threeighths onehalf
+</tt>
+
+<p><li><b>clear <i>modifier</i></b>
+<br>Eliminates all keys from being associated with a given modifier key type.  There are eight modifier key types: <tt>Shift, Lock, Control, Mod1, Mod2, Mod3, Mod4, Mod5</tt>.  You can set Mod1...Mod5 to whatever modifier functions you want: for example, associate mod5 with mode-switch ("option" or "AltGr"), and I associate Mod1 with Alt.  The idea here is that multiple keys can be associated with the same modifier function (for example, your two shift keys).
+
+<p>Examples:<br>
+<tt>clear Mod1</tt>
+
+<p><li><b>add <i>modifier</i> = <i>key symbol</i></b>
+<br>Adds the key associated with <i>key symbol</i> to be a modifier of the given type.
+
+<p>Examples:<br>
+<tt>add Control = Super_L<br>
+add Mod1 = Alt_R
+</tt>
+
+<p><li><b>remove <i>modifier</i> = <i>key symbol</i></b>
+<br>Removes the key associated with <i>key symbol</i> to be a modifier of the given type.
+
+<p>Examples:<br>
+<tt>remove Control = Control_R
+</tt>
+
+<p><li><b>! <i>comment</i></b>
+<br>A comment.  Blank lines are also acceptable.
+
+<p>Examples:<br>
+<tt>! This is a comment line<br>
+!!!! This is a more emphasized comment line :-)</tt>
+</ol>
+
+<p>Here's an <a href="http://www.in-ulm.de/~mascheck/X11/xmodmap.html">excellent tutorial</a> on xmodmap.
+
+<p>You can find all the key symbol names in X11's <a href="keysymdef.h">keysymdef.h</a> file.  Strip off the "XK_" to get the key symbol name.  Here's a <a href="keysymdef.html">page with unicode symbol equivalents for all of the printable key symbols</a>.  Sadly, Nokia's fonts have a dearth of available symbols, though it does appear that they contain at least the union of Microsoft's <a href="http://www.alanwood.net/demos/ansi.html">Windows-1252 (so-called "ANSI")</a>, Microsoft's <a href="http://www.alanwood.net/demos/wgl4.html">Windows Glyph List 4</a>, and Apple's <a href="http://www.alanwood.net/demos/macroman.html">MacRoman</a> character sets (except U+F8FF, the Apple Logo).
+
+<h3>My Personal .xmodmap File</h3>
+
+I already have a working .xmodmap file.  Its goals were:
+
+<p><ol>
+<li>Because Nokia's virtual keyboard refuses to come up even when you try to force it (see <a href="old.html#fun">below</a>), we should include all the bindings from Nokia's standard "symbols" in their virtual keyboard.  (I've got all but one, the "per mille" sign: &#x2030; ).
+<li>Include Italian accents (I'm studying Italian).
+<li>Organize bindings largely in the same way the Macintosh does it, with a shift and an option key, and bindings in more or less the same place.  To some degree I'm restricted by Nokia's poor fonts and not able to provide all the bindings I'd like.
+<li>Include page up, page down, home, and end, but not in the standard Mac cursor location -- put them somewhere more useful (I use F10, F11, F12, and Eject).
+<li>Include bullets and arrows.
+</ol>
+
+<p>Here's the <a href="xmodmap">file</a>.  Also, here is a highly useful <a href="https://cs.gmu.edu/~sean/stuff/n800/keyboard/keyboard.pdf">PDF diagram</a> of my mappings (check it out!), and the <a href="keyboard.graffle">OmniGraffle file</a> in case you want to modify it.
+
+<p>Some notes:
+
+<p><ol>
+<li>Left Alt/Option operates like a Mac Option key (that is, X11's "mode switch").
+<li>Because so many Nokia applications have ctl-x for cut, etc., I've mapped Left Command (the key right next to the space bar) to also be a control key along with ctrl.  This helps Mac people used to typing Command-x etc.
+<li>Right Command has been mapped to the "Compose" key, which ordinarily would allow you to create all sorts of characters (see <a href="http://www.in-ulm.de/~mascheck/X11/compose.html">here</a>).  Sadly, Nokia appears to not support this, so it's presently a dead key until I decide what to do with it.
+<li>Right Alt has been mapped to an actual "Alt" key in the traditional sense.
+<li>Fn is, as discussed, dead.
+<li>Shift-Return is keypad-enter (just like on the Mac).
+<li>Shift-Delete is keypad-delete.
+<li>Shift-Tab is reverse-tab.
+<li>See above about page-up/page-down/home/end
+</ol>
+
+<h4>Using Your .xmodmap File</h4>
+
+<p>Traditionally, your xmodmap commands are stored in a file called <b>.xmodmap</b> in your home directory.  On the <a href="http://maemo.org/community/wiki/HowTo_SetupKeyboard">maemo wiki</a> there are instructions to modify your <b>real-af-startup</b> file to call xmodmap.  It doesn't work, so don't bother.  Instead, you can install the <a href="http://maemo-hackers.org/wiki/OssoStatusbarCpu">Osso Statusbar CPU</a> applet.  This applet allows you to, among other things, set up shell commands to issue from the applet's menu.  I have one called "Bluetooth Bindings" which issues the command <b>xmodmap .xmodmap</b>  That does the job nicely.
+
+<a name="fun"></a><h4>More Fun Stuff</h4>
+
+<p>The <a href="http://maemo.org/community/wiki/HowTo_SetupKeyboard">maemo wiki</a> also describes how you can use the <b>kbdconfig</b> file to tell the window server to fire up various applications etc., including popping up the virtual keyboard when it's convenient.  Though the procedure works for other functions, it does <i>not work</i> for popping up the virtual keyboard: OS2007 has broken that functionality.
+
+<p>The general idea is to create a file called <tt>/home/user/.matchbox/kbdconfig</tt> which maps certain keystrokes to various actions, one to a line.  Mine simply says this:
+
+<tt><pre>
+<ctrl>Escape=close
+<ctrl>Tab=next
+</pre></tt>
+
+This maps Control-Escape to closing windows, and Control-Tab to paging through windows, similar to Command-Tab on the Mac.
+</div>
+</body>
+</html>
+

@@ -1,0 +1,263 @@
+<html>
+<head>
+<title>Using the Apple Bluetooth Keyboard with the Nokia N800</title>
+
+<STYLE TYPE="text/css">
+body {
+                margin :0px;
+                font-family:Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+                background-color: #ffffff;
+        }
+.text { font-family:Verdana,Helvetica,Geneva,Arial,Sans-Serif; font-size:12px; }
+.mainbody
+        {
+        margin-left:10px;
+        margin-right:10px;
+        }
+.header {
+        margin: 0px 0px 0px 0px
+        font: 36px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    font-weight: 900;
+        background-color : #303050;
+        color : white;
+        padding-left : 20px;
+        padding-bottom : 20px;
+        padding-top : 20px;
+        }
+
+.headertext     {
+        font: 24px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight: 900;
+        background-color : #303050;
+        color : white;
+        }
+.smallheadertext        {
+        font: 14px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    font-weight: 900;
+        background-color : #303050;
+        color : white;
+        }
+.bullettext     {
+        font: 12px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        padding-left : 15px;
+        padding-right:  35px;
+        padding-bottom: 12px;
+        }
+
+.bullettitle    {
+        color : #303050;
+        font: 12px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight:900;
+        padding-bottom: 12px;
+        width:130px;
+        left:5px;
+        }
+H2
+        {
+        margin-top: 3em;
+        border-bottom: solid 5px #303050;
+        font-size: 120%;
+        font-name: Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight: 900;
+	padding-bottom: 3px;
+        }
+
+
+</STYLE>
+
+</head>
+<body>
+
+<iframe align=right style="width: 200px; height:400px; padding-left:10px; padding-bottom:10px; border:0px;" src="https://cs.gmu.edu/~sean/stuff/n800/nav.html" scrolling="no"></iframe>
+
+
+<div class="header">
+<div class="headertext">Using the Apple Bluetooth Keyboard</div>
+<div class="smallheadertext">with the Nokia N800</div>
+</div>
+<div class="mainbody">
+
+<p><img align=left src="keyboard/keyboard.jpg"> 
+
+I recently purchased an Apple Bluetooth Keyboard for use with the N800.  Though it doesn't fold, it's small and lightweight, and at $80 it's an excellent value compared to its portable competition.  Getting it to work on the N800 well took a bit of tweaking.  I hope this is helpful to you if you get one as well.
+
+<h3>Powering the Keyboard</h3>
+
+You turn the keyboard on by pressing the power button on its right edge.  A green light turns on and promptly turns off again, but the keyboard is <i>on</i>.  There is, unfortunately, no other indication.  You turn the keyboard off by pressing and <i>holding</i> the power button until the light turns on and off again.  This is important: several times I have stuck the keyboard in my backpack and have found it typing on its own to my N800 while I carry it about.
+
+<h3>Setup</h3>
+
+You pair the keyboard to the N800 by turning the keyboard on, going to Control Panel:Bluetooth, turning Bluetooth on, clicking on Devices:Edit, finding the keyboard (by default it's called "Apple Wireless Keyboard"),  and selecting the keyboard.  You enter in the pairing key on the keyboard by <i>typing</i> the number and then pressing RETURN.
+
+<p>Next go to Control Panel:Hardware keyboard, and change the Keyboard to "Generic 105-key PC" and 
+English (USA)" layout.  By default it's set to Nokia SU-8W, which is wrong (the RETURN key won't work).
+
+<h3>What Works out of the Box</h3>
+
+All the main keys work, plus control.  The caps lock light does not light up.  None of the option or command keys do anything, nor the Fn ("function") key.  Shift-Return is not enter.  The function keys operate as indicated in Control Panel:Hardware keyboard: Shortcuts:
+
+<p><table cellpadding=0 cellspacing=0 border=0>
+<tr><td>Task launcher<td>F3
+<tr><td>Application menu<td>F4
+<tr><td>Close<td>control-F4
+<tr><td>"Home&nbsp;View"&nbsp;(who&nbsp;knows)&nbsp;&nbsp;<td>F5
+<tr><td>Full screen toggle<td>F6
+<tr><td>"Plus" (zoom in)<td>F7
+<tr><td>"Minus" (zoom out)<td>F8 (irritatingly, these are backwards from the Nokia's buttons)
+<tr><td>Task switcher<td>F9
+<tr><td>Minimize<td>control-F9
+<tr><td>Power<td>F12 (grrr, horrible position, I press it whenever I press delete)
+</table>
+
+<p>The first thing I do is remap the Power menu key to ctrl-F12 (click on "Edit" in the shortcuts window), so I don't accidentally turn my machine off.
+
+<p>Nokia screwed up badly here again: though you can remap the shortcuts to "regular" keys, or to control/shift/alt-function keys, you <i>cannot remap them to other function keys</i>.  Fairly asinine.
+
+<h3>Bugs</h3>
+
+<p>When under bluetooth load, the N800 freaks out and repeats keys, resulting in helllllllllllllllllllo instead of hello.  This is rare for me but others are being driven nuts by it, especially when in combination with some other bluetooth device (like a phone) which puts load on the N800 and triggers the problem.  Nothing fixes it, including the xset770  etc. commands which control key repeat.  It's a bug, and apparently also happens in OS 2008.
+
+<p>Exactly one application doesn't work properly with the keyboard: MaemoPad+, an otherwise excellent app, interprets the Return key as a request to bring up the button bar instead of, say, you know, starting a new line of text.  
+
+<h3>Remapping Keys</h3>
+
+Want page-up/page-down?  Want some accents?  Then you're going to need to remap keys.
+
+<p><font color=red>Previously I recommended using xmodmap for this task.  No longer.</font>  This is because each successive version of OS 2008 has become increasingly hostile to xmodmap: now its use mostly results in crashes and reboots.  If you're still interested in the old approach, see <a href="keyboard/old.html">here</a>.
+
+<p>Instead, the right way to do this is to create an <b>xkb</b> file.  Unfortunately Nokia has made this unusually difficult.  You have to:
+
+<ul>
+<li>Be able to become root on your box.
+<li>Be able to move files to certain root locations on your box.
+</ul>
+
+I'm not going to tell you how to do this: but if you're comfortable with UNIX, it's not an issue.  Perhaps someone may one day write a program.
+
+<p>Nokia's X-windows keyboard map files (xkb) are located in <b><tt>/usr/share/X11/xkb/symbols</tt></b>  These files take two forms, though it's not immediately obvious.  First there are files which define general classes of keyboards.  Nokia permits exactly two of file of these on the N800: the PC105 keyboard (in <b><tt>pc</tt></b>) and Nokia's crummy SU-8W bluetooth keyboard (defined in <b<tt>nokia_vndr/su-8w</tt></b>).   Associated with these keyboards are various language variations, stored in additional files.  For example, US English is stored in <b><tt>us</tt></b>.  Apple's bluetooth keyboard is fairly similar to the PC105, so what we're going to do is make a language variation for the PC105 keyboard called <b><tt>apple</tt></b>.  It will show up as a "language" under the PC105 option when you choose it.  
+
+<p>To do this, we'll start by making a file called <b><tt>apple</tt></b>.  This file will define the keys on the keyboard.  In particular, we'll set it up to define the two option keys ("ALT" in X parlance) as being secondary shift keys like they are on the Mac, to enable us to have four keyboards: regular, shifted, option, and option-shifted.  Then we define the various symbol keys.  Finally, we'll change the command keys to be control keys as well, since most of Nokia's menu structures are handled using control keys.  That lets Mac users type "Command-x", and Nokia will interpret it as "Control-x" and it'll do the right thing.
+
+<p>The big place where you can fool around here is in defining which symbols go with which key.  If you'd like to change the symbols below, you can find all the key symbol names in X11's <a href="keyboard/keysymdef.h">keysymdef.h</a> file.  Strip off the "XK_" to get the key symbol name.  Here's a <a href="keyboard/keysymdef.html">page with unicode symbol equivalents for all of the printable key symbols</a>.  Sadly, Nokia's fonts have a dearth of available symbols, though it does appear that they contain at least the union of Microsoft's <a href="http://www.alanwood.net/demos/ansi.html">Windows-1252 (so-called "ANSI")</a>, Microsoft's <a href="http://www.alanwood.net/demos/wgl4.html">Windows Glyph List 4</a>, and Apple's <a href="http://www.alanwood.net/demos/macroman.html">MacRoman</a> character sets (except U+F8FF, the Apple Logo).
+
+<p>The file I use for the 'apple' keyboard is <a href="keyboard/apple.html">here</a>.  I list it below for your reading pleasure.  But first, after you've created this file and placed it in <b><tt>/usr/share/X11/xkb/symbols/apple</tt></b> you will also need to modify a file to tell Nokia that this file exists.  You'll need to edit the file <b><tt>/usr/share/X11/xkb/rules/base.lst</tt></b>  Right after the 'us English(USA)' variant, add the following line in the layout section:
+<pre><tt>
+  apple           Apple Bluetooth                                                                                   
+</tt></pre>
+
+<p>After this, you should be able to pair with your bluetooth keyboard, then go into the Bluetooth keyboard control panel, choose the "Generic 105-key PC" keyboard, then the "Apple Bluetooth" Keyboard layout.  And you're off and running!
+
+<h3>The Keyboard File</h3>
+<p>The keyboard file below had the following goals:
+
+<ol>
+<li>Include Italian accents (I'm studying Italian).
+<li>Organize bindings largely in the same way the Macintosh does it, with a shift and an option key, and bindings in more or less the same place.  To some degree I'm restricted by Nokia's poor fonts and not able to provide all the bindings I'd like.
+<li>Include page up, page down, home, and end, but not in the standard Mac cursor location -- put them somewhere more useful (I use F10, F11, F12, and Eject).
+<li>Include bullets and arrows.
+</ol>
+
+<p>Here's the <a href="keyboard/xmodmap">file</a>.  Also, here is a highly useful <a href="https://cs.gmu.edu/~sean/stuff/n800/keyboard/keyboard.pdf">PDF diagram</a> of my mappings (check it out!), modulo a few new ones I've added, and the <a href="keyboard/keyboard.graffle">OmniGraffle file</a> in case you want to modify it.
+
+<p>Some notes:
+
+<p><ol>
+<li>Alt/Option operates like a Mac Option key (that is, X11's "mode switch").
+<li>Because so many Nokia applications have ctl-x for cut, etc., I've mapped Command 
+to also be a control key along with ctrl.  This helps Mac people used to typing Command-x etc.  
+<li>Fn is dead.  It's not possible to map to this key.
+<li>See the PDF file for information about page-up/page-down/home/end
+</ol>
+
+Here's the file; change the symbols as you like (regular, shifted, option, option-shifted), and leave NoSymbol where you'd like that key to produce nothing in that combination.  Again, you can download it <a href="keyboard/apple.html">here</a>:
+
+<p><tt><pre>
+default partial
+xkb_symbols "basic" {
+
+  key &lt;RALT> {
+    type[Group1]="ONE_LEVEL",
+    symbols[Group1] = [ ISO_Level3_Shift ]
+    };
+
+  key &lt;LALT> {                                                                                                      
+    type[Group1]="ONE_LEVEL",                                                                                       
+    symbols[Group1] = [ ISO_Level3_Shift ]                                                                          
+    };                                                                                                              
+
+   modifier_map Mod1 { &lt;RALT>, &lt;LALT> };
+
+    name[Group1]= "Apple";
+
+    // Alphanumeric section
+    key &lt;TLDE> {    [    grave,	asciitilde, NoSymbol, NoSymbol 	]	};
+    key &lt;AE01> {    [    1, exclam, exclamdown, NoSymbol 		]	};
+    key &lt;AE02> {    [    2, at, trademark, EuroSign ] 	};
+    key &lt;AE03> {    [    3, numbersign, sterling, NoSymbol	]	};
+    key &lt;AE04> {    [    4, dollar, cent, currency		]	};
+    key &lt;AE05> {    [    5, percent, infinity, U2030		]	};
+    key &lt;AE06> {    [    6, asciicircum, section, NoSymbol	]	};
+    key &lt;AE07> {    [    7, ampersand, paragraph, doubledagger	]	};
+    key &lt;AE08> {    [    8, asterisk, enfilledcircbullet, degree	]	};
+    key &lt;AE09> {    [    9, parenleft, ordfeminine, periodcentered	]	};
+    key &lt;AE10> {    [    0, parenright, masculine, NoSymbol	]	};
+    key &lt;AE11> {    [    minus, underscore, endash, emdash	]	};
+    key &lt;AE12> {    [    equal, plus, notequal, plusminus		]	};
+
+    key &lt;AD01> {    [    q, Q, oe, OE	]	};
+    key &lt;AD02> {    [    w, W, Greek_SIGMA, doublelowquotemark		]	};
+    key &lt;AD03> {    [    e, E, egrave, Egrave		]	};
+    key &lt;AD04> {    [    r, R, registered, numerosign		]	};
+    key &lt;AD05> {    [    t, T, latincross, caron		]	};
+    key &lt;AD06> {    [    y, Y, yen, NoSymbol		]	};
+    key &lt;AD07> {    [    u, U, ugrave, Ugrave		]	};
+    key &lt;AD08> {    [    i, I, igrave, Igrave		]	};
+    key &lt;AD09> {    [    o, O, ograve, Ograve	]	};
+    key &lt;AD10> {    [    p, P, Greek_pi, Greek_PI		]	};
+    key &lt;AD11> {    [    bracketleft, braceleft, leftdoublequotemark, rightdoublequotemark	]	};
+    key &lt;AD12> {    [    bracketright, braceright, leftsinglequotemark, rightsinglequotemark	]	};
+    key &lt;AD13> {    [    backslash, bar, guillemotleft, guillemotright	]	};
+
+    key &lt;AC01> {    [    a, A, agrave, Agrave 		]	};
+    key &lt;AC02> {    [    s, S, ssharp, NoSymbol		]	};
+    key &lt;AC03> {    [    d, D, Greek_delta, Greek_DELTA	]	};
+    key &lt;AC04> {    [    f, F, eacute, Eacute		]	};
+    key &lt;AC05> {    [    g, G, copyright, acute		]	};
+    key &lt;AC06> {    [    h, H, enopensquarebullet, filledrectbullet		]	};
+    key &lt;AC07> {    [    j, J, enfilledsqbullet, enopencircbullet		]	};
+    key &lt;AC08> {    [    k, K, NoSymbol, NoSymbol		]	};
+    key &lt;AC09> {    [    l, L, notsign, Lstroke		]	};
+    key &lt;AC10> {    [    semicolon, colon, ellipsis, NoSymbol		]	};
+    key &lt;AC11> {    [    apostrophe, quotedbl, ae, AE	]	};
+
+    key &lt;AB01> {    [    z, Z, Greek_omega, Greek_OMEGA 		]	};
+    key &lt;AB02> {    [    x, X, approxeq, multiply	]	};
+    key &lt;AB03> {    [    c, C, ccedilla, Ccedilla		]	};
+// I think I can do unicode for lozenge (25CA)
+    key &lt;AB04> {    [    v, V, squareroot, U25CA		]	};
+    key &lt;AB05> {    [    b, B, integral, NoSymbol		]	};
+    key &lt;AB06> {    [    n, N, filledtribulletup, leftarrow		]	};
+    key &lt;AB07> {    [    m, M, filledtribulletdown, rightarrow		]	};
+    key &lt;AB08> {    [    comma, less, lessthanequal, breve		]	};
+    key &lt;AB09> {    [    period, greater, greaterthanequal, macron		]	};
+    key &lt;AB10> {    [    slash,	question, division, questiondown	]	};
+
+    // End alphanumeric section
+
+    key &lt;FK10> {    [    Home, onesuperior, oneeighth, onequarter ] };
+    key &lt;FK11> {    [    End, twosuperior, threeeighths, onehalf ] };
+    key &lt;FK12> {    [    Page_Up, threesuperior, fiveeighths, threequarters ] };
+    key &lt;FK13> {    [    Page_Down, NoSymbol, seveneighths, NoSymbol ] }; 
+
+// map the command keys to control so I can do cut paste etc.
+    key &lt;LWIN> {	[  Control_L			]	};
+    key &lt;RWIN> {        [  Control_R                    ]       };
+    modifier_map Control{ Control_L, Control_R, &lt;LWIN>, &lt;RWIN> };
+
+};
+</pre></tt>
+
+</div>
+</body>
+</html>
+

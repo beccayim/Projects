@@ -1,0 +1,73 @@
+<HTML>
+<HEAD>
+<TITLE>Make a Yahoo Movies! Plugin</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+
+<H2>Make a Yahoo Movies! Plugin</H2>
+
+<p>I hacked this up today after having to search the nth time through movie
+listings for my movie.  I hope you find it useful.  This plugin searches lists all the movie theatres in the area which are showing a given movie, plus show times, addresses, phone numbers, and other information.
+
+<p>The first thing you need to do is to create a .src file in your Note Pad, with the text below.  Whitespace doesn't matter -- except inside quoted areas, where it's critical, so watch out!  The single item you'll definitely need to
+change is the zip code (20878) in the line
+
+<p><tt><pre>     &lt;input name="z" value="<font color="#FF0000">20878</font>"&gt;</pre></tt>
+
+<p>...you'll need to set this to the zip code in the area where you're searching.  You may also want to change the search name and description to strings that you think are more fitting for your personal Yahoo movie searcher.
+
+<p>After you have created this in the note pad, go to the routing menu for this note and choose "Add to Hemlock Engines".  If Hemlock can properly parse this plugin, it'll add it to the engines silently, otherwise it'll pop up a warning message saying that it had failed.
+
+<p>Note that there's a bug in Yahoo's movie search mechanism -- sometimes too exact a title will get you no answers back (for example, searching for "The Matrix" failed to find anything, but searching for "Matrix" nailed it exactly).  And too vauge of a title, where more than one movie could be under that title, may also fail.  Go figure!
+
+<p>If you're too lazy to type all this in :-) you can instead download it as a Hemlock engine <a href="YahooMovies.src.hqx">here</a>.  Then you can export it to the Note Pad by choosing "Send to Notes" from Hemlock's routing menu.
+
+<hr><tt><pre>
+<font color="gray">
+# Yahoo Movies (Localized)
+# Sherlock Plug-In
+# Sean Luke
+# June 10, 1999
+
+# Comments are lines which begin with a "#" -- you can eliminate them
+
+# The search tag tells Hemlock basic information about where to issue queries
+# change the name and description as you see fit
+</font>&lt;search
+     name = "<font color="#FF0000">Yahoo Movies: D.C.</font>"
+     description = "<font color="#FF0000">Movies near Sean's house</font>"
+     method = "GET"
+     action = "http://movies.yahoo.com/showtimes/showtimes.html"
+&gt;
+
+<font color="gray">
+# The input tags tell Hemlock what additional items to put on the URL
+# line (everything after the "?", and separated by "&"'s)
+# the z value is your zip code -- change it as appropriate
+</font>     &lt;input name="z" value="<font color="#FF0000">20878</font>"&gt;
+     &lt;input name="r" value="adv"&gt;
+     &lt;input name="m" user&gt;
+     &lt;input name="t" value=""&gt;
+     &lt;input name="a" value=""&gt;
+     &lt;input name="dt" value="0"&gt;
+     &lt;input name="s" value="tm"&gt;
+     &lt;input name="p" value="4"&gt;
+
+<font color="gray">
+# The interpret tag tells Hemlock how to parse the results.  Watch out
+# below: one of the attributes (resultListStart), is wraped with *single*
+# quotes, not double-quotes.  This is because the data inside of it
+# contains double quotes
+</font>     &lt;interpret
+          resultListStart='&lt;table width="585"'                
+          resultListEnd="&lt;!-- movies module --&gt;"
+          resultItemStart="&lt;/A&gt;&lt;Br&gt;"
+          resultItemEnd="&lt;p&gt;"
+     &gt;
+
+&lt;/search&gt;
+</pre></tt><hr>
+<br>
+<br>
+</BODY>
+</HTML>

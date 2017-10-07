@@ -1,0 +1,138 @@
+<HTML>
+<title>Research Project Descriptions -  Control</title>
+<BODY BGCOLOR="#eeffff"> <!-- white -->
+   <CENTER>
+      <H2>
+         <Resarch Project Descriptions>
+      </H2>
+   </CENTER>
+   </HEAD>
+<HR>
+<P>
+
+<CENTER>
+ <H2>
+  Research Project Description <BR>
+ </H2>
+</CENTER>
+
+<HR>
+
+<P>
+<CENTER>
+Software Architecture Based Control Integration
+
+ <BR>
+  Dr. Liz White<BR>
+  white@cs.gmu.edu <BR>
+</CENTER>
+
+
+ 
+<ol>
+
+<LI><B>Control Integration</b>[1][7][8][9][10]
+<p>
+<UL>
+<LI>  In conjunction with Dr. Jim Purtilo (UMD-CP) and Dr. 
+Gilberto Matos (Siemens Corporate Research), I have been working on techniques for describing, 
+analyzing and integrating the control aspects of large-scale distributed applications using a finite state 
+based approach.  One result has been a technique for automatically enforcing receptive safety 
+properties, properties that can only be violated by component actions.  This work builds on earlier work 
+by Clarke which looks at the generation of synchronization skeletons from temporal descriptions of 
+system behavior.  One of the difficulties of Clarke's work is that the complexity of analysis exceeds 
+exponential growth, stemming from the unrestricted nature of the temporal properties that are being 
+enforced.
+<P>
+The method we have developed selects a restricted set of properties whose enforcement requires lower 
+complexity of analysis.  Initially, each application component is described as an independent finite state 
+machine (FSM) and the receptive safety properties are defined as unsafe states in the global machine.  
+Analysis detects potential safety violations and the preconditions of these violation are used to derive 
+synchronization conditions for the individual components.  The decomposition of complex systems into 
+single component subsets for safety analysis and enforcement contributes to a dramatic reduction in the 
+complexity of the integration.  Additional complexity reduction is achieved using static component 
+analysis instead of reachability analysis; actions that may cause violation of the specified safety 
+property are detected regardless of whether they can actually be reached during execution.  Once unsafe 
+actions are detected, the FSMs associated with the individual components are augmented with delay 
+transitions that preserve system safety.
+A problem with this approach is that it assumes that no failures can occur in the application 
+components.  We have done some initial work to extend the techniques for a restricted form of dynamic 
+reconfiguration - fault tolerance in systems with parallel components.
+
+<P>
+<LI>One interesting problem associated with software development and integration is 
+the issue of implementing interactions between the components of a software application.  Just as with 
+data, there must be agreement between all participants as to the meaning of the protocol used.  Early 
+work in module interconnection assumed that interaction must be coded as part of the components 
+themselves.  However, this makes it impossible to reason either formally or informally about the 
+correctness of the interaction.  One of the driving forces behind the emerging field of software 
+architecture is the need to be able to express control at the configuration level.
+<P>
+My early work looked at ways that control specifications could be used in conjunction with module 
+interconnection languages (MILs) for the purposes of integration.  Recent architecture description 
+languages (ADL) allows programmers to describe control as a first class component of configuration 
+and so my focus has moved into this area.  
+
+</ul>
+<P>
+
+<LI> <B> General Integration and Packaging</b>[2][3][4][5][6] 
+<P>
+  I have had a long-term interest in other integration problems as 
+well, particularly those that relate to packaging.  Packaging is the process of taking the various parts of 
+a software system and determining, via analysis, the appropriate integration mechanisms given 
+environmental assumptions and priorities. I have looked at packaging techniques for both dynamic 
+reconfiguration environments and application-level multicast software.  I have also looked at more 
+general problems in integration and packaging, including how the overall structure of components can 
+be extracted and used in the integration process.  All of these efforts involved significant tool 
+development.
+<P>
+
+
+<P>
+<H2>References</h2>
+ 
+<UL>
+<LI>[1] White, E., J. Purtilo. Integrating the Heterogeneous Control Properties
+of Software Modules, ACM SigSoft, 1992.
+
+<li> [2] Hofmeister, C., E. White, J. Purtilo.
+SURGEON:  A Packager for Dynamically Reconfigurable Distributed Applications.
+IEE Software Engineering Journal, Vol. 8, No. 2 (March 1993), pp. 95-101.
+<li>[3] Swiss, T., J. Purtilo, E. White.  
+Extracting Program Structure for Packaging in a Component-based Environment.
+Computer Languages, Vol. 21, No. 1, pp. 39-48, January 1995.
+<li> [4] Chen, C., E. White, J. Purtilo.
+A Packager for Multicast Software in Distributed Systems.
+Fifth International Conference on Software Engineering and Knowledge Engineering, (June 1993).
+
+<li> [5] Fruth L., J. Purtilo, E. White.
+A Pattern-based Object Linking Mechanism for Component-based Software Development Environments.
+Journal of Systems and Software, Vol, 32, No. 3, pp. 227-236, March 1996.
+
+
+
+<li> [6] White, E., K. Frosch, V. Laviano, M. Hieb, J. M. Pullen. 
+Interfacing External Decisions Processes to DIS Applications.
+Proceedings of the 6th Conference on Computer Generated Forces, July 1996.
+
+<li> [7] Matos, G., J. Purtilo, E. White.  Automated Computation of Decomposable Synchronization Conditions.
+IEEE 1997 High--Assurance Systems Engineering Workshop, August 1997.
+
+<LI> [8] Matos, G., E. White.
+Application of Dynamic Reconfiguration in the Design of Fault Tolerant Productions Systems.
+4th International Conference on Configurable Distributed Systems,
+May 1998.
+
+<li> [9] Matos, G., E. White.  Automated Enforcement of Receptive
+Safety Properties in Distributed Design.
+Presentation at IEEE Seventh Workshop on Enabling Technologies, May 1998.
+<li> [10] Matos, G., E. White. Enforcement of Receptive Safety Properties by Automated Component
+Synchronization.  In preparation.
+
+</UL>
+
+<P>
+<P></BODY>
+</HTML>
+

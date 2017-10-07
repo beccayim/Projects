@@ -1,0 +1,140 @@
+Developing Waba apps for Newton with Windows - a tutorial
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+What you need:
+~~~~~~~~~~~~~~
+
+To get started, you should first download all of the tools and archives
+you'll need to get set up: 
+
+-A recent (Java 1.1 or better) Java Development Kit - http://java.sun.com/
+-The Waba SDK - files wabasdk.10.part1of2.zip and wabasdk.10.part2of2.zip from http://www.wabasoft.com/
+-The Java wababin for Newton package - file wababin.jar.zip
+-The Waba VM for Newton - file WabaVM.pkg.sit
+-A text editor.
+
+What to do:
+~~~~~~~~~~~
+
+1 - Create a directory where you plan to store all of your tools together;
+let's call it "C:\WabaNewt". 
+
+2 - Extract the two Waba SDK packages into "C:\WabaNewt".  You'll get a new
+directory called "wabasdk.10".  This contains all of the Waba class
+documentation, and the classes that Java will use to compile your Waba
+apps. 
+
+3 - The Java wababin for Newton package comes as a file called wababin.jar.zip. Although it is a .zip file, you shouldn't extract it with WinZip. Simply change its filename to wababin.jar (click yes if Window$ tells you the file may become unusable), and move the resulting wababin.jar file into your "C:\WabaNewt" directory. 
+
+4 - Next, we need to set up your Java CLASSPATH and system PATH to point to
+the tools we just extracted.  For Windows 95/98, this is done by editing
+your C:\AUTOEXEC.BAT file.  For Windows 2000, this is done through Start
+-> Settings -> Control Panel -> System -> Advanced -> Environment
+Variables. 
+
+a. First add the path to your Java executables to your PATH.  If your PATH statement looks like this: 
+
+PATH=C:\WINDOWS;C:\WINDOWS\COMMAND;
+
+Then you should add the path to the Java executables (java, javac,
+appletviewer, etc) onto the end like this: 
+
+PATH=C:\WINDOWS;C:\WINDOWS\COMMAND;C:\jdk1.3.0_02\bin;
+
+If there is no PATH statement, just make one and add your Java
+path to it. 
+
+b. Next, we need to create or modify your Java CLASSPATH.  This will tell
+Java where to look for the extra Waba classes and tools.  Chances are, you
+don't have a CLASSPATH variable.  Just create one and add the path to the
+Waba classes (which are in wabasdk. 10\classes\) and the path to the
+wababin.jar file, like this: 
+
+CLASSPATH=C:\WabaNewt\wabasdk.10\classes\;C:\WabaNewt\wababin.jar;.
+
+Note that we also added the working directory with the dot (.). This allows java to find files in the directory you are calling it from (If you forget this you'll always need to specify .\ in front of class names.
+
+When you think you've made these two changes, you should be able to open a
+new DOS/Command Prompt session and have things work.  Try running 'java'
+and 'javac' from the command prompt.  If you get something other than "Bad
+command or file name', you're PATH is good.  Try 'java wababin.Warp' to
+test your CLASSPATH.  You can type 'set' at the command prompt to review
+all of your environment variables. 
+
+Example: Now that you've got your environment set up, let's build and run a Waba
+program to show you how to compile and test your apps on your desktop and
+your Newton.  Most Waba apps you write will run within the Java VM
+installed on your computer; however, if you use a Newton-specific class or
+package (such as the NSWabaAPI), then you'll have to install it on your
+Newton to test it. 
+
+Okay, so let's get going.  Let's go to one of the Waba example programs
+and build it, by doing: 
+
+> cd c:\WabaNewt\wabasdk.10\examples
+> dir
+
+This will show you a list of the available examples.  We'll pick Scribble. 
+
+> cd Scribble
+> dir
+
+Now, you'll see a listing of all of the files in the Scribble directory. 
+There should be a few .java files, a few .bat files, a Scribble.html, and
+an icon.bmp. 
+
+The process of building a Newton package from Waba source code has three
+steps: 
+
+- Compiling Waba source into Java class files (using javac)
+- Packaging the resources (using wababin.Warp) 				
+- Building the final PKG (using wababin.Exegen)
+
+To compile, we use javac like this:
+
+> javac *.java
+
+which will create one or more .class files for every .java file.
+
+At this point, we can test the Waba program with the Java VM.  We just
+need to know which is the main program class of the app.  This is always
+the class that is a subclass of waba.ui.MainWindow, which in this case is
+the Scribble class.  So we run: 
+
+> java waba.applet.Applet Scribble
+
+The first parameter to java loads the waba Applet class, and then the
+second parameter tells Waba which class to load our app from.  (Note that
+the .class extension is omitted).  You should now get a little window with
+Scribble running in it. 
+
+Now that we can compile and test Waba apps on our desktops, we need to
+know how to load them onto our Newtons.  For that we need to use two
+tools, Warp and Exegen.  They have lots of advanced options that we won't
+be using right now; to see them, just run them without any options, like
+this: 
+
+> java wababin.Warp
+> java wababin.Exegen
+
+(Note that java is case sensitive. If you get the error message "Can't find class wababin/warp", chances are you typed warp instead of Warp.)
+
+But right now, we just want to build our first package.  We begin with
+Warp. To build Scribble, we'd run: 
+
+> java wababin.Warp c /f 4 Scribble *.class
+
+The c tells waba to create a new warp file. The /f 4 tells waba we want a package for the Newton. Scribble is the name of the pakage we want to create. And *.class tells waba to use all the .class files in the current directory as input (We could also have typed them out as "Scribble.class DrawArea.class Title.class).
+
+Warp will spit back a bunch of output and also create a file, called
+"Scribble.pkg~".  This is not quite a complete package yet though.  Next
+we need to use Exegen, like this: 
+
+> java wababin.Exegen /f 4 Scribble Scribble Scribble
+
+Again the /f 4 tells waba to create a file aimed at the Newton. The first Scribble is the name of the output file we want to create. The second Scribble is the main window class. And the third Scribble is the warp-generated file to use as input.
+
+This will generate the Scribble.pkg file, which we can then install on our
+Newton. 
+
+

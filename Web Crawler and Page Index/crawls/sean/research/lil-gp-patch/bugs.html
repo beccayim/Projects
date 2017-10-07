@@ -1,0 +1,240 @@
+<HTML>
+<HEAD>
+<TITLE>
+lil-gp Bug Patches
+</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<H1> lil-gp Bug Patches</h1>
+<p> I have identified two chief bugs in lil-gpl 1.1 beta while working in multi-threaded mode.  Until they are resolved, here are (ugly) patches to the code which should work nicely.
+
+<a href="http://www.daimi.aau.dk/~ptr/">Peter Anderson</a> has also identified a bug in lilgp's ERC facility; I've not verified this bug, but his patch is located <a href="peters-patch.html">here</a>.
+
+<h2>The Tree Evaluation Facility</h2>
+<p> This appears to be a <b>very</b> serious bug; all the function <tt>set_current_individual()</tt> does is modify a global static pointer.  This creates a very dangerous race condition when individuals are being evaluated simultaneously.  The patch is to move this global variable into the thread-safe globaldata structure.  This means you will have to first add to your <b>globaldata</b> structure the line...
+
+<p><tt>individual* current_individual;</tt>
+
+<p>You should not access this line in your evaluation code, even though it's in the globaldata structure.  Once this line has been added, follow the following patch instructions.
+
+<p><b>Open the file <tt>eval.c</tt>.  Change the passage...</b>
+
+<P><pre><tt>
+static individual * current_individual;
+
+void set_current_individual ( individual *ind )
+{
+  current_individual = ind;
+}
+</tt></pre>
+
+<p><b>...to...</b>
+
+<p><pre><tt>
+#if !defined(POSIX_MT) && !defined(SOLARIS_MT)
+static individual * current_individual;
+#define CURRENT_INDIVIDUAL current_individual
+#else
+#define CURRENT_INDIVIDUAL ((get_globaldata())->current_individual)
+#endif
+
+void set_current_individual ( individual *ind )
+{
+  CURRENT_INDIVIDUAL = ind;
+}
+</tt></pre>
+
+<p><b>...next, there are THREE passages you'll need to change.  They're all identical.  All three times it occurs, change...</b>
+
+<p><pre><tt>
+arg->d = evaluate_tree ( current_individual->tr[f->evaltree].data,
+                        f->evaltree );
+</tt></pre>
+
+<p><b>...to...</b>
+
+<p><pre><tt>
+arg->d = evaluate_tree ( CURRENT_INDIVIDUAL->tr[f->evaltree].data,
+                        f->evaltree );
+</tt></pre>
+
+<p><b>Lastly, you need to access your globaldata structure differently than you did in the past.  Comment out the line in <tt>app.c</tt> where it says...</b>
+
+<tt><pre>
+extern globaldata g;
+</pre></tt>
+
+<p><b>...(or whatever).  To access your "global" variable, you now use the new threadsafe function
+<tt>get_globaldata()</tt> as in:</b>
+
+<pre>                    void app_eval_fitness ( individual *ind )
+                        {
+                         globaldata* g=get_globaldata();
+                         set_current_individual ( ind );
+                         ...
+</pre>
+
+
+
+<h2>The Random Facility</h2>
+<p> lil-gp's random facility is not threadsafe and cannot be called from your evaluation code in multi-threaded mode without some patching.   The patch for this wraps the random facility in a mutex so only one thread can call the random function at a time. Assuming threads aren't re-seeing the generator, the only function that needs to be wrapped is <tt>random_double()</tt> because the other random functions operate on it.    <b>Note that this patch only works for POSIX Threads</b>.  You'll have to code your own Solaris Threads patch, sorry.  Here are the patch instructions.
+
+<p><b>First open <tt>main.c</tt>, and change the passage</b>
+
+<P><pre><tt>
+/* maximum number of nodes per individual.  -1 if no limit is
+   enforced. */
+int ind_nodelimit;
+
+int main ( int argc, char **argv )
+{
+
+     multipop *mpop;
+     int startgen;
+     char *param;
+     event start, end, diff;
+     event eval, breed;
+     int startfromcheckpoint;
+
+#ifdef MEMORY_LOG
+     /* dump all memory allocations to a file. */
+     mlog = fopen ( "memory.log", "w" );
+#endif
+</tt></pre>
+
+<p> <b>...to...</b>
+
+<p><pre><tt>
+/* maximum number of nodes per individual.  -1 if no limit is
+   enforced. */
+int ind_nodelimit;
+
+extern pthread_mutex_t random_mutex;  /* Mutexes the random code */
+
+int main ( int argc, char **argv )
+{
+
+     multipop *mpop;
+     int startgen;
+     char *param;
+     event start, end, diff;
+     event eval, breed;
+     int startfromcheckpoint;
+
+     pthread_mutex_init(&random_mutex,NULL); /* Initialize the random mutex */
+
+#ifdef MEMORY_LOG
+     /* dump all memory allocations to a file. */
+     mlog = fopen ( "memory.log", "w" );
+#endif
+</tt></pre>
+
+<p><b> Then modify the passage (at the end of <tt>main()</tt>)...</b>
+
+<p><pre><tt>
+     /* print memory/time statistics and close output files. */
+     output_system_stats ( &diff, &eval, &breed );
+     close_output_streams();
+
+#ifdef MEMORY_LOG
+     fclose ( mlog );
+#endif
+
+     /* all done. */
+     return 0;
+}
+</tt></pre>
+
+<p><b>...to...</b>
+
+<p><pre><tt>
+     /* print memory/time statistics and close output files. */
+     output_system_stats ( &diff, &eval, &breed );
+     close_output_streams();
+
+#ifdef MEMORY_LOG
+     fclose ( mlog );
+#endif
+
+     pthread_mutex_destroy(&random_mutex);  /* Destroy random mutex */
+
+     /* all done. */
+     return 0;
+}
+</tt></pre>
+
+
+<p><b> Next, open the file <tt>random.c</tt> Change the passage </b>
+
+
+<p><pre><tt>
+static double mz = 0.0;
+static double ma[55];       /* the number 55 is special -- see Knuth. */
+static int inext, inextp;
+</tt></pre>
+
+<p><b> ...to...</b>
+
+<p><pre><tt>
+static double mz = 0.0;
+static double ma[55];       /* the number 55 is special -- see Knuth. */
+static int inext, inextp;
+
+pthread_mutex_t random_mutex;
+</tt></pre>
+
+<p><b> and change the function...</b>
+
+<p><pre><tt>
+double random_double ( void )
+{
+
+     double mj;
+     double res;
+
+     inext = (inext+1)%55;
+     inextp = (inextp+1)%55;
+     
+     mj = ma[inext] - ma[inextp];
+     if ( mj < mz )
+          mj = mj + mbig;
+     ma[inext] = mj;
+
+     res=mbig;
+
+     return mj/res;
+}
+</tt></pre>
+
+<p><b> ...to...</b>
+
+<p><pre><tt>
+double random_double ( void )
+{
+  /* There's a race condition on this, so we need to mutex it! */
+
+     double mj;
+     double res;
+
+     pthread_mutex_lock(&random_mutex);
+
+     inext = (inext+1)%55;
+     inextp = (inextp+1)%55;
+     
+     mj = ma[inext] - ma[inextp];
+     if ( mj < mz )
+          mj = mj + mbig;
+     ma[inext] = mj;
+
+     res=mbig;
+
+     pthread_mutex_unlock(&random_mutex);
+     return mj/res;
+}
+</tt></pre>
+
+
+</BODY>
+</HTML>
+
+

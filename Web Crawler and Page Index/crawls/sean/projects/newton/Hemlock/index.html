@@ -1,0 +1,353 @@
+<HTML>
+<HEAD>
+<TITLE> Hemlock for the Newton </TITLE>
+</HEAD>
+<BODY bgcolor="white">
+
+<table width="100%"><tr><td valign=bottom align=left width=64>
+<img valign="bottom" align="left" src="Icon.gif" width=64>
+</td><td valign=bottom align=left width="75%">
+<br><FONT size=5><b>Hemlock</b></font><br>
+<font size=4><b>An Internet Search Tool for the Newton</b></font>
+</td><td align=right valign=bottom width="25%">
+<i>...Make your own personalized <a href="MakeAPlugin.html">Yahoo Movies plugin</a> for Hemlock!
+</td></tr></table>
+
+<p><b>Hemlock</b> searches multiple internet search engines, news organizations, shopping centers, 
+even top-ten lists
+using for user-specified search terms, putting the results in a scrollable list similar to the results in the
+Newton's Find panel.  To search the web, Hemlock uses Apple Computer's <a href="http://www.apple.com/sherlock/">Sherlock&#8482;</a> plugins.  Hemlock is free.
+
+
+<H3>Table of Contents</H3>
+<ol>
+  <li><A href="index.html#HemlockRequirements">Hemlock Requirements</a>
+  <li><a href="index.html#Migrating">Migrating from Hemlock 1.2.2 to Hemlock 2.0b1</a> <b><font color=red>Important!</font></b>
+  <li><a href="index.html#Hemlock.2.0">What's New in Hemlock 2.0b1</a>
+  <li><a href="index.html#Hang">Stomping the MP2000/Emate300 Internet Hang Bug</a> <b><font color=red>Important!</font></b>
+  <li><a href="index.html#KnownBugs">Known Bugs and Issues</a>
+  <li><a href="index.html#DownloadHemlock">Download Hemlock</a>
+  <li><a href="index.html#UsingHemlock">Using Hemlock</a>
+       <li><a href="l/
+  <li><a href="index.html#UsingHemlockFromNewtsCape">Using Hemlock from Newt's Cape</a>
+  <li><a href="index.html#WhereDoIGetPlugins">"Where do I get plugins?"</a>
+  <li><a href="index.html#WhyHemlock">"Why 'Hemlock'"?</a>
+  <li><a href="index.html#HemlockReviews">Hemlock Reviews</a>
+  <li><a href="index.html#WritingHemlockFriendlyPlugins">Writing Hemlock-Friendly Plugins</a>
+  <li><a href="index.html#OddsAndEnds">Odds and Ends</a>
+</ol>
+
+
+<H3><a name="HemlockRequirements">Hemlock Requirements</a></H3>
+
+<p>Hemlock does not do its own web page and search engine fetching; instead, 
+Hemlock relies on <a href="http://members.bellatlantic.net/~sweyer/newton/newtscape.htm">Newt's Cape</a>
+to do this low-level work for it.  <b>Hemlock will not work without recent versions of Newt's Cape.</b>  I don't 
+currently plan on writing one that works with either NetHopper or LunaSuite, sorry.  It goes without saying
+that Hemlock needs Newton OS 2.0.  I have tested Hemlock extensively on a MessagePad 2000, but only just a little on an MP130 and MP120.
+
+<H3><a name="Migrating">Migrating from Hemlock 1.2.2 to Hemlock 2.0b1</a></H3>
+
+Hemlock 2.0b1 is an <b>early release version</b>.  After the beta period, 2.0b1 will be updated to 2.0.  I don't think there are many unknown bugs (if any) in 2.0b1, but it is bleeding-edge software nonetheless.  Please test it and <a href="mailto:seanl@cs.umd.edu">let me know</a>.
+
+<ol>
+  <li> Replace your old default search engines with the new default ones.  This doesn't mean just pressing "update" -- delete them and replace them.  You don't need to replace non-default search engines probably.
+  <li> Read the new information on preferences and the information below carefully, and set up your preferences accordingly.
+  <li> Clear out your old search results by choosing Find:Overwrite Results.
+</ol>
+
+<H3><a name="Hemlock.2.0">What's New in Hemlock 2.0b1</a></H3>
+
+<ul>
+  <li>Properly parses Sherlock 2.0's date, availability, name, relevance, and price tags.
+  <li>Fixes the <a href="index.html#Hang">Internet Hang Bug</a>.
+  <li>Text/discussion/etc is trimmed to avoid super-long lengths.
+  <li>Fixed parsing bugs.
+  <li>Writing out notes now writes out name/price/availability/date/relevance/routeType
+  <li>Prefences changed.  A lot.
+  <li>Hemlock can now be full-screen.
+  <li>Discussion is moved to second line if nothing else is there.
+  <li>Search engine info window now only displays name, description, route type, and update info.
+  <li>Revised the default search engines.
+  <li>Additional URLs now properly work for relative URLs (oops).
+  <li>Add to Bookmarks now uses the item's text to bookmark (oops).
+  <li>See below for new information on <b>international search engines</b>.
+</ul>
+
+<H3><a name="Hang">Stomping the MP2000/Emate300 Internet Hang Bug</a></H3>
+
+<p>A common problem for MP2000s and Emate300s (but <i>not</i> for the MP2100 or for the MP130 or below), is Hemlock and/or Newt's Cape hanging the Newton after a few uses.  I believe I've stomped this obnoxious NIE bug through a simple workaround: smaller windows.
+
+<p>The Newton has a special heap called the C++ heap (this is different from the "frames heap" that everyone knows and loves).  In the C++ heap is stored the low-level temporary information for the C++ underpinnings of the system.  One big consumer of the C++ heap is windows and window redrawing.  Another big consumer is the NIE.  Now you're beginning to see the problem!  The NIE consumes so much C++ heap that closing large windows requires more C++ heap than is available, and the Newton freezes either for a <i>very</i> long time, or more likely, forever.  You have to reboot.  I was getting this problem regularly with Hemlock and also while browsing on Newt's Cape.  Hemlock and Newt's Cape both repeatedly open and close very big windows.  NetHopper doesn't have this problem because, unlike Hemlock and Newt's Cape, it opens just one big window and keeps it open.
+
+<p>At any rate, it appears that by making the windows slightly smaller, this problem magically goes away.  I've set up a preference for Hemlock which makes its results and text summary windows a little smaller for MP2000s and emates, and have not had any problems since!  Steve Weyer will soon release a version of Newt's Cape with a similar feature.  Emates have slightly larger screens than MP2000s -- I do not own an emate so I cannot determine if the size I've arranged will fix the problem for emates too.  If not, please let me know and I'll shrink it further for emate users.
+
+<H3><a name="KnownBugs">Known Bugs and Issues</a></H3>
+
+<ul>
+  <li>Newt's Cape is not adding Hemlock's queries to its cache when the user asks to display them in Newt's Cape.
+  <li>The term "Full Size" has not been localized.
+  <li>If the Newt's Cape preference <tt>Other Options:Reset HTTP</tt> is set to a non-<tt>nil</tt> value, Newt's Cape will fail to respond to Hemlock after processing the first in a series of Hemlock requests.  Steve Weyer is looking into this.
+  <li>Because French words are so long :-) the French menus are too wide to fit in portrait mode on an MP130.  Bother <a href="mailto:pguyot@pnm-consulting.com">Paul Guyot</a> if you need this fixed.
+  <li>Due to a bug in Apple's protoNewFolderTab object, a black line obscures some larger folder names; this is only obvious when viewing the French version of Hemlock in portrait mode on the MP130.  If anyone knows how to fix this, please let me know.
+  <li>Hemlock seems to have compatibility problems with <a href="http://www.newts.com/newton/">BarKeep</a>, a button bar utility, which generates -8007 errors.  BarKeep's author is looking into the issue.
+  <li>Also, <a href="mailto:pguyot@pnm-consulting.com">Paul Guyot</a> has expressed interest in modifying Hemlock to work with NetHopper and possibly LunaSuite.  Please encourage him!  If you're interested in tackling the NetHopper port yourself, see the <a href="http://www.allpen.com/products/nethopper-api/">NetHopper API.</a>
+</ul>
+
+<H3><a name="DownloadHemlock">Download Hemlock</a></H3>
+
+<p>Hemlock is designed to work only with recent versions of <a href="http://members.bellatlantic.net/~sweyer/newton/newtscape.htm">Newt's Cape</a>.  Be sure to upgrade your your Newt's Cape copy.  I suggest a minimum of Newt's Cape version 2.0-r.
+
+<p>The German version of Hemlock was localized by <a href="http://ourworld.compuserve.com/homepages/SMessmer/index-us.html">Stefan Messmer</a>.  The French version of Hemlock was localized by <a href="mailto:pguyot@pnm-consulting.com">Paul Guyot</a> of <a href="http://www.pnm-consulting.com/newton/">PNM Consulting</a>.  <b>Please contact them with any localization issues.</b>
+
+<p>If you're having trouble with the Stuffit (.sit) versions, it may be
+because your Stuffit Expander (or whatever) is too old; these were compressed
+with recent versions of Stuffit, and a recent Stuffit change is not backward compatible with earlier versions of the program, unfortunately. <a href="http://www.aladdinsys.com/">Upgrade.</a>  It's free!
+
+<p>
+<DIV ALIGN="CENTER">
+<TABLE BORDER="0" CELLSPACING="1" CELLPADDING="2">
+<TR>
+<TD ALIGN="left" BGCOLOR="#FFFFFF"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" COLOR="#FFFFFF" ></FONT><BR></TD>
+<TD ALIGN="center" BGCOLOR="#3366CC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" COLOR="#FFFFFF" >Macintosh plus English Docs</FONT><BR></TD>
+<TD ALIGN="center" BGCOLOR="#3366CC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" COLOR="#FFFFFF" >Direct to Newton/PC (.pkg)</FONT><BR></TD>
+</TR><TR>
+<TD ALIGN="center" BGCOLOR="#3366CC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" COLOR="#FFFFFF" >English</FONT><BR></TD>
+<TD ALIGN="left" BGCOLOR="#CCCCCC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" >
+<a href="Hemlock.2.0b1.sit">Hemlock.2.0b1.sit</a></FONT><BR></TD>
+<TD ALIGN="left" BGCOLOR="#CCCCCC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" >
+<a href="Hemlock.2.0b1.pkg">Hemlock.2.0b1.pkg</a></FONT><BR></TD>
+</TR><TR>
+<TD ALIGN="center" BGCOLOR="#3366CC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" COLOR="#FFFFFF" >German</FONT><BR></TD>
+<TD ALIGN="left" BGCOLOR="#CCCCCC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" >
+<a href="Hemlock.2.0b1D.sit">Hemlock.2.0b1D.sit</a></FONT><BR></TD>
+<TD ALIGN="left" BGCOLOR="#CCCCCC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" >
+<a href="Hemlock.2.0b1D.pkg">Hemlock.2.0b1D.pkg</a></FONT><BR></TD>
+</TR><TR>
+<TD ALIGN="center" BGCOLOR="#3366CC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" COLOR="#FFFFFF" >French</FONT><BR></TD>
+<TD ALIGN="left" BGCOLOR="#CCCCCC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" >
+<a href="Hemlock.2.0b1F.sit">Hemlock.2.0b1F.sit</a></FONT><BR></TD>
+<TD ALIGN="left" BGCOLOR="#CCCCCC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" >
+<a href="Hemlock.2.0b1F.pkg">Hemlock.2.0b1F.pkg</a></FONT><BR></TD>
+</TR><TR>
+<TD ALIGN="center" BGCOLOR="#3366CC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" COLOR="#FFFFFF" >Source Code</FONT><BR></TD>
+<TD COLSPAN=2 ALIGN="left" BGCOLOR="#CCCCCC"><FONT SIZE="-1" FACE="Simple,Geneva,Arial,Helvetica" >
+<a href="Hemlock.2.0b1.source.sit">Hemlock.2.0b1.source.sit</a></FONT><BR></TD>
+</tr>
+</table>
+</div>
+
+<H3><a name="UsingHemlock">Using Hemlock</a></H3>
+
+<img src="New.gif" valign=bottom align=right>
+
+<H4>Loading, Filing, Modifying, and Updating Search Engine Plugins</H4>
+
+<p>Hemlock does its magic by reading the "plugins" desgined to drive Apple Computer's Sherlock(tm) internet
+search system built into the new Find File panel in MacOS 8.5.  So before you can use Hemlock, you need
+to load some of these plugins into Hemlock.  Hemlock <b>only</b> reads plugins that end in the extension ".src.hqx".  Nothing else.
+
+<p>You begin by pressing the "New" button, then entering the URL of a plugin, and pressing "Get".  Alternatively
+you can load a plugin directly into Hemlock via Newt's Cape (see <a href="index.html#UsingHemlockFromNewtsCape">below</a>).  After
+the plugin is fetched, the search engine it represents appears in the list in the main Hemlock window.  In Hemlock's
+main window, you can
+
+<ul>
+  <li><b>Delete</b> plugins
+  <li><b>File</b> them
+  <li><b>Update</b> them: as search engines change their query mechanisms and resultant HTML formats, you may need to periodically update the plugins manually, perhaps once a week, if they start giving bad results.
+  <li><b>Export them to the Note Pad</b>: this saves out a search engine in .src format to the Note Pad.  .src format, described in <a href="http://developer.apple.com/technotes/tn/tn1141.html">Apple's specifications</a> and an <a href="http://www.apple.com/sherlock/plugindev.html">introduction</a>, is the format which describes the operations of a search engine.  You can also <b>import plugins</b> in .src format back into Hemlock by choosing "Add to Hemlock Engines" in the Note Pad's Routing menu.
+</ul>
+
+<img src="Hemlock.gif" valign=bottom align=right>
+
+<H4>Submitting a Query</H4>
+
+<p>To submit a query, enter search terms into the "Words" field, select the search engines you wish to query,
+and press Find.  If you want any new search results to overwrite existing results, choose "Overwrite Results", else choose "Append to Results".
+
+<p>Hemlock queries the engines one by one and tabulates the results. 
+
+<H4>Cancelling Requests and Dealing with Errors</H4>
+
+<p>Hemlock makes three kinds of requests to Newt's Cape:  loading a new search engine plugin, updating a group of plugins, or submitting one ore more queries.  If one or more requests are pending, the "Find" menu changes into a "Stop" menu.  Choosing "Stop Job" from the Stop menu will stop all requests submitted to Hemlock, including any that are currently pending.  
+
+<p>If an error occurs while processing a request, Hemlock will present you with four options:
+
+<ul>
+<li>Retry that request.
+<li>Skip that request and go on to the next in the series.
+<li>Skip that request, go on to the next, and always do that; don't present me with these options again.
+<li>Stop the this request and all pending requests (equivalent to pressing the main "Stop" button).
+</ul>
+
+<p>If Newt's Cape is not responding to a request, or you for some reason want to skip just that request or retry it
+choose "Interrupt Job" from the Stop menu.  This is similar to creating an error while processing the request, and Hemlock will correspondingly give you three options: retry the request, skip the request and go to the next request, or stop all requests.
+
+<p>Once in a blue moon, Newt's Cape may get <i>really</i> stuck and refuse to process any requests Hemlock tosses its way, no matter what you do.  Don't give up hope! You can give Newt's Cape the equivalent of a vulcan nerve pinch (force-quit it if it's running in the background) by choosing "Reset Newt's Cape" from the "i" menu.  This also causes Newt's Cape to drop its current HTTP connection and let go of NIE; so if by chance you want a Hemlock to allow NIE to drop without quitting Hemlock, this menu option will also do the trick.
+
+
+<H4><img src="Results.gif" valign=bottom align=right>Showing the Results</H4>
+
+<p>When Hemlock has finished querying search engines, it will automatically show you the results (unless you
+cancelled the querying).  Or you can show the results yourself by pressing the
+overview button (the "belly button").  Just like the Newton's Find program...in fact, if you look closely, you'll notice more than a superficial resemblence between the two :-).
+
+<p>Hemlock displays the results in a scrolling list.  All the results for a given search engine are shown
+in the order they were processed from the query; the first item will be a header for the search engine itself.
+
+<p>The search engine header contains the
+name of the engine, and possibly a short advertisement text (very important to keep search engine companies
+making plugins!).  If you click on a search engine header, you can choose to have Newt's
+Cape load and display the query as it was presented to the search engine, bookmark this query, export the query information to the Note Pad, or load and display the
+advertisement's URL link.
+
+<p><b>How Query Results are Displayed.</b>  Hemlock shows the "main text" in bold.  If the URL feature is turned on (see preferences below), typically Hemlock will show some additional text to the right of the main text, and also the URL below.  To the left of the URL may appear a relevance bar if that information was parsed.  This is shown in the example image above.  If you click on a query result, you can
+choose to display a text summary of that result, export the result text and related information to the Note Pad, or have Newt's Cape either load or bookmark the URL for the result. Hemlock can also do some additional tricks for special kinds of search engines: 
+
+<p><img src="date.gif" valign=bottom align=right><i>News:</i> If the date feature is turned on (see preferences below), then Hemlock will replace the URL and additional text with date information, if available, on the second line, as shown here.
+
+<p><img src="priceavail.gif" valign=bottom align=right><i>Shopping:</i> If the price/availability feature is turned on (see preferences below), then Hemlock will replace the URL and additional text with price and availability information, if availabile, on the second line, as shown here.
+
+<p><img src="relevance.gif" valign=bottom align=right>If the url feature is turned <i>off</i> (see preferences below), then Hemlock will never display the URL.  If no date, availability, or price information is to be displayed, then Hemlock will move the additional text to the second line to show more of it.
+
+
+<H4>The Text Summary Window, and Additional Link Gathering</H4>
+
+<p>If you choose to display a text summary, a window pops up which displays a screenful of text.  In the top-right corner appears the relevance as a percent value, if any.  In the routing menu, you can send the result text and related information to the Note Pad, load the result URL, or bookmark it.  If the original text contained images, they are represented in summary text as <tt>[foo]</tt>, where <i>foo</i> is the alt text (if any) for the image.  With no alt text, an image appears as <tt>[]</tt>.
+
+<p>In addition to the main link for the item, Hemlock also gathers all other links located inside the item area; the hypertext for these additional links is listed in the "Load Other Links" menu in the text summary window.  Choose one of these menu items, and the associated link is loaded in Newt's Cape.
+
+For example, the following HTML text snippet is found by searching for "Hemlock Newton" at www.altavista.com, and as parsed as a single item in Hemlock:
+
+<p>
+<table "width=100%"><tr><td width=40></td><td bgcolor="#CCCCCC">
+<font size=-1 face="Simple,Geneva,Arial,Helvetica">
+<dl><dt><b>2. </b><a href="http://scruffy.cs.umd.edu:8080/seanl/Newton/Hemlock/index.html"><b>Hemlock for the Newton</b></a><dd>
+Hemlock. An Internet Search Tool for the Newton. Hemlock searches multiple internet search engines, news organizations, shopping centers, even top-ten...<br><b>URL:</b> <font color=gray>scruffy.cs.umd.edu:8080/seanl/Newton/Hemlock/index.html<br>
+Last modified 20-May-99 - page size 17K - in English</font> [&nbsp;<a href="http://jump.altavista.com/trans.go?urltext=http%3a%2f%2fscruffy%2ecs%2eumd%2eedu%3a8080%2fseanl%2fNewton%2fHemlock%2findex%2ehtml&language=en">Translate</a>&nbsp;]</dl></font></td></tr></table>
+
+<ul>
+  <li>The <b>main link</b> (the first one) has the associated text <font face="Simple,Helvetica,Arial,SansSerif,Geneva">Hemlock for the Newton</font>.  This is the link that you ordinarily load or bookmark in the routing menu of the text summary window.
+  <li>This item has one <b>additional link</b> in the discussion, whose associated text is <font face="Simple,Helvetica,Arial,SansSerif,Geneva">Translate</font>.  Thus the single item "Translate" will appear in the "Load Other Links" menu of the text summary window; choosing this item from the menu will load this link in Newt's Cape.
+</ul>
+
+<H4>Preferences</H4>
+
+<p>Hemlock provides serveral preferences, accessible from Info:Prefs.
+
+<ul>
+  <li><b>Always store new results internally</b>
+  <li><b>Always store new engines internally</b>
+  <li><b>Reset Newt's Cape after a request</b>.  This in effect presses Info:Reset Newt's Cape after all current pending jobs.  This lets Newt's Cape let go of the HTTP connection, which in turn lets NIE bring down the connection if it's set up that way.
+  <li><b>Gather additional links when parsing</b>.  This tells Hemlock that it should bother gathering those additional links discussed above.  Gathering additional links can take more parsing time and more storage space, so if you're in a small system you may not want it.
+  <li><b>Never warn on failure</b>.  With this, Hemlock acts as if you always press the "Don't Warn" button every time it encounters an error.
+  <li><b>MP2000/Emate300</b>.  This causes Hemlock to display its results and text summary windows smaller, which seems to alleviate the <a href="index.html#Hang">MP2000 Internet Hang Bug.</a>
+  <li><b>Full Size</b>.  This causes Hemlock's search engines window to fill the whole screen.
+  <li><img src="priceavailicon.gif">  If this is checked, Hemlock will search query results for price and availability information (a little bit slower), and also display this information in the results.  The URL and additional text will not be displayed.
+  <li><img src="dateicon.gif">  If this is checked, Hemlock will search query results for date information (a little bit slower), and also display this information in the results. The URL and additional text will not be displayed.
+  <li><b>URL</b>.  If this is <i>unchecked</i>, Hemlock will <i>never</i> display the main URL in the query results.  This leaves more room for additional discussion text.
+</ul>
+       
+<H4>Other Stuff</H4>
+<ul>
+  <li>Info:Hide will hide Hemlock.
+  <li>Info:About brings up the about panel, which includes the all-important <b>version number.</b>
+  <li>Words:<i>date</i> will insert the date into the Words field.  This is useful for some plugins (such as CNN Interactive) where if you search by the current date, you get daily headlines!
+  <li>Clicking on an engine displays some information about it:
+       <ul>
+	 <li>The Sherlock 2.0 channel for the plugin (Internet/Apple/News/Shopping/Reference).
+	 <li>Any plugin description information.
+	 <li>Whether the plugin is updatable, and the recommended minimum time delay between updates.
+       </ul>
+</ul>
+
+<H3><a name="UsingHemlockFromNewtsCape">Using Hemlock From Newt's Cape</a></H3>
+
+<p>Hemlock registers itself as a Newt's Cape helper app for the extension ".src.hqx" and the BinHex MIME type  This means that usually you should be able to load a new search engine directly into Hemlock just by clicking on its URL link in Newt's Cape.
+
+<p>Newt's Cape can also be configured to use Hemlock as its Find facility.  In Newt's Cape, General:Other Options,
+<ul>
+  <li>First, set <tt>Find.Title</tt> to <tt>Hemlock</tt>
+  <li>To just launch Hemlock with the given search terms, but let the user manually enter the search engines, set <tt>Find.URL</tt> to <tt>Hemlock</tt>
+  <li>To launch Hemlock and start searching on one or more search engines, set <tt>Find.URL</tt> to <tt>Hemlock</tt> followed by the search engine names (as they appear in Hemlock) delimited by semicolons.  For example, <tt>Hemlock;Yahoo!;CNN Interactive;AltaVista</tt> will search Yahoo!, CNN Interactive, and AltaVista.  If <tt>_all</tt> appears somewhere in the list of engines delimited by semicolons, all the engines that Hemlock has will be searched.
+</ul>
+
+<p>After this, Hemlock will be used as the search mechanism when you choose "Newt's Cape:Find?" in Routing buttons (such as from the Notes app).
+
+<H3><a name="WhereDoIGetPlugins">"Where Do I Get Plugins?"</a></H3>
+
+<p>I've put together a few Newton-specific plugins listed below.
+
+<ul>
+  <li><a href="plugins/NewtonTalk.src.hqx">Interim NewtonTalk Archive Search Engine</a>
+  <li><a href="plugins/Amug.src.hqx">AMUG Newton Software Archive</a>
+  <li><a href="plugins/NewtWho.src.hqx">NewtWho?</a>
+  <li><a href="plugins/c.s.n.announce.src.hqx">comp.sys.newton.announce</a>
+  <li><a href="plugins/c.s.n.marketplace.src.hqx">comp.sys.newton.marketplace</a>
+  <li><a href="plugins/c.s.n.misc.src.hqx">comp.sys.newton.misc</a>
+  <li><a href="plugins/c.s.n.programmer.src.hqx">comp.sys.newton.programmer</a>
+  <li><a href="plugins/de.comp.sys.newton.src.hqx">de.comp.sys.newton</a> (German).
+  <li><a href="plugins/NewtonTalk.src.hqx">DNUG Newton Software Version Tracker</a>
+</ul>
+
+<p>Here are some sites with lots of plugins for you to browse. <b>Note:</b> Many third-party Sherlock plugin developers put their files in Stuffit (".sit" or ".sit.hqx") format, which Hemlock cannot read.
+
+<ul>
+<li><a href="http://www.google.com/defaults.html">Google</a> provides a number of different variants on Google searches (btw, if you've not tried Google, you're missing out, it's the best search engine on the web, bar none).
+<li><a href="http://www.apple.com/sherlock/plugins.html">Apple Computer's Sherlock Plugin Site</a> no longer lists plugins, just images of them :-).
+<li><a href="http://www.apple-donuts.com/sherlocksearch/newton.html">Apple Donuts</a> has set up Newton-friendly versions of all their plugins.  They're a little dated -- bother these guys to update their Newton versions (it's trivial for them to do).
+</ul>
+
+<p>If you're not American, Apple has special "international" versions of plugins, which have the same URL as the original plugin, plus a special symbol representing the country.  For example, the standard American plugin for Excite is <tt>http://si.info.apple.com/updates/Excite.src.hqx</tt> but various "international" versions include:
+
+<ul>
+  <li>Excite-UK: <tt>http://si.info.apple.com/updates/Excite_B.src.hqx</tt>
+  <li>Excite-Europe: <tt>http://si.info.apple.com/updates/Excite_EU.src.hqx</tt>
+  <li>Excite-Australia: <tt>http://si.info.apple.com/updates/Excite_Z.src.hqx</tt>
+  <li>Excite-Worldwide works the same as the American plugin): <tt>http://si.info.apple.com/updates/Excite_ZM.src.hqx</tt>
+</ul>
+
+<p>The same thing goes for Altavista, Infoseek, Lycos, Encyclopedia (worldwide anyway).  If you are aware off other secret international plugins, let me know.  BTW, since it's a completely different server and company, I've added <b>Amazon.com UK</b> to Hemlock's standard plugin list.
+
+<H3><a name="WhyHemlock">"Why 'Hemlock'"?</a></H3>
+
+<p>Perhaps <a href="http://www.pbs.org/kids/sesame/activities/hn/2/1.htm">this</a> might jog your memory.
+
+<H3><a name="HemlockReviews">Hemlock Reviews</a></H3>
+
+<ul>
+  <li><a href="http://www.pdadash.com/news/reviews/1999/99.02.05/index.shtml">PDA Dash</a> webzine, by Charles Pickrell.
+  <li><a href="peter.html">NewtonTalk</a> email list, by Peter Rand.
+  <li>Peter has extended his review and translated it into German for Issue 12 of <a href="http://www.palmtop-pro.com">Palmtop Pro Magazine</a>, a German mobile-computing magazine.  A <a href="peter.jpg">JPEG picture</a> of the review is available.
+  <li><img align=right valign=top src="http://download.planetnewton.com/download/smallbulb.jpg"><img align=right valign=top src="http://download.planetnewton.com/download/smallbulb.jpg"><img align=right valign=top src="http://download.planetnewton.com/download/smallbulb.jpg"><img align=right valign=top src="http://download.planetnewton.com/download/smallbulb.jpg"><img align=right valign=top src="http://download.planetnewton.com/download/smallbulb.jpg"><a href="http://www.planetnewton.com">Planet Newton</a> bestowed upon Hemlock a unique honor: <i>five</i> lightbulbs, this despite the fact that Planet Newton's highest award is only four lightbulbs.  :-)  
+</ul>
+
+<H3><a name="WritingHemlockFriendlyPlugins">Writing Hemlock-Friendly Plugins</a></H3>
+
+<p><i>These are notes for plug-in developers only; if you're not creating plugins, you can ignore this section...</i>
+
+<p><b>Provide a <FONT COLOR="blue">.src</FONT>.hqx file URL.</b> Hemlock reads <b>only</b> .src.hqx files.  Unfortunately, many Sherlock plugin authors have chosen to encapsulate their .src files in Stuffit (.sit or .sit.hqx) archives, so they can include README files and pretty icons for the Sherlock plugins.  Stuffit is a proprietary format and Hemlock cannot read it.
+
+<p><b>Provide good text for your advertisements.</b>  Hemlock cannot display GIF or JPEG files; this means that if you want Hemlock to show banner advertisement information, you must provide text as well as pictures.  You don't need to say much: Hemlock on a vertically-rotated MessagePad 130 can only show about 40 characters of text per banner advertisement.  On a horizontally-rotated Emate 300 (the largest Newton screen), Hemlock can display up to 100 characters of text.  Here's how you tell Hemlock to display advertising text:
+
+<ul><li>If you are using the <tt>&lt;bannerStart&gt;</tt> and <tt>&lt;bannerEnd&gt;</tt> tags, Hemlock will use the <tt>alt</tt> attribute of the first <tt>&lt;img&gt;</tt> tag after the first <tt>&lt;a&gt;</tt> tag after the banner start, for its advertising text.  The aforementioned <tt>&lt;a&gt;</tt> tag provides the link URL.
+     <li>If you are using the <tt>bannerImage</tt> and <tt>bannerLink</tt> attributes of the <tt>&lt;search&gt;</tt>tag, Apple unwisely forgot to include a text alternative to <tt>bannerImage</tt>.  Hemlock adds to the .src format the following <tt>&lt;search&gt;</tt> attribute:  <tt><b>bannerText</b></tt>.  Anything in <tt>bannerText</tt> will be displayed as an advertisement.  <tt>bannerText</tt> takes precedence over <tt>&lt;bannerStart&gt;</tt> and <tt>&lt;bannerEnd&gt;</tt>.
+</ul>
+
+<p><b>Writing Hemlock-only plugins</b>.  If tons of Mac users are too much for your little newton site, you <i>can</i> write a Hemlock-only plugin, simply by changing your <tt>&lt;search ...&gt;</tt> tag to <tt>&lt;hemlock-search ...&gt;</tt>.
+
+<H3><a name="OddsAndEnds">Odds and Ends</a></H3>
+
+<ul>
+  <li>Viewing this web page in Newt's Cape?  Have Hemlock installed?  Then try clicking <a href="Hemlock:seanl">here</a>.  Go ahead, try it.
+
+  <li>Hemlock has an <a href="api.html">API</a>.
+  <li>Hemlock's parsing is based on <a href="http://developer.apple.com/technotes/tn/tn1141.html">Apple's specifications</a> best they can be understood.  <a href="http://www.apple.com/sherlock/plugindev.html">Another</a> less technical document.
+  <li>Many people have asked me where I got the de-binhexing code.  My code
+       is derived from explanations and C source code which you can find <a href="http://www.natural-innovations.com/boo/binhex.html">here</a>.
+  <li>I've also been asked why I can't include un-Stuffit code to deal with those pesky .sit.hqx files.  The simple answer is: the only available C-based freeware unpacker for Stuffit that I know of is <a href="http://ink.yahoo.com/bin/query?p=macunpack&z=2&hc=0&hs=0">macunpack</a>, a UNIX utility whose code requires a lot of dynamic memory allocation in big chunks (something the Newton just can't do).  If you want to give it a try, you're more than welcome, but I'll sit out this one I think.
+</ul>
+       
+</BODY>
+</HTML>

@@ -1,0 +1,196 @@
+<html>
+<head><title>Lisp at GMU</title>
+</head>
+
+<STYLE TYPE="text/css">
+body {
+                margin :0px;
+                font-family:Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+                font-size:12px;
+                background-color: #ffffff;
+        }
+.text { font-family:Verdana,Helvetica,Geneva,Arial,Sans-Serif; font-size:12px; }
+.mainbody
+	{
+	margin-left:10px;
+	margin-right:10px;
+	}
+.header {
+        margin: 0px 0px 0px 0px
+        font: 36px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    font-weight: 900;
+        background-color : #303050;
+        color : white;
+        padding-left : 20px;
+        padding-bottom : 20px;
+        padding-top : 20px;
+        }
+
+.headertext     {
+        font: 24px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight: 900;
+        background-color : #303050;
+        color : white;
+        }
+.smallheadertext        {
+        font: 14px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    font-weight: 900;
+        background-color : #303050;
+        color : white;
+        }
+.bullettext     {
+        font: 12px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        padding-left : 15px;
+        padding-right:  35px;
+        padding-bottom: 12px;
+        }
+
+.bullettitle    {
+        color : #303050;
+        font: 12px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight:900;
+        padding-bottom: 12px;
+        width:130px;
+        left:5px;
+        }
+H2
+        {
+        margin-top: 3em;
+        border-bottom: solid 5px #303050;
+        font-size: 16px;
+        font-name: Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight: 900;
+        }
+
+
+</STYLE>
+
+</head>
+<body>
+
+
+<div class="header">
+<div class="smallheadertext">Helpful Hints for Surviving Lisp in CS and AI...</div>
+<div class="headertext">Lisp at GMU</div>
+</div>
+<div class="mainbody">
+
+<img src="lisplogo_warning2_128.png" style="border-left: 10px solid white; " align=right>
+
+<H2>Running Lisp on Mason</H2>
+
+<p>Lisp runs fine on <tt><b>mason.gmu.edu</b></tt> (type <tt>lisp</tt>).  But <b>only use Lisp on Mason to verify your code, not for development</b>.  Instead, do development on your own machine -- it's <i>much</i> less painful. However, in Prof. Luke's classes, your Lisp homework and projects must compile and run properly on Mason for them to count. So be sure it's working on Mason.
+
+<p>If you're familiar with Emacs, you may wish to run lisp under emacs on mason.  You probably will want to install <a href="http://common-lisp.net/project/slime/">slime</a> as well.  See below for more information.
+
+<br clear="right"><H2>Getting a Lisp system at Home</H2>
+
+<h3> On the Command Line</h3>
+The basic, if primitive, way to get Lisp running is to install a command-line Lisp system.  This works especially well if you have a UNIX system (OS X or Linux).  Command-line Lisps include:
+
+<ul>
+<li><a href="http://sbcl.sourceforge.net/">SBCL</a> is a recent revision of CMUCL with new modifications and additions.  <b>I recommend SBCL as the best command-line Lisp.</b>  However, SBCL is very verbose and warning-filled though, which can get quite annoying.  On the Mac, if you prefer a quieter, more forgiving, and decently fast Lisp, try CCL or MCL.
+<li><a href="http://clisp.sourceforge.net/">CLISP</a> is a good Common Lisp, and is highly portable to nearly every environment out there.  However, the reason it is portable is that it compiles to a bytecode interpreter rather than to machine code, and so it's pretty slow. 
+<li><a href="https://code.google.com/p/mcl/">MCL</a> is a freeware command-line-only version of Macintosh Common Lisp, which runs under MacOS X nicely.  It is much faster than CLISP on the Mac, but its debugging facilities are primitive.
+<li><a href="http://ccl.clozure.com/">CCL</a>, or Clozure CL, was a fork of MCL way back when but now is a high-performance Lisp implementation in its own right, and runs on a lot of different platforms.  If you're getting annoyed at SBCL's verbosity, try CCL.
+<li><a href="http://www.cons.org/cmucl/">CMUCL</a> is a first-rate Common Lisp, but it is not available on all platforms.   CMUCL is the system from which SBCL sprang.
+<li>If you're interested in playing around with it, <a href="http://abcl.org/">ABCL</a> is a Common Lisp implementation which runs on the Java VM.  Note that it's not particularly fast (yet).
+</ul>
+
+<H3> Lisp IDEs</h3>Lisp is an interactive programming language and IDEs were <i>invented</i> originally for Lisp.  Use an IDE designed for Lisp -- it will make your coding far more productive.  There are several approaches to doing this:
+
+<ul>
+<li> <b>Use a Lisp system with a built-in GUI.</b>  The some choices here are:
+	<ul>
+	<li><a href="https://itunes.apple.com/us/app/clozure-cl/id489900618">Clozure Common Lisp</a> is the GUI version of CCL and is available on the Mac App Store.  I love Clozure -- it goes way back to my early Mac days -- but have found it to be crashy.
+	<li><a href="http://www.franz.com/downloads/clp/survey">Franz Allegro Common Lisp for Windows, Linux, and FreeBSD.</a>  
+	<li><a href="http://www.lispworks.com/downloads/index.html">Xanalys LispWorks Personal Addition for Linux, MacOS X, and Windows.</a>  This package has the added advantage of being the same exact kind of common lisp as the installation on mason.gmu.edu.
+	</ul>
+
+<p>Other examples include <a href="http://www.cormanlisp.com">Corman Lisp</a> on Windows.
+
+<p><li> <b>Use a command-line Lisp attached to Eclipse.</b>  To do this, first install SBCL or Clisp. Then install a plugin.  Two I know of (but have no experience with) are:
+	<ul>
+	<li><a href="http://www.sergeykolos.com/cusp/update/">Cusp</a> seems to have the most mindshare.  Only works with SBCL.
+	<li><a href="http://sourceforge.net/projects/dandelion-ecl">Dandelion</a>.  Works with SBCL or Clisp.
+	</ul>
+
+<p><li> <b>Use a command-line Lisp attached to GUI Emacs+slime.</b>  This is the approach that I take.  
+	<ul>
+	<li>A graphical version of Emacs is available on most systems, particularly Linux boxen which often have it built-in.
+	<li>On OS X, try <a href="http://sourceforge.net/projects/aquamacs/">Aquamacs</a>, a good cocoa Emacs.
+	<li>You should augment your Emacs system by installing  <a href="http://common-lisp.net/project/slime">slime</a> a set of Emacs extensions which dramatically enhance its ability to act as an IDE for Lisp.
+	</ul>
+
+<p>One gotcha that befalls students is that Emacs is <i>also written in Lisp</i> -- just not Common Lisp.  Emacs is written in its own variant of lisp called, not surprisingly, Emacs Lisp.  But you're not using Emacs Lisp.  Instead, you're using Emacs to run and control <i>another Lisp system</i> (SBCL, etc.)  However, it's easy to mix up running code in Emacs Lisp with running code in the underlying Common Lisp system.  So just be aware of this fact in case you start getting lost.
+
+<p>Emacs+SLIME+Lisp is so common an approach that there are several all-in-one installation bundles available:
+	<ul>
+	<li>You might try the <a href="http://common-lisp.net/project/lispbox/">LispBox</a> page, which has installers for Franz Allegro, OpenMCL, SBCL, and CLISP, on Windows, Linux, and OS X.  I've not tried it myself, but you might have luck there.  And the guy knows what he's talking about.  Apparently he's not going to be maintaining it much anymore however. 
+	<li>Another nice all-in-one bundle for OS X is <a href="https://github.com/jwiegley/ready-lisp">ReadyLisp</a>, which ties together Aquamacs Emacs, SLIME, and SBCL.
+	</ul>
+
+<p><li><b>Use a command-line lisp plugged into the terminal version of Emacs+slime.</b>  This is rather more painful, though less painful than logging into mason!  The procedure here is essentially identical to the GUI Emacs above.
+
+<P><li><b>Use SBCL attached to vim</b> See the <a href="http://www.vim.org/scripts/script.php?script_id=2219">limp</a> project.
+
+<p>Another new project which tries to do some of SLIME inside of vim: <a href="http://www.vim.org/scripts/script.php?script_id=2531">slimv</a>.
+
+</ul>
+
+<h3>Not Common Lisp
+</h3>
+
+<P>You should be aware that there are two other variants of Lisp out there which are <b>NOT</b> Common Lisp.  Those variants are Scheme and Emacs Lisp.  Do not use either one.  Scheme is a really nice language, but it's not what we'll be using.  BTW, if you want to try out Scheme, <a href="http://www.plt-scheme.org/">PLT Scheme</a> is definitely the way to go.  If you'd like to instead edit Scheme with Emacs, check out <a href="http://www.neilvandyke.org/quack/">quack</a>.
+
+<p>There are some new Lisp-related languages lately.  <a href="http://www.lambdassociates.org/">Qi</a> tries to move Lisp towards strong typing languages like Haskell or Ocaml.  <a href="http://clojure.sourceforge.net/">Clojure</a> is a Lisp of sorts which is designed to directly target the Java Virtual Machine.  And <a href="http://arclanguage.org/">Arc</a> is Paul Graham's exploratory revision of Lisp for rapid coding.    
+
+<H2>My Tutorials and Assorted Lisp Stuff</h2>
+
+Lisp is a daunting language.  To help you get up to speed quickly, I have put together a Lisp tutorial that coverx concepts of the language which are <i>similar</i> to languages you've already seen.  This should enable you to do basic programming in Lisp.  I give short shrift to features special to Lisp.  Afterwards you should have enough basics to tackle the "special to Lisp" features (macros, CLOS, etc.) in a textbook at your own leisure.
+
+<ol>
+<li> <a href="LispTutorial.html">Lisp QuickStart</a>.  GMU Students: pay particularly close attention to the "Lisp Style" section.
+</ol>
+
+Some other stuff I've done which you might find useful:
+
+<ol>
+<li> A <a href="LispCheatSheet.txt">cheat sheet</a> for using various data structures in Lisp.
+<li> A very short tutorial on <a href="cons.html">Cons Cells</a>
+<li> My <a href="doseq.lisp">doseq</a> macros, simple examples of useful Lisp macros.
+<li> My <a href="snarf.lisp">snarf</a> object-oriented language.  Much smaller and simpler than CLOS.  An example of how you can bend Lisp to your will (in this case: I've modified Lisp to support an OO language with a fe macros and functions).  This is often how Lisp is used in big projects -- programmers twist Lisp into the language they'd most like for their project, then write in that language!
+</ol>
+
+<H2>Other People's Lisp Tutorials and Information</H2>
+
+<ol>
+<li>One of the best books out there is now available entirely online.  It's a <a href="http://www.gigamonkeys.com/book/">lisp tutorial</a> called <i>Practical Common Lisp</i>, by Peter Seibel.  It's got a lot of examples that you may find helpful.
+
+<li>Another good online Lisp tutorial called the <a href="http://mypage.iu.edu/~colallen/lp/">Lisp Primer</a>.  It's very good.  
+
+<li>CMU's David Touretzky put his 1990 book, <i><a href="http://www.cs.cmu.edu/~dst/LispBook/">Common Lisp: A Gentle Introduction to Symbolic Computation</a></i>, online as a PDF file.  Still a very good text.
+
+<li>If you're looking for all sorts of information about Common Lisp (books, online resources, software, whatever) try the <a href="http://www.apl.jhu.edu/~hall/lisp.html">Common Lisp Introduction</a>.  
+
+<li>Common Lisp is very big -- if you need a complete reference to Common Lisp to find just that function you're looking for, try Harlequin's <a href="http://www.lispworks.com/reference/HyperSpec/">Common Lisp HyperSpec</a>.
+
+<li>Paul Graham's book <i>On Lisp</i>, a fine book on <i>advanced</i> Lisp, is out of print.  So he has graciously made it available <a href="http://www.paulgraham.com/onlisptext.html">online!</a>  Including source code.
+
+<li>Peter Norvig wrote a book called <a href="http://www.norvig.com/paip.html">Paradigms of Artificial Intelligence Programming: Case Studies in Common Lisp</a>, which goes through many large AI projects and implements them in their entirety in Lisp.  Norvig has provided the source code on his web page.  Also, the web page for Russel and (again) Norvig's <a href="http://aima.cs.berkeley.edu/">Artificial Intelligence: A Modern Approach</a> has a ton of code in Lisp, among other languages.  Did I mention that Norvig's now Director of Research at Google?
+
+<!--<li>Lisp.org has a long list of <a href="http://lisp.org/alu/res-lisp-education">online Lisp Tutorials</a>.
+-->
+
+<li><a href="http://www.cl-user.net">CL-USER.net</a> has a wealth of Lisp stuff.
+
+<li>If you've read all the way to the bottom of this page, you're clearly into Lisp.  Here's where you get advanced Lisp packages of all sorts (everything from networking to regular expressions to 3D graphics): <a href="http://www.quicklisp.org/">QuickLisp</a>.  Basically, it's apt-get for Lisp.  But you have to know what you're looking for.
+
+</ol>
+
+</div>
+<br>
+<br>
+<br>
+</body>
+</html>

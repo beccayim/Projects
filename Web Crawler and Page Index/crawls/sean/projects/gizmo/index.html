@@ -1,0 +1,115 @@
+<html style="padding: 3em;">
+
+<head>
+<meta name="description"
+      content="Gizmo is an open-source MIDI utility device for the Arduino Uno or Mega.  It contains, among other things, an arpeggiator, step sequencer, note recorder, MIDI gauge, MIDI controller, keyboard splitter and mixer, filter facility, and measure counter.  Gizmo can control the MIDI clock, transpose, volume shift, output to control voltage, and lots more.">
+<title>Gizmo</title>
+<style>
+body { 
+    font-family: "Gill Sans","Gill Sans MT",Helvetica,Arial,Verdana,SansSerif;
+    font-size: 100%;
+    line-height: 120%;
+    align: center;
+    margin: auto;
+    background-color: #eaeef0;
+    color: black;
+    width: 1024px;
+}
+td { vertical-align: top; }
+li { padding-bottom: 5px; }
+</style>
+</head>
+<body>
+<div style="margin: auto;">
+
+
+<img src="banner.jpg">
+
+<h1 style="padding-top: 20px;">Gizmo</h1>
+
+Gizmo is the codename for an open source MIDI utility device which targets the Arduino Uno or Mega.  It can do at least this:
+
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr><td>
+<h3>Applications</h3>
+<ul>
+<li>Full-featured Arpeggiator
+<li>Full-featured Step Sequencer (16, 24, 32, 48, 64 steps)
+<li>Small Note Recorder
+<li>Capable MIDI Gauge or Monitor
+<li>Small two-button, two-pot MIDI Controller
+<li>(On the Arduino Mega) Keyboard Splitter
+<li>(On the Arduino Mega) Channel Merging, Chord Memory, Debouncing,
+CC-NRPN mapping, Multichannel Note Distribution, Channel Blocking, and Note Replication
+<li>(On the Arduino Mega) Measure and Beat Counter
+</ul>
+<td>
+<h3>Capabilities</h3>
+<ul>
+<li>MIDI In and Out
+<li>NRPN Control of Gizmo
+<li>Swing
+<li>Bypass
+<li>Tempo and Note Speed
+<li>MIDI Clock Control, Filtering, and Division
+<li>Click Tracks
+<li>(On the Arduino Mega) Transposition and Volume Modulation
+<li>(On the Arduino Mega) Output to 0-5V DC Control Voltage (V/Octave with Gate and auxillary voltage for velocity or pressure)
+<li>Storage for 10 Arpeggios and 2 (Uno) or 9 (Mega) Sequences / Recordings
+</ul>
+</table>
+
+Have an Uno but want the (Mega-only) Keyboard Splitter?  No problem: Gizmo is
+fully modular: you can customize your board to add or remove
+applications and features as necessary.
+
+<h2>Demos</h2>
+
+Gizmo's LED display is rock-solid, steady bright red.  But in these videos it looks like flickery, junky yellow due to the camera.  :-( Annoying. Note: these demos were of Version 1: there have been improvements since.
+
+<p><table border=0 cellspacing=0 cellpadding=0>
+<tr><td>
+<h3 style="padding-right: 50px;">Introduction and Arpeggiator</h3>
+<td>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YxtnexxPvks" frameborder="0" allowfullscreen style="border: 1px solid black;"></iframe>
+<tr><td>
+<h3 style="padding-right: 50px;">Step Sequencer</h3>
+<td>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YfV-gth0y-U" frameborder="0" allowfullscreen style="border: 1px solid black;"></iframe>
+<tr><td>
+<h3 style="padding-right: 50px;">MIDI Gauge, Controller, and Note Recorder</h3>
+<td>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/70lB7-0owYw" frameborder="0" allowfullscr
+een style="border: 1px solid black;"></iframe>
+
+</table>
+
+<h2>Obtaining Gizmo</h2>
+
+<ul>
+<li><a href="https://github.com/eclab/gizmo/">Github Repository</a>
+<li><a href="https://github.com/eclab/gizmo/blob/master/docs/Gizmo.pdf"> Manual (in PDF) </a>
+<li>To assemble Gizmo, you'll need an <a href="http://arduino.cc">Arduino Uno or Mega</a> (if you want to develop, get a Mega), a <a href="https://www.sparkfun.com/products/12898">SparkFun MIDI Shield</a>, some Arduino headers (I use <a href="https://www.sparkfun.com/products/11417">stackable headers</a>), an <a href="https://www.adafruit.com/products/2037">Adafruit 16x8 LED Matrix Backpack</a> (they come in various colors, shapes, and sizes -- I use 1.2" round amber red), and four <a href="https://www.adafruit.com/products/1952">Male/Female Jumper wires</a>.  Note that in the video my LED Matrix has headers which stick out horizontally: I installed <a href="https://www.adafruit.com/products/1540">angle headers</a>.  By default the Matrix comes with straight headers which you can point up, or point down into a breadboard.  Follow the build instructions in the Manual.  It's really easy.
+<li>Optional voltage output is done via two I2C-based DACs.  Gizmo targets <a href="https://www.adafruit.com/product/935">these 12-bit DACs from Adafruit</a>.  You'll also need more wires (of course) and perhaps a breadboard to make things easy.  Warning: the voltage code has not been tested at all yet.
+<li>Gizmo relies on the esteemed <a href="https://github.com/FortySevenEffects/arduino_midi_library">Forty Seven Effects MIDI Library</a>, though you should install the version of the library which comes in Gizmo's repository.
+</ul>
+
+<h2>Development Ideas</h2>
+
+I'm making Gizmo available in the hopes that people will do fun things with it.  Ideas I've had include porting it to the <a href="http://www.e-licktronic.com/en/7-boards-arduino-midi-controller-diy-sequencer">E-licktronic MIDI shield family</a>, extending the interface to include the <a href="https://www.adafruit.com/product/1999">16x8 Unztrument</a> or even just the <a href="https://learn.adafruit.com/adafruit-trellis-diy-open-source-led-keypad">Trellis Keypad</a>, upgrading to an <a href="https://www.adafruit.com/product/684">OLED</a> (though it may be too slow), attaching a <a href="http://www.ginsingsound.com/">synthesizer shield</a>, and of course making a decent case for this thing.
+
+<p>If you're thinking of doing development for the Gizmo, you should do it on an Arduino Mega.  At present Gizmo takes up all but just a few bytes of the Arduino Uno's memory: there's no space left to code.
+
+<h2>Similar Devices</h2>
+
+<ul>
+<li><a href="http://mutable-instruments.net/midipal">MIDIPal</a>, <a href="https://midisizer.com/other/midibud/">MIDIBud</a>, <a href="https://midisizer.com/midigal/">MIDIGal</a>, and <a href="http://www.audiothingies.com/midibro/">MIDIBro</a>.
+<li>Various devices from <a href="http://www.midisolutions.com/">MIDISolutions</a>.
+<li><a href="http://groovesizer.com/">Groovesizer</a>
+<li><a href="https://www.tindie.com/products/hotchk155/arpie-midi-arpeggiator-kit/">Arpie</a>
+<li>Brendan Clarke's <a href="http://brendanclarke.com/2014/04/23/arduino-based-midi-sequencer/">Arduino Based MIDI Sequencer</a> (really an arpeggiator), which served as a significant inspiration in my project.
+</ul>
+
+</div>
+</body>
+</html>

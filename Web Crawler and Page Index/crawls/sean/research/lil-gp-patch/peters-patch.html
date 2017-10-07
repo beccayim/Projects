@@ -1,0 +1,123 @@
+<HTML>
+<HEAD>
+<TITLE>
+Peter's Patch
+</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<H1>Peter's Patch to Sean's Patched <i>lil-gp</i>  <a href="http://www.cs.umd.edu/users/seanl/patched-gp/gp.tar.gz">Kernel</a></h1>
+
+<p><a href="http://www.daimi.aau.dk/~ptr/">Peter Anderson</a> noted the following bug in the ERC facility.  I've not yet verified that this bug exists or that the patch works, so you're own your own.  I include his message to me below:
+
+<pre>
+
+Use of ERC terminal on the form "name:ERCindex" do not work.
+
+The ECR terminal nodes are not constructed.
+The first call to "mod_read_tree_recurse" 
+eind with the ERC structure is NULL, and the call to
+"get_function_by_name" core dump on a I:1 structure.
+
+I have modified the function "mod_read_tree_recurse" in populate.c so
+the user can use ERC integer constant. By supplying a function to
+insert the constant in the DATATYPE structure. The chances are as followed.
+in the files:
+
+populate.c
+ckpoint.c
+ 
+
+a) "get_function_by_name" in ckpoint.c is made safe by changing:
+  
+        *ep = eind[j];
+        (*ep)->f = fs->cset+i;
+
+change to:
+
+        if (eind != NULL) {
+            *ep = eind[j];
+            (*ep)->f = fs->cset+i;
+        }
+
+b) "mod_read_tree_recurs" catch the ERCindex before the call to 
+"get_function_by_name"
+
+  f = get_function_by_name ( tree, string, &ep, eind );
+
+chance to:
+
+  sl = strlen ( string );
+  for ( si = 0; si < sl; ++si )
+    {
+
+      if ( string[si] == ':' )
+        {
+          /* names of the form "name:index" are chopped at the colon,
+             and the value of the index saved. */
+          string[si] = 0;
+          ECRvalue = atoi ( string+si+1 );
+          break;
+        }
+    }
+
+  f = get_function_by_name ( tree, string, &ep, eind );
+
+where sl,si are int.
+
+c) create the ERC'c in "mod_read_tree_recurse"
+
+  switch ( f->type )
+    {
+    case TERM_NORM:
+    case TERM_ARG:
+    case EVAL_TERM:
+      break;
+    case TERM_ERC:
+      /* record the ERC address as the next lnode in the array. */
+      gensp_next(space)->d = ep; 
+      break;
+
+chance to:
+
+  switch ( f->type )
+    {
+    case TERM_NORM:
+    case TERM_ARG:
+    case EVAL_TERM:
+      break;
+    case TERM_ERC:
+      /* record the ERC address as the next lnode in the array. */
+      new_ECR = gensp_next(space);
+      new_ECR->d = new_ephemeral_const ( f );
+      set_ECR_value(&new_ECR->d->d , ECRvalue);
+      /* gensp_next(space)->d = ep; */
+      break;
+
+The function "set_ECR_value(&new_ECR->d->d , ECRvalue);" is user defined
+in my case it is:
+
+void set_ECR_value(DATATYPE *d, int ECRvalue)
+{
+  d->input = ECRvalue;
+}
+
+
+d) before the first call to "mod_read_tree_recurse" is there a call to
+"gensp_reset(0)" that is not needed.
+
+  case LOAD_FILE:
+    gensp_reset(0); 
+    mod_read_tree_recurse( 0, NULL, dataum[j], j, buf, 1);
+    /* need to do something here about limit checking */
+    break;
+
+chance to:
+
+  case LOAD_FILE:
+    /* gensp_reset(0); not needed there is a call before the switch */
+    mod_read_tree_recurse( 0, NULL, dataum[j], j, buf, 1);
+    /* need to do something here about limit checking */
+    break;
+
+
+</pre>

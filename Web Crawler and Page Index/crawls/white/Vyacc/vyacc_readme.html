@@ -1,0 +1,119 @@
+<html>
+<title>The Visual Yacc Distribution</title>
+<body>
+<h1>The Visual Yacc Distribution</h2>
+<b>Visual yacc</b> is a tool that takes a lex and a yacc specification pair 
+and generates a parser with the the same behavior as the original parser
+plus it will draw a representation of the stack maintained by the
+parser as well as a corresponding parse tree.
+<P> 
+<h2>Usage</h2>
+Creating the visualizing parser is done with
+<P>
+<tt>visual_yacc [-v]  <b>file_name</b> </tt>
+<P>
+  where <b>file_name</b> corresponds to a lex file <b>file_name</b>.l and a yacc file <b> file_name</b>.y.
+  The optional -v (verbose) flag can be used to see what is happening during
+  creation.
+<P>
+The result is a file <b>file_name</b>.out
+<P> 
+  Typing this command with redirected input will cause a window to 
+  appear on your screen.  This window has several buttons:
+<UL>
+<LI> <B> start </b>- start the visualization
+<LI>  <B>step </b> - take a single step
+<LI> <B> multi-step </b>- take a user-defined number of steps
+<LI> <B> go </b> - parse the entire input string
+<LI> <B> quit</b> - end the visualization
+</UL>
+
+
+On the left side of the screen, we show the current parse stack.  Shifts
+cause the stack to grow and reductions pop multiple elements from the
+stack (and push a single element).  If you are using the displayable
+attributes, these values are shown on the stack as well.
+<P>
+On the right side of the screen, we show the parse tree.  At the moment
+no attributes are displayed, but you can see what rules are chosen by
+YACC during the parse. 
+
+<h2>Examples to get you started</h2>
+We have included an <tt>Examples</tt> directory in the distribution that
+should help you figure out
+how to visualize your own grammers. These examples are located in
+<br>
+<tt>Examples</tt>
+<br>
+Each of the ch* directories correspond to examples from the O'Reilly & 
+Associates book "lex & yacc" by John R. Levine, Tony Mason & Doug Brown.  
+Directory <tt>gram</tt> corresponds to a pascal-oid language.
+Each directory contains:
+<UL>
+<li> lex and yacc 
+specification pairs designed to work with visual_yacc
+<LI> A <tt>ReadMe</tt> file that describes how to use the executable
+in the directory and that shows you what the input files look like.
+<LI> An executable 
+<LI> input files
+</UL>
+<P> 
+ 
+ 
+<h2>Writing your own visualizable grammars</h2>
+ 
+There are several rules you must follow in order to write your own visualizable
+grammars.  
+<OL>
+<LI> The files must be lex-able and yacc-able on their own,
+except for the special keyword <tt>VYint</tt>. 
+The visualization software will check this for you and reject any code that
+would not be buildable this way.
+<h3>Example 1</h3>
+This example comes from ch3-02. 
+ 
+<pre>
+%union {  
+   VYint val;
+}
+
+%type &lt;val> NUMBER expression
+</pre>
+These integers are referenced in the obvious way:
+<pre>
+   |    expression '-' NUMBER   { $$ = $1 - $3; }
+</pre>
+
+In this example, NUMBER is set in the lexor:
+<pre>
+      {. . .  yylval.val = . . .  return NUMBER;  }
+</pre>
+
+Changing VYint to int is also fine except that no value will be
+shown on the stack.
+ 
+<LI> 
+You can declare other attributes associated
+with the individual nodes and computations using these attributes can
+be arbitrarily complex.  However, the value of these attributes will not
+be shown during the visualization. The declarations must
+occur after the declaration for <tt>x</tt>.  
+ 
+<h3>Example 3</h3>
+In this example, we assume that the lexor sets the <tt>dval</tt> for NUMBER.
+(<tt>yylval.s.dval = </tt>)
+<pre>
+%union {
+      double dval;
+      VYint val;
+      int vblno;
+}
+. . .
+ 
+</pre>
+ 
+</ol>
+<P>
+
+</body></html>
+

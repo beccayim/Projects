@@ -1,0 +1,93 @@
+ <HTML>
+<title>Project Summery  -  Visualization Tool for YACC</title>
+<BODY>
+
+<H1>Visual YACC</h1>
+One of the difficult parts of teaching courses on compiler theory is finding ways to explain syntax 
+directed translation to students.  The evaluation technique is closely tied to the parsing algorithm in use 
+and is particularly non-intuitive for LR (bottom-up) parsing.  Although there is some debate on how 
+helpful visualization tools are in the teaching process, I decided to find a way to allow students to 
+interact with this process in order to understand it better.
+<P>
+I designed a source-to-source translation scheme that instrumented input YACC grammars with calls to 
+a graphics library so that as the resulting parser analyzed an input string, these calls would generate a 
+visualization of both the LR parse stack (and attribute values) and the LR parse tree.  Based on my 
+design, Laura Deddens, a student visiting me as part of the CRA Distributed Mentorship Program, 
+constructed a prototype tool.  When I teach compilers, I give the students a quick tutorial on the use of 
+this tool so that they can experiment with it if they desire.  I also have it available on the web, where it 
+has been downloaded by many different people.  A Java version of this tool also exists, built by GMU 
+Masters student Jeff Ruby.
+
+<h2> Associated Publication</h2> 
+<UL>
+<LI> Elizabeth White, Laura Deddens, Jeffrey Ruby, "Software Visualization of LR Parsing and 
+Synthesized Attribute Evaluation", Software: Practice and Experience, Vol. 29, No. 1, pp. 1 - 16, January 1999.
+</ul>
+
+
+<h2>Project Summery  -  Visualization Tool for YACC</H2>
+
+May 1996
+<P> 
+One of the challenging aspects of teaching students how compilers work
+is helping them discover how a stack is used and how attributes are
+synthesized during LR parsing.  The project that Laura Deddens,
+a senior at UC Santa Cruz, and I are working on this summer 
+is the development of a tool that allows
+students to write a grammar, augment it with code to do simple attribute
+synthesis, and then get to watch a visualization of the parse of some input.
+ 
+In order to accomplish this, we have had to determine the following:
+<ol>
+<li> what should the visualization look like?<p>
+Before doing any development work, we needed to determine what aspects of
+the parsing and attribute synthesis process can and should be visualized.
+My initial plan was to visualize changes to the parse stack and
+attributes associated with stack elements as input
+symbols were processed.  However, Laura convinced me that it was possible
+to visualize the parse tree as well!
+<p>
+<li> What standard graphics package should be used?<p>
+We chose to use Motif because of its widespread popularity.
+<p>
+<li>How can we manually instrument YACC grammars so that as the parsing 
+progresses, the visualization is updated appropriately,
+<P>
+The next task was to determine how to add
+Motif calls to a YACC grammar specification so that the calls are made as
+the input is parsed.  Much of this will be fairly routine, but some of
+the more complex aspects requireed experimenting with different call
+placements and with some manual transformations on the grammar.
+This was accomplished fairly quickly and the student became an expert
+on adding calls to arbitrary grammars so that the parsing process
+could be visualized.
+<p>
+<li>Can we use source-to-source translation tools to automatically instrument
+     the YACC grammars for this visualization?
+<P> 
+The goal of the fourth step was to develop a tool that takes a YACC grammar
+(augmented in the restricted manner described in step 1) and produces a
+YACC grammar that contains the calls to the visualization package.  Once
+this YACC grammar is processed by the YACC tools and is compiled, a compiler
+that parses and does visualization for the given grammar will result.  The
+most straightforward way to build this instrumentation tool is using a
+source-to-source translation package such as NewYacc.
+</ol>
+ 
+<P>
+<a href="vyacc.html"> Information on using the VisualYacc tool here at
+GMU</a>
+<P>
+<a href="../Vyacc/dist.html"> Information on getting a copy of the VisualYacc tool</a>
+<P>
+The final piece of work that I would like to have done here is to
+build a web-based interface so that the tool would be demonstratable
+to a wider audience.
+ 
+<P>
+<i>This work was supported under the <A href="http://www.cra.org"> Computing Research Association's</a>
+Distributed Mentor Program
+</i>
+</body>
+</HTML>
+

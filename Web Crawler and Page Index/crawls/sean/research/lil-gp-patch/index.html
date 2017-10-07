@@ -1,0 +1,341 @@
+<HTML>
+<HEAD>
+<TITLE>
+Sean's Patched lil-gp Kernel
+</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<H1>Sean's Patched <i>lil-gp</i>  <a href="gp.tar.gz">Kernel</a></h1>
+
+<p>This modified lil-gp kernel provides a number of new features developed to make possible our GP development of real-time soccer softbots for 1997 <A href="http://www.robocup.org/RoboCup/RoboCup.html">RoboCup</a> competition in Nagoya.  You may find them useful.
+
+<dl><dt><b>Bug Fixes</b>
+<dd>	There are two serious race-condition bugs in multithreaded lil-gp.  This kernel fixes them, but if you don't want to use this kernel, you can still patch them
+     yourself; the instructions are located <a href="bugs.html">here.</a>  Regardless, you need to very slightly modify your application code as described below. 
+<dt><b>Strongly Typed GP</b>
+<dd>
+	The kernel is now strongly-typed, not typeless like normal lil-gp.
+	You can still do "typeless" GP, of course, as this is just a special case of
+	strongly-typed GP (with a single type).
+
+<dt><b>Coevolution</b>
+<dd>	The kernel supports a simple form of coevolution.
+
+<dt><b>Reading Populations from Files</b>
+<dd>	You can now generate populations from lisp-like tree files.
+
+<dt><b>Tree Generation and Modification</b>
+<dd>	Mutation, population generation, and crossover now have some
+	new features.
+
+<dt><b>New Selection Methods</b>
+<dd>	The kernel now provides boltzman selection and sigma scaling selection.
+<dt><b>Mutlithreading Patch</b>
+<dd>	You can now specify the number of threads in your input file, instead of (yuck) in an environment variable.
+
+</dl>
+
+<p> Actually, I'm not exactly certain if this is all the features added to this kernel; it's been a while.  And I state here and now, I am not responsible for any bugs or errors in this code.  It is offered freely and without warranty or guarantee of any kind.
+
+<p><a href="http://www.daimi.aau.dk/~ptr/">Peter Andersen</a> has found two bugs in the patched and original kernels.  One is a minor memory leak which has been fixed as of December 23, 1997 (download a new version if your version is older than this).  The other concerns ERCs and appears to occur in the original kernel; I've not verified if his patch fix works yet, so instead of patching it in the kernel, I give his instructions <a href="peters-patch.html"> here.</a>
+
+<p> The kernel is located <a href="gp.tar.gz"><b>here</b></a>.  It includes a single app (a modified version of ant, called anttype, which demonstrates strongly-typed GP with the kernel), but no documentation etc.  You'll have to get that from the <a href="http://garage.cps.msu.edu/software/software-index.html#lilgp">lil-gp home page</a>.
+
+
+<h2>Bug Fixes</h2>
+
+<p>The kernel fixes two very serious multithreading race-condition bugs in the
+lilgp distribution.  One is in the <tt>random()</tt> facility, the other is in the
+variable <tt>current_individual</tt>.
+
+<p>To make possible the <tt>current_individual</tt> bug fix, a modification had to
+be made in the user's definition of and use of the <tt>globaldata</tt> structure.
+So to use this kernel, you'll need to add one
+field to your <tt>globaldata</tt> structure in <tt>app.h</tt> to
+facilitate one of the bug patches.  Namely, your <tt>globaldata</tt> struct should
+look thusly:
+
+<pre>                    typedef struct
+                        {
+                        /* include this to patch the current_individual bug,
+                           but DO NOT access it.  Just leave it alone... */
+                        individual* current_individual;
+                        /* end patch */
+
+
+                        /* The rest of your globaldata stuff goes here...*/
+
+                        } globaldata;
+
+
+                    /* Now it's important to comment this out -- we no longer use it! */
+                    /*extern globaldata g;*/
+
+</pre>
+
+<p>So if we've commented out <tt>g</tt> as a global variable, how do we gain access to our global data?  This is done with a new, correctly thread-safe function called <tt>get_globaldata()</tt>.  At the top of <tt>app_eval_fitness</tt>, you now do something like:
+
+<pre>                    void app_eval_fitness ( individual *ind )
+                        {
+                         globaldata* g=get_globaldata();
+                         set_current_individual ( ind );
+                         ...
+</pre>
+
+<p>...and that completes <i>your</i> part of the bug fix!
+
+
+<h2>Strongly-Typed lilgp</h2>
+
+<p>This version of lilgp has been modified to use strongly-typed gp instead of
+single-typed gp.  Tree generation (for mutation and for initial trees) and
+crossover have been heavily modified to enforce strongly-typed GP.
+
+<p>This kernel distinguishes "types" by assigning each "type" a unique integer, starting with 0 and going up.
+Each tree has a user-defined return type for that tree.  Additionally, each
+function (terminal or nonterminal) has a user-defined return type,
+and nonterminal functions have
+unique return types for each of their arguments.  The kernel will not permit
+trees to be constructed such that their root function returns the wrong type
+for the tree, or such that any nonterminal has as a child a function which returns
+the wrong type for that argument position in the nonterminal.
+
+<p> You'll use DATATYPE as usual for passing results among functions.  You should take
+it on faith that whatever you encode in DATATYPE will be properly decoded by whomever
+you pass it to, since you now are enforced to expect the data in DATATYPE to be of the
+same exact "type".
+
+<P>This code works peachy for a single tree and for individuals with several trees not used as ADFs.  I have *not* tested it for ADFs, so I cannot vouch that it works for sure with them, but I believe it works right.
+
+<p>Here are the main data types and defines, and explanations for how they've changed to support
+strong typing.  Read and follow these THOROUGHLY.
+
+
+<dl>
+  <dt><b>DATATYPE</b><dd>
+       is the C data type returned by all functions and terminals.
+       because this is *strongly*typed* GP, DATATYPE is best written as the
+       *union* of all your data types.  As an example, suppose you wanted to
+       support vectors (two floats) and booleans as your datatypes.  Then
+       DATATYPE might be set to something like
+
+<pre>       typedef struct vect_ { float x; float y; } vect;
+       typedef union app_datatype_ { vect v ; char bool; } app_datatype;
+       #define DATATYPE app_datatype
+</pre>
+
+       
+<dt><b>NUMTYPES</b><dd>        A new define.  This indicates the total number of data types in your domain.
+                If your types are, say, int, bool, and vector, then you
+                set NUMTYPES to 3.  Your datatype should be assigned numbers (as explained below)
+               ranging from 0 to NUMTYPES - 1.  <b>You need to add this define to your appdef.h file.</b>
+
+<dt><b>function</b><dd>        Now looks like this:
+            
+<pre>                    typedef struct
+                        {
+                         DATATYPE (*code)();
+                         void (*ephem_gen)( DATATYPE * );
+                         char * (*ephem_str)();
+                         int arity;
+                         char *string;
+                         int type;
+                         int evaltree;
+                         int index;
+                   <i> /* Added to support strong data typing */</i>
+                         int return_type;
+                         int argument_type[MAXARGS];
+                        } function;
+</pre>
+     The two last items are the return type (a value between
+                0 and NUMTYPES-1) and the type of each argument to
+                the function (if it's a nonterminal).  Here's an example.  Imagine that your MAXARGS is 3, your NUMTYPES is 2 (booleans are 0 and vectors are 1).  You want to describe a nonterminal function "CrossProduct>0" that returns a boolean value after comparing two vectors.  You might write it as:
+
+<pre>
+/* Okay, some defines first... */
+#define BOOLEANS 0
+#define VECTORS 1
+#define IGNORE -1      /* This will get ignored anyway */
+
+/* ... and your function definition might look like... */
+     
+{f_cp,NULL,NULL,2,"CrossProduct>0",FUNC_DATA,-1,0,BOOLEANS,{VECTORS,VECTORS,IGNORE}}
+</pre>
+
+
+<dt><b>user_treeinfo</b><dd>   This combines the old tree map (an integer), the
+                tree_name (a char*) together, plus the return type
+                for the tree as a whole, as:
+                
+<pre>                    typedef struct
+                        {
+                        int fset;                   /* function set for tree */
+                        int return_type;            /* return type for <b>tree</b> */
+                        char* name;                 /* tree name */
+                        } user_treeinfo;
+</pre>
+<dt><b>function_sets_init()</b><dd>    This has been modified; you no longer pass it
+                        the tree_map[] and tree_name[]; instead, you pass it
+                        a user_treeinfo[] array containing all necessary
+                        tree information for each tree.  The format is now:
+                        
+<pre>                   int function_sets_init(function_set* user_fset, 
+                                          int user_fcount,
+                                          user_treeinfo* user_tree_map,
+                                          int user_tcount );
+</pre>
+
+</dl>
+
+Some caveats:
+<ul>
+
+     <li> You *must* have at least one terminal and at least
+                    one nonterminal for *each* return type, or tree-generation
+                    will fail.
+                    
+               <li>  If you're supporting ADFs, you *must* make certain that 
+                    the ADF functions in your function set have the same return
+                    type as the ADF tree itself!  Additionally, you *must*
+                    make certain that the ARG functions have the same return
+                    type as that argument type for the cooresponding ADF
+                    function in calling trees.  If you do this, the ADF
+                    facility will probably work, though I've not tested it.
+                    
+               <li>  Remember to properly set the return types for ephemeral
+                    random constants.
+                    
+               <li>  When evaluating a tree, remember to cast its result to the 
+                    appropriate return type for that tree.
+</ul>
+
+
+
+
+<h2>Reading from Files</h2>
+
+<p>	You can now read trees in from a file at population-generation time, 
+	instead of generating them randomly.  To force a particular tree to be read from
+	a file, use the new input-file parameters:
+
+<Pre>	init.tree[<i>val</i>].method = load
+	tree-replace[<i>val</i>] = <i>filename</i>
+</pre>
+
+<p>The first tells the GP system that it will be loading trees for tree position <i>val</i> for individuals in the population.  The second gives the filename of the file to load from.  You should use separate filenames for separate tree positions.  All the trees for all the individuals in a particular tree position should appear one after another in the file.
+
+<p>Files consist of a series of trees in pseudo-LISP form.  The tree syntax follows the following rules:
+<ul>
+	<li> nonterminals are of the form <tt>(<i>nonterminal_name function function function etc.</i>)</tt>
+	<li> terminals are of the form <tt>(<i>terminal_name</i>)</tt>.  Terminals
+	    may alternately be written without the parentheses <b>only</b> within an enclosing
+	    nonterminal.
+	<li> Parentheses may not have whitespace around them.  That is,   <pre><tt>( hello ( dolly ! ) )</tt></pre>
+	    is INVALID.  It must be written as <pre><tt>(hello (dolly !))</tt></pre>
+</ul>
+<p>	For example, if you have a population of four individuals, consisting of a single tree each, for, say, symbolic regression, you might load them from a file that looks like:
+
+<pre>	(+ (/ x 2) x)
+	(sin (cos
+	     (+ 2 x)))
+	(x)
+	(- x x)
+</pre>
+
+<p>Note that the lone <tt>(x)</tt> <i>must</i> have parenthesis around itself.  This is not a robust system; if there is an error in the syntax of the file, the program will self-destruct.  GDB can help you determine which function name is causing the problem.
+
+
+
+<h2>Coevolution</h2>
+
+<p>You can do a simple 2-individual form of coevolution over a single population in <i>multi-threaded</i> lil-gp easily.  Single-threaded coevolution is not supported.
+<p>First, add the item <tt>-DCOEVOLUTION</tt> to your app's GNUmakefile CFLAGS line. Now lil-gp expects to pass you <i>two</i> roughly random (okay, next to each other in the individual array, but it was loaded randomly) individuals in app_eval_fitness().  So your app_eval_fitness() function would now look something like:
+
+<pre><tt>
+     void app_eval_fitness ( individual *ind, individual* ind2 )
+             /* Note there are two individuals now, not just one */
+     {
+     DATATYPE d1, d2;
+
+     set_current_individual(ind);
+     d1=evaluate_tree(ind->tr[0].data,0);
+
+     set_current_individual(ind2);
+     d2=evaluate_tree(ind2->tr[0].data,0);
+
+     /* yahda yahda yahda */
+
+     ind->hits= /* blah blah blah */
+     ind->r_fitness = /* blah blah blah */
+     ind->s_fitness = /* blah blah blah */
+     ind->a_fitness = 1.0/(1.0+ind->s_fitness);
+     ind->evald = EVAL_CACHE_VALID;
+
+     ind2->hits= /* blah blah blah */
+     ind2->r_fitness = /* blah blah blah */
+     ind2->s_fitness = /* blah blah blah */
+     ind2->a_fitness = 1.0/(1.0+ind2->s_fitness);
+     ind2->evald = EVAL_CACHE_VALID;
+     }
+</tt></pre>
+
+
+
+<h2>Tree Generation and Modification</h2>
+
+<p>	The new initialization parameter
+
+<pre>	init.ignore_limits = 1         # by default, it's 0</pre>
+
+<p>	...will force GP to ignore depth limit, node size, and duplicate individual violations
+	when generating new individuals.  This is useful for reading individuals from files.
+
+
+<p>	The mutation and crossover operators now have a new argument:
+
+<pre>		num_times = <i>val</i></pre>
+
+<p>	In conjunction with the argument <tt>keep_trying</tt>, this new argument tells lil-gp how many times to keep trying; this puts an effective bound on the number of times (previously, it was unbounded).  If <tt>num_times</tt> is set to 0, then there is no bound.
+
+
+<h2>New Selection Methods</h2>
+
+<h3>Sigma Scaling Selection</h3>
+
+<p>Sigma Scaling selection attempts to keep up selection pressure throughout a run.  Sigma Scaling adjusts the selection intervals with a function based on the mean and standard deviation of the population.  For more information, see [Mitchell 96].  
+
+<p>This version isn't very rigorous as it uses Koza's adjusted fitness metric as its basic fitness, and this isn't the best choice.  To perform Sigma Scaling selection, change your input file's selection method to <tt>"sigma"</tt>.
+
+<p>Sigma scaling is located in <tt>sigma.c</tt>
+
+
+<h3>Boltzman Selection</h3>
+
+<p>Boltzman selection slowly decreases temperature T from boltzman_hi to boltzman_low through the course of the GP run.  T is decreased by boltzman_step each generation.  As described in [Mitchell 96], T determines the randomness of the selection.
+
+<p>This version isn't very rigorous as it uses Koza's adjusted fitness metric as its basic fitness, and this isn't the best choice. Boltzman selection MAY NOT WORK WITH CHECKPOINT FILES.
+
+<p>To perform Boltzman selection, change your input file's selection method to <tt>"boltzman"</tt>.  You adjust Boltzman selection with the input file parameters:
+
+<dl><dt><tt>boltzman_hi</tt><dd>
+   The high-temperature (initial) value, default: max_generations, else 51.0;
+
+<dt><tt>boltzman_low</tt>
+<dd>   The low-temperature (final) value, default: 0.0
+
+<dt><tt>boltzman_step</tt>
+<dd>   The amount T decreases each generation, default: 1.0
+</dl>
+
+<p>Boltzman selection is located in <tt>boltzman.c</tt>.
+
+<h2>Multithreading Patch</h2>
+
+<p>You now specify the number of threads not with an environment variable (man, that was weird), but with an input file parameter:
+
+<pre>	num_threads = <i>val</i> </pre>
+
+<p> This must be set in order to do multithreading.
+
+<p>Have fun!
+

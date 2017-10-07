@@ -1,0 +1,70 @@
+<HTML>
+<HEAD>
+<TITLE> Cantonese (Yale Romanization) Input Module for the Newton</TITLE>
+</HEAD>
+<BODY bgcolor="white">
+<H2><img valign="top" align="left" src="Yale.gif"><br>Cantonese (Yale Romanization) Input Module for the Newton</H2>
+
+<p>Based on data I provided, Joseph Chen was kind enough to create a Yale Romanization input module for his <a href="http://nats-www.informatik.uni-hamburg.de/~joseph/newton/input_methods/index.html">Chinese Input System</a>.  This input module makes it possible to enter Chinese characters into the Newton by writing their romanizations.  However, he has never added it to the collection on his web page, and I haven't been able to get ahold of him, so I'm including it here.  Joseph does have two earlier (non-Yale) cantonese input modules; skip them, they're not worth much.
+
+
+<H3>Yale Cantonese Romanization</H3>
+
+<p>Cantonese is a dialect of Chinese found in southern China, and particularly in Hong Kong, Macau, many parts of southeast asia, and chinatowns everywhere.  Yale Romanization is a romanization of cantonese that is by far the most popular form of romanization for non-native cantonese learners (like me).  Yale cantonese romanization spells out Chinese characters in one of four combinations:
+<ul><li>A <i>final</i><li>An <i>initial</i> plus a <i>final</i><li>ng<li>m</ul>
+
+<p>The initials are <tt>p b t d k g ch j kw gw m n ng f l h s y w</tt>
+
+<p>The finals are <tt>a aai aau aam aap aan aat aang aak ai au am ap an at ang ak e eng ek ei eu eung euk eui eun eut i iu im ip in it ing ik o oi on ot ong ok ou u ui un ut ung uk yu yun yut</tt>
+
+<p>So for example, some spellings include: gwai, chaai, hyut, ngo, mou, ng, m, au, yu, kip, uk.  But that's not all: Cantonese is a tonal language, so inflection is important.  Cantonese Chinese has seven accents:
+
+<p>0. High
+<br>1. High Falling
+<br>2. High Rising
+<br>3. Middle
+<br>4. Low Falling
+<br>5. Low Rising
+<br>6. Low
+
+<p>In Yale romanization, these accents are indicated by placing certain accent marks over the first vowel in the final, possibly in combination with placing an "h" after the last vowel in the final.  For example:
+
+<p align=center><img src="yaleexample.gif">
+
+<p>For the vowel-less cantonese romanizations "ng" and "m", the "h" is placed at the end of the word, and the accent is placed on top of the first letter (the n or the m).
+
+<H3>Using the Input Module</H3>
+
+<p>In this input module, the High (0) and High Falling (1) accents are both treated as High Falling (1).  That's common practice anyway nowadays as the High accent is slowly disappearing from the language, at least in Hong Kong.  The package provides two modules: "Cantonese (Yale)" and "Cantonese (Yale Ortho)".
+
+<p>The "Cantonese (Yale)" module expects the user to enter the romanized spelling of the word <i>without the inflection information</i> (no accent, no following "h"), but include the accent as a number after the word.  For example: ngo4  The number values are those given above (remember that high and high-falling are both 1).
+
+<p><img align=right src="m-ng.gif">The "Cantonese (Yale Ortho)" module expects the user to enter the full Yale romanization of the word, accents and all.  For "ng" and "m", the accent and the optional h are ignored.  Note that due to a bug, the Ortho module does not display any characters beginning with "ch".
+
+<H3>Where did this information come from?</H3>
+
+<p> From the <a href="ftp://ftp.unicode.org/Public/UNIDATA/">UniHan database</a> at <a href="http://www.unicode.org">Unicode.org</a>.
+
+<H3>Download the Yale Input Module</H3>
+
+<a href="CantoneseYaleDict.pkg">CantoneseYaleDict.pkg</a> or <a href="CantoneseYaleDict.sit">CantoneseYaleDict.sit</a> (60K stored in Newton)
+
+<H3>Where Do I Find Chinese/Japanese Fonts and other input systems and dictionaries?</H3>
+
+<p>Some links to get you started:
+
+<ul><li><a href="http://nats-www.informatik.uni-hamburg.de/~joseph/newton/index.html">
+Joseph Chen's Chinese Newton Page</a>.  Joseph Chen has coded quite a few impressive input systems and dictionaries for the Newton, and also lists all known Chinese fonts for the Newton.
+<li><a href="http://www.cis.nctu.edu.tw:8080/~is84007/EP_Softwares/LIP/lip.html"> Eureka's Lily Input Pad.</a>  Another input system which lets you input from a Newton Keyboard as well.  Cool!  But I don't speak Mandarin, so this isn't as useful to me tho.
+<li><a href="http://home.hkstar.com/~hknug/">The Hong Kong Newton Users's Group</a>.   One of the more with-it user's groups out there.  Very impressive home page, including information on how to convert your Newton for Chinese.  Yes, it's in English.  Hong Kong ain't Taiwan, y'know...
+<li><a href="http://www.orient.co.jp/~tmurai/freeware/newton/jfont/newtonfont.html">Tomoyoshi Murai</a> lists a wide range of Japanese fonts, and <i>six</i> different Japanese input systems.
+<li><a href="http://www.enfour.co.jp/newton/software/">Enfour Group Japan</a> sold a number of input systems, dictionaries, and fonts for Japanese.  While at the <a href="http://www.newtonshop.co.jp">Newton Shop</a> in Tokyo, I personally used Enfour's Japanese character handwriting recognition system.  It works!  Very nifty indeed.
+</ul>
+
+
+<br>
+<br>
+<br>
+<br>
+</BODY>
+</HTML>

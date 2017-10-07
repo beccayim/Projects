@@ -1,0 +1,119 @@
+!!!! F10, F11, F12, Eject
+keycode 0x4c = Home onesuperior oneeighth onequarter
+keycode 0x5f = End twosuperior threeeighths onehalf
+keycode 0x60 = Page_Up threesuperior fiveeighths threequarters
+keycode 0xfd = Page_Down NoSymbol seveneighths NoSymbol 
+
+!!!! Mac Compatability more or less
+keysym bracketleft = bracketleft braceleft leftdoublequotemark rightdoublequotemark
+keysym bracketright = bracketright braceright leftsinglequotemark rightsinglequotemark
+keysym backslash = backslash bar guillemotleft guillemotright
+keysym 1 = 1 exclam exclamdown NoSymbol
+keysym 2 = 2 at trademark EuroSign
+! Single angle braket quotes don't have an equivalent on the
+! Nokia I believe.  :-(
+keysym 3 = 3 numbersign sterling NoSymbol
+keysym 4 = 4 dollar cent currency
+! Not bothering with fi and fl
+keysym 5 = 5 percent infinity NoSymbol
+keysym 6 = 6 asciicircum section NoSymbol
+keysym 7 = 7 ampersand paragraph doubledagger
+keysym 8 = 8 asterisk enfilledcircbullet degree
+keysym 9 = 9 parenleft ordfeminine periodcentered
+! Not bothering with the superlow comma
+keysym 0 = 0 parenright masculine NoSymbol
+! Can't do a hyphen instead of a minus here: I may need
+! to map hyphen elsewhere
+keysym minus = minus underscore endash emdash
+keysym equal = equal plus notequal plusminus
+keysym comma = comma less lessthanequal NoSymbol
+keysym period = period greater greaterthanequal NoSymbol
+keysym b = b B integral NoSymbol
+keysym d = d D Greek_delta Greek_DELTA
+! we do Delta on j also.
+keysym g = g G copyright acute
+keysym h = h H enopensquarebullet filledrectbullet
+keysym j = j J enfilledsqbullet enopencircbullet
+keysym n = n N filledtribulletup leftarrow
+keysym m = m M filledtribulletdown rightarrow
+keysym l = l L notsign Lstroke
+keysym p = p P Greek_pi Greek_PI
+keysym q = q Q oe OE
+keysym r = r R registered numerosign
+keysym v = v V squareroot NoSymbol
+keysym w = w W Greek_SIGMA doublelowquotemark
+keysym x = x X approxeq multiply
+keysym y = y Y yen NoSymbol
+keysym z = z Z Greek_omega Greek_OMEGA
+keysym slash = slash question division questiondown
+keysym apostrophe = apostrophe quotedbl ae AE
+keysym semicolon = semicolon colon ellipsis diaeresis
+
+!!!! Italian
+! I can't do compositions like I can on the mac.  That
+! is most frustrating.  So what I am going to do is just
+! have grave accents on the ALTGR and put e-acute on f
+keysym a = a A agrave Agrave
+keysym e = e E egrave Egrave
+keysym f = f F eacute Eacute
+keysym i = i I igrave Igrave
+keysym o = o O ograve Ograve
+keysym u = u U ugrave Ugrave
+
+!!!! Two Nokia symbols (also on the Mac) whose
+!!!! standard Mac position conflicts with my 
+!!!! Italian configuration above are acute (normally opt-s-e)
+!!!! moved to opt-s-g
+!!!! and diaeresis (two dots, normally opt-s-u)
+!!!! moved to opt-s-;
+
+
+!!!! Add Enter, Backtab, and Delete
+keysym Return = Return KP_Enter Return KP_Enter
+keysym Tab = Tab ISO_Left_Tab Tab ISO_Left_Tab
+keysym BackSpace = BackSpace Delete BackSpace Delete
+
+
+!!!! for good measure
+remove Control = Control_R
+clear Mod1
+clear Mod2
+clear Mod3
+clear Mod4
+clear Mod5
+
+!!!!! Left command -> Control
+! This enables me to say command-x rather than ctl-x :-)
+! Of course it doesn't help me in Xterm for cutting :-)
+! But then nothing would.
+! Note, there appear to be two Super_L's -- ours is 0x73
+! but don't worry about it
+add Control = Super_L
+
+!!!!!! Set left alt -> Mode_switch
+keycode 0x40 = Mode_switch
+add Mod5 = Mode_switch
+
+!!!!! Set right command -> Multi_key
+! Sadly this doesn't appear to work at all.
+keycode 0x74 = Multi_key
+
+!!!!! Set right alt -> Alt
+! This is mostly helpful for a few applications which use
+! alt as their menu key. Rare though.
+keycode 0x71 = Alt_L
+add Mod1 = Alt_L
+
+!!!!! Nokia symbol stuff that doesn't appear to be
+!!!!! in the xkeysym symbol tables
+!! O/oo (so-called per mille or perthousand sign
+!!      option-shift-r on mac
+
+!!!!! Mac symbols I was hoping to include but 
+!!!!! weren't in the xkeysym symbol tables
+!! outlined diamond ("lozenge")
+!!      option-shift-v on mac
+
+!! I didn't put on all the accents of course either,
+!! just the italian ones.
+

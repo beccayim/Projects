@@ -1,0 +1,4136 @@
+<html>
+<head>
+<title>Learning Lisp Fast</title>
+</head>
+<body bgcolor=white>
+<img src="lisplogo_warning_256.png" align=left style="margin-bottom: 2em; margin-right: 1em;">
+
+
+<h1>Lisp Quickstart</h1>
+
+<p>Lisp is a deep language with many unusual and powerful features.  The goal of this tutorial is <b>not</b> to teach you many of those powerful features: rather it's to teach you just enough of Lisp that you can get up and coding quickly if you have a previous background in a procedural language such as C or Java.
+
+<p>Notably this tutorial does <b>not</b> teach macros, CLOS, the condition system, much about packages and symbols, or very much I/O.
+
+<br clear="all">
+
+
+<h2>Table of Contents
+</h2>
+
+<img src="lisplogo_256.png" align=right style="margin-left: 1em; margin-bottom: 2em;">
+
+
+
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>
+<ul>
+<li><a href="LispTutorial.html#Legend">Legend</a>
+<li><a href="LispTutorial.html#Running">Running, Breaking, and Quitting Lisp</a>
+<li><a href="LispTutorial.html#EvaluatingFunctions">Evaluating Simple Expressions</a>
+<li><a href="LispTutorial.html#Functions">Evaluating Lists as Functions</a>
+<li><a href="LispTutorial.html#Control">Control Structures and Variables</a>
+<li><a href="LispTutorial.html#WritingFunctions">Writing Functions</a>
+<li><a href="LispTutorial.html#Lists">Lists and Symbols as Data</a>
+<li><a href="LispTutorial.html#Loading">Loading and Compiling Lisp</a>
+<li><a href="LispTutorial.html#Style">Lisp Style</a>
+<li><a href="LispTutorial.html#Arrays">Arrays and Vectors</a>
+<li><a href="LispTutorial.html#Setf">Setf and Friends</a>
+<li><a href="LispTutorial.html#Funcall">Function, Funcall, and Apply</a>
+</ul>
+</td><td><ul>
+<br>
+<li><a href="LispTutorial.html#Mapping">Mapping</a>
+<li><a href="LispTutorial.html#Lambda">Lambda and Closures</a>
+<li><a href="LispTutorial.html#Sequence">Sequence Functions</a>
+<li><a href="LispTutorial.html#Arguments">Functions With Variable Arguments</a>
+<li><a href="LispTutorial.html#ListFunctions">List Functions</a>
+<li><a href="LispTutorial.html#Predicates">Predicates and Types</a>
+<li><a href="LispTutorial.html#HashTables">Hash Tables</a>
+<li><a href="LispTutorial.html#Printing">Printing and Reading</a>
+<li><a href="LispTutorial.html#MoreControl">More Control Structures</a>
+<li><a href="LispTutorial.html#LispInLisp">Writing Lisp in Lisp</a>
+<li><a href="LispTutorial.html#Debugging">Debugging</a>
+</ul>
+</td></tr></table>
+
+<br clear="right">
+<h2><a name="Legend">Legend</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+The table cell to the right shows what you type, and the output, for this tutorial.  Text shown in <font color=blue>blue</font> you are responsible for typing, with a Return at the end of the line.  Text shown in <font color=black>black</font> indicates stuff that is printed back to you.  Text shown in <font color=red>red</font> are remarks -- do not type them.
+
+<p>If the cell is divided by a line, as is shown at right, then this indicates two different examples.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>This text is being printed out.
+<font color=blue>You would type this text</font>         <font color=red>[This is a remark]</font>
+<hr>
+Here is another example.
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+<br><br><br><h2><a name="Running">Running, Breaking, and Quitting Lisp</h2></a>
+
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+On your laptop you have several options for running Lisp.  <b>SBCL</b> is a very popular one, and you start it (typically) by typing <b>sbcl</b> on the command line.  
+<p>On osf1 or mason2, you start lisp by typing <b>lisp</b> at the command line.  This fires up an implementation of lisp called LispWorks.
+<p>On zeus, you start lisp by typing <b>clisp</b> at the command line.  This fires up an implementation of lisp called CLISP.
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[SBCL running on your laptop...]</font>
+laptop&gt; <font color=blue>sbcl</font>
+This is SBCL 1.2.12, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+* 
+
+</font>
+<hr>
+<font color=red>[LispWorks running on mason / osf1...]</font>
+&gt; <font color=blue>lisp</font>
+LispWorks(R): The Common Lisp Programming Environment
+Copyright (C) 1987-2011 LispWorks Ltd.  All rights reserved.
+Version 6.1.0
+Saved by root as lispworks, at 25 Jun 2012 13:14
+User sean on mason
+; Loading text file /usr/local/lispworks_6.1/lib/6-1-0-0/config/siteinit.lisp
+;  Loading text file /usr/local/lispworks_6.1/lib/6-1-0-0/private-patches/load.lisp
+
+CL-USER 4 > 
+
+</font>
+<hr>
+<font color=red>[CLISP on zeus...]</font>
+zeus&gt; <font color=blue>clisp</font>
+</font>
+i i i i i i i       ooooo    o        ooooooo   ooooo   ooooo
+I I I I I I I      8     8   8           8     8     o  8    8
+I  \ `+' /  I      8         8           8     8        8    8
+ \  `-+-'  /       8         8           8      ooooo   8oooo
+  `-__|__-'        8         8           8           8  8
+      |            8     o   8           8     o     8  8
+------+------       ooooo    8oooooo  ooo8ooo   ooooo   8
+
+Welcome to GNU CLISP 2.49 (2010-07-07) &lt;http://clisp.cons.org/&gt;
+
+Copyright (c) Bruno Haible, Michael Stoll 1992, 1993
+Copyright (c) Bruno Haible, Marcus Daniels 1994-1997
+Copyright (c) Bruno Haible, Pierpaolo Bernardi, Sam Steingold 1998
+Copyright (c) Bruno Haible, Sam Steingold 1999-2000
+Copyright (c) Sam Steingold, Bruno Haible 2001-2010
+
+Type :h and hit Enter for context help.
+
+[1]> 
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+In the previous examples, the very last line is the <b>command line</b>.  Lisp has a command line where you type in things to execute.  Here are the command lines in Lispworks and in clisp. 
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[SBCL running on your laptop...]</font>  
+*
+
+<hr>
+<font color=red>[LispWorks running on mason / osf1...]</font>
+CL-USER 4 &gt; 
+
+<hr>
+<font color=red>[CLISP on zeus...]</font>
+[1]&gt;
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+Think of the Lisp command line like the command line in a Unix shell or at a DOS prompt.  Pressing Control-C in a Unix shell or at a DOS prompt halts the current running process and returns you to the command line.  Similarly, pressing Control-C in Lisp halts whatever is presently running and returns you to the command line.
+
+<p>After you press Control-C, the command line changes to a "subsidiary" command line to reflect that you are in a <b>break</b> or <b>error condition</b>.  Kinda like pressing Control-C in a debugger.
+
+<p>These conditions can be stacked: if you keep working while in a condition, and then get in <i>another condition</i> and so on, you're piling up conditions on a stack.
+
+<p>Just like in a debugger, at any break or error condition, you have a bunch of options (like examining the stack, changing what the return value should be, etc.)  You can even continue the infinite loop we just broke out of.  But you probably just want to escape.  The easiest option is to escape out of all of your error conditions, right back up to the top.  
+
+<ul>
+<li>In SBCL on your laptop, this is done by typing <b>:top</b> or <b>:<i>n</i></b> (where <i>n</i> is the largest number presented to you -- here it's 1).  
+<li>In LispWorks on OSF1/MASON, it's similar: type <b>:top</b> or <b>:c <i>n</i></b> (where <i>n</i> is the largest number presented to you -- here it's 3).  
+<li>In clisp on zeus, you'd type <b>:R1</b>
+</ul>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[SBCL running on your laptop...]</font>  
+* <font color=blue>(loop)</font>                       <font color=red>[Press Return at this point,                   
+			and you go into an infinite loop]
+		       
+		       [Now press Control-C, and you get...]</font>
+debugger invoked on a SB-SYS:INTERACTIVE-INTERRUPT in thread
+#&lt;THREAD "main thread" RUNNING {1002D8E743}>:
+Interactive interrupt at #x10049770C0.
+
+Type HELP for debugger help, or (SB-EXT:EXIT) to exit from SBCL.
+
+restarts (invokable by number or by possibly-abbreviated name):
+0: [CONTINUE] Return from SB-UNIX:SIGINT.
+1: [ABORT   ] Exit debugger, returning to top level.
+
+((FLET SB-UNIX::RUN-HANDLER :IN SB-SYS:ENABLE-INTERRUPT) 13 
+#.(SB-SYS:INT-SAP #X051FF658) #.(SB-SYS:INT-SAP #X051FF6C0))
+
+0] <font color=blue>:top</font>
+
+*
+
+<hr>
+<font color=red>[LispWorks running on mason / osf1...]</font>
+CL-USER 4 &gt; <font color=blue>(loop)</font>             <font color=red>[Press Return at this point,
+			and you go into an infinite loop]
+
+		       [Now press Control-C, and you get...]</font>
+Keyboard break to NIL.
+1 (continue) Return from break.
+2 (abort) Return to level 0.
+3 Restart top-level loop.
+
+Type :b for backtrace or :c &lt;option number> to proceed.
+Type :bug-form "&lt;subject&gt;" for a bug report template or :? for other options.
+
+CL-USER 5 : 1 &gt; <font color=blue>:top</font>
+
+CL-USER 6 &gt;
+
+<hr>
+<font color=red>[CLISP on zeus...]</font>
+[1]> <font color=blue>(loop)</font>                    <font color=red>[Press Return at this point,
+			and you go into an infinite loop]
+
+		       [Now press Control-C, and you get...]</font>
+** - Continuable Error
+EVAL: User break
+If you continue (by typing 'continue'): Continue execution
+The following restarts are also available:
+ABORT          :R1      Abort main 
+Break 1 [2]> <font color=blue>:R1</font>
+[3]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+You can quit your lisp session by getting to the command line (possibly through pressing Control-C), <b>then</b> typing <b>(quit)</b> and pressing return.  Here are examples using Lispworks or using clisp.
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[SBCL running on your laptop...]</font>
+* <font color=blue>(quit)</font>
+laptop>
+<hr>
+<font color=red>[LispWorks running on mason / osf1...]</font>
+CL-USER 4 &gt; <font color=blue>(quit)</font>
+&gt;
+<hr>
+<font color=red>[CLISP on zeus...]</font>
+[1]&gt; <font color=blue>(quit)</font>
+Bye.
+zeus&gt;
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+
+
+
+<br><br><br><h2><a name="EvaluatingFunctions">Evaluating Simple Expressions</h2></a>
+
+<p>From now on, we will only use examples in <b>clisp</b>.  But it works basicallly the same on all Lisp systems.
+
+<p><table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+An <b>expression</b> is something that is <b>evaluated</b>, by which we mean, submitted to Lisp and executed.  All things that are evaluated will return a <b>value</b>.  If you type in an expression at the command line, Lisp will print its value before it returns the command line to you.
+
+<p>Numbers are expressions.  <b>The value of a number is itself.</b>  Lisp can represent a great many kind of numbers: integers, floating-point expressions, fractions, giant numbers, complex numbers, etc.
+
+<p>A fraction is straightforwardly represented with the form <b>x/y</b>  Note that here the <b>/</b> does <i>not</i> mean "divide".  
+
+<p>A complex number <i>a+b</i>i takes the form <b>#C(<i>a b</i>)</b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[3]> <font color=blue>-3</font>    
+-3
+[4]> <font color=blue>2.43</font>
+2.43
+[5]> <font color=blue>1233423039234123234113232340129234923412312302349234102392344123</font>
+1233423039234123234113232340129234923412312302349234102392344123
+[6]> <font color=blue>#C(3.2 2)</font>             <font color=red>[the complex number 3.2 + 2i ]</font>
+#C(3.2 2)
+[7]> <font color=blue>2/3</font>                   <font color=red>[the fraction 2/3.  NOT "divide 2 by 3"]</font>
+2/3
+[8]> <font color=blue>-3.2e25</font>               <font color=red>[the number -3.2 x 10^25]</font>
+-3.2E25
+[9]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+Individual <b>characters</b> are expressions. Like a number, the value of a character is itself.  A character is represented using the <b>#\</b> syntax.  For example, <b>#\A</b> is the character 'A'.  <b>#\%</b> is the character '%'.
+
+<p>Control characters have very straightforward formats:
+
+<p>#\tab<br>#\newline<br>#\space<br>#\backspace<br>#\escape
+
+<p>(etc.)
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[3]> <font color=blue>#\g</font>    
+#\g
+[4]> <font color=blue>#\{</font>
+#\{
+[5]> <font color=blue>#\space</font>
+#\Space
+[6]> <font color=blue>#\newline</font>
+#\Newline
+[7]> <font color=blue>#\\</font>       <font color=red>[The character '\']</font>
+#\\
+[8]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+
+
+
+<tr><td valign=top>
+<p>Strings are expressions.  Just like a numbers and characters, the value of a string is itself.
+
+<p>A Lisp string is a sequence of characters.  Lisp strings begin and end with double-quotes.  Unlike in C++ (but like Java) a Lisp string does <b>not</b> terminate with a <b>\0</b>.
+
+<p>Like C++ and Java, Lisp strings have an escape sequence to put special characters in the string.  The escape sequence begins with the backslash <b>\</b> .  To put a double-quote in the middle of a string, the sequence is <b>\"</b>  To put a backslash in the middle of a string, the sequence is <b>\\</b>  Lisp tries to return values in a format that could be typed right back in again.  Thus, it will also print return values with the escape sequences shown.
+
+<p>Unlike C++, you do not normally add returns and tabs to strings using an escape sequence.  Instead, you just type the tab or the return right in the string itself.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[14]> <font color=blue>"Hello, World!"</font>
+"Hello, World!"
+[15]> <font color=blue>"It's a glorious day."</font>
+"It's a glorious day."
+[16]> <font color=blue>"He said \"No Way!\" and then he left."</font>
+"He said \"No Way!\" and then he left."
+[17]> <font color=blue>"I think I need a backslash here:  \\  Ah, that was better."</font>
+"I think I need a backslash here:  \\  Ah, that was better."
+[18]> <font color=blue>"Look, here are      tabs      and some
+
+returns!
+
+Cool, huh?"</font>
+"Look, here are      tabs      and some
+
+returns!
+
+Cool, huh?"
+[19]> 
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<p>In Lisp, the special constant <b>nil</b> (case insensitive) all by itself represents "false".  <b>nil</b> evaluates to itself.
+
+<p><b>Every other expression but nil</b> is considered to be "true".  However, Lisp also provides an "official" constant which represents "true", for your convenience.  This is <b>t</b> (also case-insensitive).  <b>t</b> also evaluates to itself.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[3]> <font color=blue>t</font>    
+T
+[4]> <font color=blue>nil</font>
+NIL
+[5]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+</table>
+
+
+
+
+
+<br><br><br><h2><a name="Functions">Evaluating Lists as Functions</h2></a>
+
+<p><table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+Lisp program code takes the form of <b>lists</b>.  A list begins with a parenthesis, then immediately contains a <b>symbol</b>, then zero or more expressions separated with whitespace, then a closing parenthesis.  
+
+<p>We'll discuss the format of symbols further down.  In the examples at right, <b>+</b> and <b>*</b> are symbols, and denote the addition and multiplication functions respectively.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[14]> <font color=blue>(+ 3 2 7 9)</font>       <font color=red>[add 3+2+7+9 and return the result]</font>
+21
+[15]> <font color=blue>(* 4 2.3)</font>     <font color=red>[multiply 4 by 2.3 and return the result]</font>
+9.2
+</font>
+</pre></tt>
+
+</td></tr>
+
+
+<tr><td valign=top>
+Like everything else in Lisp, <b>lists are expressions</b>.  This means that lists return a value when evaluated.
+
+<p>An <b>atom</b> is <b>every expression that is not a list</b>.  Among other things, strings and numbers and boolean values are atoms.
+
+<p>When Lisp evaluates a list, it first examines (but <b>does not evaluate</b>) the symbol at the beginning of the list.  Usually this symbol is associated with a <b>function</b>.  Lisp looks up this function.
+
+<p>Then each expression in the list (except the beginning symbol) is evaluated <b>exactly once, <i>usually</i> (but not necessarily) left-to-right</b>.
+
+<p>The values of these expressions are then passed in as parameters to the function, and the function is called.  The list's return value is then the value returned by the function.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[14]> <font color=blue>(+ 3 2)</font>     <font color=red>[Look up the + function, evaluate
+	  3 and 2 (numbers evaluate to themselves),
+	  then pass their values (3 and 2) into the
+	  + function, which returns 5, 
+	  which is then returned].</font>
+5
+[15]> <font color=blue>(subseq "Hello, World" 2 9)</font>     <font color=red>[Look up the subseq function,
+			       evaluate "Hello, World", 2,
+			       and 9 (they evaluate to 
+			       themselves), then pass their
+			       values in as arguments.  The
+			       subseq function will return
+			       the substring in "Hello, World"
+			       starting at character #2 and
+			       ending just before character #9.</font>
+"llo, Wo"
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+A <b>symbol</b> is a series of characters which typically do not contain whitespace, parentheses ( ), pound ( # ), quote ( ' ), double-quote ( " ), period ( . ),  or backquote ( ` ), among a few others.  Symbols generally don't take the form of numbers.  It's very common for symbols to have hyphens ( - ) or asterisks ( * ) in them -- that's perfectly fine.  <b>Symbols are case-INSENSITIVE</b>.  Here are some interesting symbols:
+
+<p>+&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;1+&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;string-upcase<br>reverse&nbsp;&nbsp;&nbsp;length&nbsp;&nbsp;&nbsp;sqrt
+
+<p>Guess what function is associated with each of these symbols.
+
+<p>In C++ and in Java, there are operators like <tt>+, &lt;&lt;, &amp;&amp;,</tt> etc.  But in Lisp, there are no operators: instead, there are only functions.  For example, <tt>+</tt> is a function.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[23]> <font color=blue>(+ 27/32 32/57)</font>
+2563/1824
+[24]> <font color=blue>(* 2.342 3.2e4)</font>
+74944.0
+[25]> <font color=blue>(* 2.342 9.212 -9.23 3/4)</font>      <font color=red>[You can mix number types]</font>
+-149.34949
+[26]> <font color=blue>(/ 3 5)</font>
+3/5                 <font color=red>[The return type stays as general as possible]</font>
+[27]> <font color=blue>(/ 3.0 5)</font>
+0.6                 <font color=red>[Here Lisp had no choice: convert to a float]</font>
+[28]> <font color=blue>(1+ 3)</font>
+4
+[29]> <font color=blue>(string-upcase "How about that!")</font>
+"HOW ABOUT THAT!"
+[30]> <font color=blue>(reverse "Four score and seven years ago")</font>
+"oga sraey neves dna erocs ruoF"
+[31]> <font color=blue>(length "Four score and seven years ago")</font>
+30
+[32]> <font color=blue>(sqrt 2)</font>   
+1.4142135
+[33]> <font color=blue>(sqrt -1.0)</font>
+#C(0 1.0)
+[34]> <font color=blue>(SqRt -1.0)</font>     <font color=red>[Lisp symbols are case-insensitive]</font>
+#C(0 1.0)
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+
+
+
+<tr><td valign=top>
+While some functions require a fixed number of arguments, other ones (like <b>+</b> or <b>*</b>) can have any number of arguments.  
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[23]> <font color=blue>(+ 100 231 201 921 221 231 -23 12 -34 134)</font>
+1994
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+Other functions have a fixed number of arguments, plus an <i>optional argument</i> at the end.
+
+<p>For example, <b>subseq</b> takes a string followed by one <i>or</i> two numbers.  If only one number <i>i</i> is provided, then <b>subseq</b> returns the substring starting a position <i>i</i> in the string and ending at the end of the string.
+
+<p>If two numbers <i>i</i> and <i>j</i> are provided, then <b>subseq</b> returns the substring starting a position <i>i</i> in the string and ending at position <i>j</i>.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[23]> <font color=blue>(subseq "Four score and seven years ago" 9)</font>
+"e and seven years ago"
+[24]> <font color=blue>(subseq "Four score and seven years ago" 9 23)</font>
+"e and seven ye"
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<p>Lisp has a special name for functions which return "true" (usually <b>t</b>) or "false" (<b>nil</b>).  These functions are called <b>predicates</b>.  Traditionally, many Lisp predicate names end with a <b>p</b>. Here are some predicates.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[5]> <font color=blue>(= 4 3)</font>               <font color=red>[is 4 == 3 ? ]</font>
+NIL
+[6]> <font color=blue>(&lt; 3 9)</font>               <font color=red>[is 3 &lt; 9 ?]</font>
+T
+[7]> <font color=blue>(numberp "hello")</font>     <font color=red>[is "foo" a number?]</font>
+NIL
+[8]> <font color=blue>(oddp 9)</font>              <font color=red>[is 9 an odd number?]</font>
+T
+[9]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+
+<tr><td valign=top>
+When an expression is evaluated which generates an error, Lisp breaks and returns to the command prompt with a break sequence, just like what happens when you press Control-C.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[26]> <font color=blue>(/ 1 0)</font>
+
+*** - division by zero
+1. Break [27]> <font color=blue>:a</font>       <font color=red>[clisp's way of exiting a break sequence]</font>
+[28]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+Errors can also occur if there is no function associated with a given symbol in a list.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[26]> <font color=blue>(blah-blah-blah 1 0 "foo")</font>
+
+*** - EVAL: the function BLAH-BLAH-BLAH is undefined
+1. Break [27]> <font color=blue>:a</font>
+[28]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+<p>When a list contains another list among its expressions, <b>the evaluation procedure is recursive</b>.  The example at left thus does the following things:
+
+<ol>
+<li> The + function is looked up.
+<li> 33 is evaluated (its value is 33).
+<li> <tt>(* 2.3 4)</tt> is evaluated:
+<ol>
+<li> The * function is looked up.
+<li> 2.3 is evaluated (its value is 2.3)
+<li> 4 is evaluated (its value is 4)
+<li> 2.3 and 4 are passed to the * function.
+<li> The * function returns 9.2.  This is the value of <tt>(* 2.3 4)</tt>.
+</ol>
+<li> 9 is evaluated (its value is 9).
+<li> 33, 9.2, and 9 are passed to the + function.
+<li> The + function returns 51.2.  This is the value of <tt>(+ 33 (* 2.3 4) 9)</tt>.
+<li> The Lisp system returns 51.2.
+</ol>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(+ 33 (* 2.3 4) 9)</font>
+51.2
+[45]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+Here are some more examples.
+
+<p>Now you see how easy it is to get lost in the parentheses!
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(+ (length "Hello World") 44)</font>
+55
+[45]> <font color=blue>(* (+ 3 2.3) (/ 3 (- 9 4)))</font>    <font color=red>[in C++: (3+2.3) * (3 / (9-4)) ]</font>
+3.1800003
+[46]> <font color=blue>(log (log (log 234231232234234123)))</font>
+1.3052895
+[47]> <font color=blue>(+ (* (sin 0.3) 
+    (sin 0.3))         <font color=red>[expressions may use multiple lines]</font>
+ (* (cos 0.3)
+    (cos 0.3)))</font>        <font color=red>[ sin(0.3)^2 + cos(0.3)^2 ]</font>
+1.0000001                      <font color=red>[ = 1.  Rounding inaccuracy]</font>
+[48]> <font color=blue>(and (< 3 (* 2 5))
+   (not (>= 2 6)))</font>     <font color=red>[ (3 < 2 * 5) && !(2 >= 6) ]</font>
+T
+[49]>
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+One particularly useful function is <b>print</b>, which takes the form <b>(print <i>expression-to-print</i>)</b>.    This function evaluates its argument, then prints it, then <b>returns the argument.</b>  
+
+<p>As can be seen at right, if you just use <b>print</b> all by itself, the screen will appear to print the element twice.  Why is that?  It's because <b>print</b> printed its argument, then returned it, and Lisp always prints [again] the final return value of the expression.
+
+<p>One nice use of <b>print</b> is to stick it in the middle of an expression, where it will print elements without effecting the final return value of the whole expression.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[41]> <font color=blue>(print (+ 2 3 4 1))</font>
+10
+10
+[42]> <font color=blue>(print "hello")</font>
+"hello"
+"hello"
+[43]> <font color=blue>(+ (* 2 3) (/ 3 2) 9)</font>
+33/2
+[44]> <font color=blue>(+ (print (* 2 3)) (print (/ 3 2)) 9)</font>
+6 
+3/2 
+33/2
+[45]>
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+
+<br><br><br><h2><a name="Control">Control Structures and Variables</h2></a>
+
+<table cellspacing=0 cellpadding=10 border=2>
+<tr><td valign=top>
+There are some evaluatable lists which are <b>not functions</b> because they do not obey the function rule ("evaluate each argument exactly one time each").  These lists are known as <b>macros</b> or <b>special forms</b>.  For now we will not distinguish between these two terms, though there is a massive difference underneath.
+
+<p>Macros and special forms are mostly used as control structures.  For example, the control structure <b>if</b> is a special form.  <b>if</b> takes the form: 
+<tt><b><pre>
+(if <i>test-expression</i>
+<i>then-expression</i>
+<i>optional-else-expression</i>)</pre></b></tt>
+
+<p><b>if</b> evaluates <i>test-expression</i>.  If this returns true, then <b>if</b> evaluates and returns <i>then-expression</i>, else it evaluates and returns <i>optional-else-expression</i> (or if <i>optional-else-expression</i> is missing, returns nil).
+
+<p>Because <b>if</b> is an expression, unlike most languages it's quite common to see it embedded inside other expressions (like the last expression at right).  This is roughly equivalent to C's <b><tt><i>i</i>?<i>j</i>:<i>k</i></b></tt> expression form.
+
+<p>Why can't <b>if</b> be a function?  Because it may not necessarily evaluate the <i>then-expression</i>, or if it does, it will not evaluate the <i>optional-else-expression</i>.  Thus it violates the function rule.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(if (&lt;= 3 2) (* 3 9) (+ 4 2 3))</font>  <font color=red> [if 3&lt;=2 then return 3*9 
+					 else return 4+2+3]</font>
+9
+[45]> <font color=blue>(if (> 2 3) 9)</font>    <font color=red>[if 2>3 then return 9 else return nil]</font>
+NIL
+[46]> <font color=blue>(if (= 2 2) (if (> 3 2) 4 6) 9)</font>      <font color=red>[if 2==2,
+				       then if 3>2, 
+					       then return 4
+					       else return 6
+				       else return 9]</font>
+4
+[47]> <font color=blue>(+ 4 (if (= 2 2) (* 9 2) 7))</font>    <font color=red>[NOTE: the 'if' evaluates to 18!]</font>
+22
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+<b>if</b> only allows one test-expression, one then-expression, and one optional-else-expression.  What if you want to do three things in the then-expression?  You need to make a <b>block</b> (a group of expressions executed one-by-one).  Blocks are made with the special form <b>progn</b>, which takes the form:
+
+<tt><b><pre>
+(progn <i>expr1</i> <i>expr2</i> <i>expr3</i> ...)</pre></b></tt>
+
+<p><b>progn</b> can take any number of expressions, and evaluates each of its expressions in order.  <b>progn</b> then returns the value of the last expression.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(if (> 3 2)
+   (progn (print "hello") (print "yo") 
+	  (print "whassup?") 9)
+   (+ 4 2 3))</font>
+"hello" 
+"yo" 
+"whassup?" 
+9
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+Except when they're at the head of a list, <b>symbols are also expressions</b>.  When it's not the head of a list, a symbol <b>represents a variable</b>.  When evaluated, a symbol will return the value of a variable.
+
+<p>The value of a symbol's variable <b>has nothing to do</b> with the function, special form, or macro associated with the symbol.  You can thus have variables called <b>print</b>, <b>if</b>, etc.
+
+<p>Variables are set with the macro <b>setf</b>.  For now, as far as you're concerned, this macro looks like this:
+
+<b><tt><pre>
+(setf <i>variable-symbol</i> <i>expression</i>)</pre></tt></b>
+
+<p><b>setf</b> is a macro and not a function because it does not evaluate <i>variable-symbol</i>.  Instead, it just evaluates <i>expression</i>, and stores its value in the variable associated with <i>variable-symbol</i>.  Then it returns the value of <i>expression</i>.
+
+<p>If a symbol is evaluated before anything has been stored in its variable, it will generate an error.
+
+<p>Be careful with <b>setf</b>.  Lisp doesn't need to declare variables before they are used.   Therefore, unless  variables are declared to be local (discussed later), <b>setf</b> will make <b>global variables</b>.  And <b>setf</b> is the first operation we've seen with side effects -- so the order of operations will matter!  See the example at right.
+
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[27]> <font color=blue>(setf x (* 3 2))</font>
+6
+[28]> <font color=blue>x</font>
+6
+[29]> <font color=blue>(setf y (+ x 3))</font>
+9
+[30]> <font color=blue>(* x y)</font>
+54
+[31]> <font color=blue>(setf sin 9)</font>     <font color=red>[ you really can do this! ]</font>
+9
+[32]> <font color=blue>(sin sin)</font>        <font color=red>[ huh! ]</font>
+0.4121185
+[33]> <font color=blue>z</font>                <font color=red>[ z not set yet ]</font>
+
+*** - EVAL: variable Z has no value
+1. Break [34]> <font color=blue>:a</font>
+
+<font color=red>[Keep in mind that + is a function, so in <i>most</i> lisp systems it evaluates its
+arguments left-to-right.  So x is evaluated -- returning 6; then 
+(setf x 3) is evaluated, which sets x to 3 and returns 3; then
+x is evaluated -- and now it returns 3.  So + will return 6+3+3]</font>
+[35]> <font color=blue>(+ x (setf x 3) x)</font>
+12
+<font color=red>[Just like in C++/Java:   x + (x = 3) + x ]</font>
+</font>
+</pre></tt>
+
+</td></tr>
+
+
+<tr><td valign=top>
+Because special forms and macros don't obey the function rule, they can take whatever syntax they like.  Here is <b>let</b>, a special form which declares local variables:
+<b><tt><pre>
+(let ( <i>declaration1 declaration2</i> ... )
+<i>expr1</i>
+<i>expr2</i>
+... )</pre></tt></b>
+
+<p><b>let</b> declares local variables with each <i>declaration</i>.  Then it evaluates the expressions in order (as a block).  These expressions are evaluated in the context of these local variables (the expressions can see them).  <b>let</b> then gets rid of the local variables and returns the value of the <b>last expression</b>.  Thus the local variables are only declared within the <b>scope</b> of the <b>let expression</b>.
+
+<p>A declaration takes one of two forms:
+
+<p><table>
+<tr><td valign=top><tt><b><i>var</i></b></tt></td><td valign=top>A symbol representing the variable.  It is initialized to <b>nil</b>.</td></tr>
+<tr><td valign=top><tt><b>(<i>var</i>&nbsp;<i>expr</i>)</b></tt></td><td valign=top>A list consisting of the variable symbol  followed by an expression.  The expression is evaluated and the variable is initialized to that value.</td></tr>
+</table>
+
+<p>You can use <b>setf</b> to change the value of a local variable inside a <b>let</b> statement.  You can also  nest <b>let</b> statements within other <b>let</b> statements.  Locally declared variables may shadow outer local and global variables with the same name, just as is the case in C++ and in Java.  
+
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]> <font color=blue>(setf x 4)</font>             <font color=red>[x set globally]</font>
+4
+[2]> <font color=blue>(let ((x 3))           <font color=red>[x declared local]</font>
+(print x)
+(setf x 9)          <font color=red>[the local x is set]</font>
+(print x)
+(print "hello"))</font>    <font color=red>[Why does "hello" print twice? Think.]</font>
+3 
+9 
+"hello" 
+"hello"
+[3]> <font color=blue>x</font>               <font color=red>[outside the let, we're back to global again]</font>
+4
+[4]> <font color=blue>(let ((x 3) (y (+ 4 9)))    <font color=red>[declare x and y locally]</font>
+(* x y))</font>
+39
+[5]> <font color=blue>(let ((x 3))              <font color=red>[declare x locally]</font>
+(print x)
+(let (x)               <font color=red>[declare x locally again (nested)]</font>
+   (print x)  
+   (let ((x "hello"))  <font color=red>[declare x locally <i>again!</i> (nested)]</font>
+      (print x))
+   (print x))
+(print x) 
+(print "yo"))</font>          <font color=red>[Why does "yo" print twice?]</font>
+3 
+NIL 
+"hello" 
+NIL 
+3 
+"yo" 
+"yo"
+</font>
+</pre></tt>
+
+</td></tr>
+
+
+
+
+<tr><td valign=top>
+Another reason a list might be a special form or macro is because it <b>repeatedly evaluates</b> its arguments.  One example is <b>dotimes</b>.  This macro is an iterator (a looping control structure).  Like most iterators in Lisp, <b>dotimes</b> requires a variable.  Here's the format:
+<b><tt><pre>
+(dotimes (<i>var</i> <i>high-val</i>
+	<i>optional-return-val</i>)
+ <i>expr1</i>
+ <i>expr2</i>
+ ...)</pre></tt></b>
+
+<p>Here, dotimes first evaluates the expression <i>high-val</i>, which should return a positive integer.  Then it sets the variable <i>var</i> (which is a symbol, and is <b>not</b> evaluated) to 0.  Then it evaluates the zero or more expressions one by one.  Then it increments <i>var</i> by 1 and reevaluates the expressions one by one.  It does this until <i>var</i> reaches <i>high-val</i>.  At this time, <i>optional-return-val</i> is evaluated and returned, or nil is returned if <i>optional-return-val</i> is missing.
+
+<p>You don't need to declare the dotimes variable in an enclosing let -- dotimes declares the variable locally for you.  The dotimes variable is local only to the dotimes scope -- when dotimes exits, the variable's value resumes its previous setting (or none at all).
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[26]> <font color=blue>(setf x 3)</font>
+3
+[27]> <font color=blue>(dotimes (x 4 "yo") (print "hello"))</font>
+"hello"
+"hello"
+"hello"
+"hello"
+"yo"
+[28]> <font color=blue>x</font>
+3                             <font color=red>[x was local in dotimes]</font>
+[29]> <font color=blue>(setf bag 2)</font>
+2
+[30]> <font color=blue>(dotimes (x 6) (setf bag (* bag bag)))</font>
+NIL                           <font color=red>[No return expression was given]</font>
+[31]> <font color=blue>bag</font>
+18446744073709551616          <font color=red>[ Understand why? ]</font>
+</font>
+</pre></tt>
+
+</td></tr>
+
+
+</table>
+
+
+
+
+<br><br><br><h2><a name="WritingFunctions">Writing Functions</h2></a>
+
+<table cellspacing=0 cellpadding=10 border=2>
+<tr><td valign=top>
+
+In Lisp, functions are created by calling a <b>function-making macro</b>.  This macro is called <b>defun</b>.
+
+<p>A simple version of <b>defun</b> takes the following general form:
+
+<tt><b><pre>
+(defun <i>function-name-symbol</i> 
+    (<i>param1 param2 param3 ...</i>)
+<i>expr1</i>
+<i>expr2</i>
+<i>expr3</i>
+<i>...</i> )</pre></b></tt>
+
+<p><b>defun</b> builds a function of zero or more arguments of the local-variable names given by the parameter symbols, then evaluates the expressions one by one, then returns the value of the last expression.  The name of the function is the function-name-symbol.  <b>defun</b> defines the function, sets it to this symbol, then returns the symbol -- you rarely use the return value of <b>defun</b>.
+
+<p>At right is a really simple example: a function of no arguments which simply returns the string "Hello, World!".
+
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(defun do-hello-world ( )
+  "Hello, World!")</font>  <font color=red>["Hello, World!" is last expression]</font>
+DO-HELLO-WORLD
+[45]> <font color=blue>(do-hello-world)</font>      <font color=red>[ No arguments ]</font>
+"Hello, World!"
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Here are some examples with one, two, and three arguments but just one expression.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(defun add-four (x)
+  (+ x 4))</font>  <font color=red></font>
+ADD-FOUR
+[45]> <font color=blue>(add-four 7)</font>      <font color=red></font>
+11
+[46] <font color=blue>(defun hypoteneuse (length width)
+  (sqrt (+ (* length length) 
+	   (* width width))))</font>  <font color=red></font>
+HYPOTENEUSE
+[47]> <font color=blue>(hypoteneuse 7 9)</font>      <font color=red></font>
+11.401754
+[48]> <font color=blue>(defun first-n-chars (string n reverse-first)
+  (if reverse-first      <font color=red>[if reverse-first is "true" ]</font>
+    (subseq (reverse string) 0 n)
+    (subseq string 0 n)))
+</font>      <font color=red></font>
+FIRST-N-CHARS
+[49]> <font color=blue>(first-n-chars "hello world" 5 nil)</font>      <font color=red></font>
+"hello"
+[50]> <font color=blue>(first-n-chars "hello world" 5 t)</font>      <font color=red></font>
+"dlrow"
+[51]> <font color=blue>(first-n-chars "hello world" 5 18)</font>      <font color=red>[ 18 is "true"! ]</font>
+"dlrow"
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+
+<p>Here are some examples with several expressions in the function  Remember, the function returns the value of the last expression. 
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(defun print-string-stuff (string-1)
+  (print string-1)
+  (print (reverse string-1))
+  (print (length string-1))
+  string-1)</font>  <font color=red>[ string-1 is returned ]</font>
+PRINT-STRING-STUFF
+[45]> <font color=blue>(print-string-stuff "Hello, World!")</font>      <font color=red></font>
+"Hello, World!" 
+"!dlroW ,olleH" 
+13 
+"Hello, World!"
+[46] <font color=blue>(setf my-global-counter 0)</font>
+0
+[47] <font color=blue>(defun increment-global-and-multiply (by-me)
+  (setf my-global-counter (1+ my-global-counter))
+  (* my-global-counter by-me))</font>  <font color=red></font>
+INCREMENT-GLOBAL-AND-MULTIPLY
+[48]> <font color=blue>(increment-global-and-multiply 3)</font>      <font color=red></font>
+3
+[49]> <font color=blue>(increment-global-and-multiply 5)</font>      <font color=red></font>
+10
+[50]> <font color=blue>(increment-global-and-multiply 4)</font>      <font color=red></font>
+12
+[51]> <font color=blue>(increment-global-and-multiply 7)</font>      <font color=red></font>
+28
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+
+<tr><td valign=top>
+
+<p>Lisp functions can have local variables, control structures, whatnot.  Try to use local variables rather than global variables!  Declare local variables with <b>let</b>.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[ In C++: long factorial (long n) {
+      long sum = 1;
+      for (int x=0;x&lt;n;x++)
+	  sum = sum * (1 + x);
+      return sum; }            ]</font>
+[44]> <font color=blue>(defun factorial (n)
+  (let ((sum 1))
+    (dotimes (x n)
+      (setf sum (* sum (1+ x))))
+    sum))</font>
+FACTORIAL
+<font color=red> [ ... but try doing *this* with C++ :-)  ]</font>
+[45]> <font color=blue>(factorial 1000)</font>
+4023872600770937735437024339230039857193748642107146325437999
+1042993851239862902059204420848696940480047998861019719605863
+1666872994808558901323829669944590997424504087073759918823627
+7271887325197795059509952761208749754624970436014182780946464
+9629105639388743788648733711918104582578364784997701247663288
+9835955735432513185323958463075557409114262417474349347553428
+6465766116677973966688202912073791438537195882498081268678383
+7455973174613608537953452422158659320192809087829730843139284
+4403281231558611036976801357304216168747609675871348312025478
+5893207671691324484262361314125087802080002616831510273418279
+7770478463586817016436502415369139828126481021309276124489635
+9928705114964975419909342221566832572080821333186116811553615
+8365469840467089756029009505376164758477284218896796462449451
+6076535340819890138544248798495995331910172335555660213945039
+9736280750137837615307127761926849034352625200015888535147331
+6117021039681759215109077880193931781141945452572238655414610
+6289218796022383897147608850627686296714667469756291123408243
+9208160153780889893964518263243671616762179168909779911903754
+0312746222899880051954444142820121873617459926429565817466283
+0295557029902432415318161721046583203678690611726015878352075
+1516284225540265170483304226143974286933061690897968482590125
+4583271682264580665267699586526822728070757813918581788896522
+0816434834482599326604336766017699961283186078838615027946595
+5131156552036093988180612138558600301435694527224206344631797
+4605946825731037900840244324384656572450144028218852524709351
+9062092902313649327349756551395872055965422874977401141334696
+2715422845862377387538230483865688976461927383814900140767310
+4466402598994902222217659043399018860185665264850617997023561
+9389701786004081188972991831102117122984590164192106888438712
+1855646124960798722908519296819372388642614839657382291123125
+0241866493531439701374285319266498753372189406942814341185201
+5801412334482801505139969429015348307764456909907315243327828
+8269864602789864321139083506217095002597389863554277196742822
+2487575867657523442202075736305694988250879689281627538488633
+9690995982628095612145099487170124451646126037902930912088908
+6942028510640182154399457156805941872748998094254742173582401
+0636774045957417851608292301353580818400969963725242305608559
+0370062427124341690900415369010593398383577793941097002775347
+2000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000
+000000</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+
+<p>Actually, it is surprisingly rare in Lisp to have more than one expression in a function.  Instead, expressions tend to get nested together.  Lisp functions tend to take on <b>functional</b> form rather than <b>declarative</b> form.  In C++ or Java, usually you set local variables a lot.  In Lisp you don't -- you nest functions.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[ a declarative style -- yuck ]</font>
+[44]> <font color=blue>(defun my-equation (n)
+  (let (x y z)
+    (setf x (sin n))
+    (setf y (cos n))
+    (setf z (* x y))
+    (+ n z)))</font>
+MY-EQUATION
+<font color=red> [ ... a functional style  ]</font>
+[45]> <font color=blue>(defun my-equation (n)
+  (+ n (* (sin n) (cos n))))</font>
+MY-EQUATION
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Like Java, Lisp is pass-by-value.  The parameters of a function are considered to be local variables to that function, and can be set with <b>setf</b>.  This does not change the values of things passed in.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(defun weird-function (n)
+    (setf n 4)
+    n)</font>
+WEIRD-FUNCTION
+[45]> <font color=blue>(setf abc 17)</font> 
+17
+[46]> <font color=blue>(weird-function abc)</font>
+4
+[47]> <font color=blue>abc</font>
+17
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+
+<p>You can also make recursive functions.  Lisp style often makes heavy use of recursion.
+
+<p>You'll find that functional style and recursion together result in a need for very few local variables.
+
+<p>Here's the factorial function again, only done recursively.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[44]> <font color=blue>(defun factorial (n)
+  (if (&lt;= n 0)
+    1
+    (* n (factorial (- n 1)))))
+</font>
+FACTORIAL
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+
+<p>You can make functions with an optional argument using the special term <b>&amp;optional</b>, followed by the optional parameter name, at the end of your parameter list.  
+
+<p>If the optional parameter isn't provided when the function is called, then the parameter is set to <b>nil</b>.
+
+<p>Alternatively you can provide the default value to set the parameter to when it's not provided when the function is called.  You can do this by following <b>&amp;optional</b> not by a parameter name but by a list of the form <tt><b>(<i>param-name default-value</i>)</b></tt>
+
+<p>You can have only one optional parameter.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>(defun first-n-chars (string n &optional reverse-first)
+  (if reverse-first
+    (subseq (reverse string) 0 n)
+    (subseq string 0 n)))
+</font>
+REVERSE-FIRST
+[49]> <font color=blue>(first-n-chars "hello world" 5 nil)</font>      <font color=red></font>
+"hello"
+[50]> <font color=blue>(first-n-chars "hello world" 5)</font>  <font color=red>[ nil is default]</font>
+"hello"
+[51]> <font color=blue>(first-n-chars "hello world" 5 t)</font>
+"dlrow"
+[52]> <font color=blue>(defun multiply-then-maybe-add (x y &optional (z 0) )
+  (+ (* x y) z))</font>
+MULTIPLY-THEN-MAYBE-ADD
+[53]> <font color=blue>(multiply-then-maybe-add 9 2)</font>
+18
+[54]> <font color=blue>(multiply-then-maybe-add 9 2 7)</font>
+25
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+
+<p>Lisp can also have <b>keyword parameters</b>.  These are parameters which can appear or not appear, or be in any order, because they're given names.  Keyword parameters are very much like the &lt;foo arg1=val arg2=val ... > arguments in the "foo" html tag.
+
+<p>Keyword parameters appear at the end of a parameter list, after the term <b>&amp;key</b>.  Similarly to optional arguments, each  keyword parameter is either a parameter name (whose value defaults to <b>nil</b> if not passed in when the function is called) or is a list of the form <tt><b>(<i>param-name default-value</i>)</b></tt>
+<p>Keyword parameters may appear only at the end of the parameter list.
+
+<p>You pass a keyword parameter whose name is <b>foo</b> into a function by using the term <b>:foo</b> followed by the value to set <b>foo</b> to.  Keyword parameters can be passed in in any order, but must appear at the end of the parameter list.
+
+<p>Though it's possible to have both keyword parameters and optional parameters in the same function, don't do it.  Gets confusing.
+
+<p><b>Many built-in Lisp functions use lots of keyword parameters to "extend" them!</b>
+
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>(defun first-n-chars (string n 
+	  &key reverse-first <font color=red> nil by default</font>
+	       (capitalize-first t) )  <font color=red> t by default</font>
+  (let ((val (if capitalize-first 
+		      (string-upcase string)
+		      string)))
+    (if reverse-first
+      (subseq (reverse val) 0 n)
+      (subseq val 0 n))))
+<font color=red> [ take a while to understand the LET before going on... ] </font>
+</font>
+FIRST-N-CHARS
+[49]> <font color=blue>(first-n-chars "hello world" 5 :reverse-first t)</font>      <font color=red></font>
+"DLROW"
+[50]> <font color=blue>(first-n-chars "hello world" 5 
+    :reverse-first t :capitalize-first nil)</font>      <font color=red></font>
+"dlrow"
+[51]> <font color=blue>(first-n-chars "hello world" 5 
+    :capitalize-first nil :reverse-first t )</font>      <font color=red></font>
+"dlrow"
+[52]> <font color=blue>(first-n-chars "hello world" 5)</font>      <font color=red></font>
+"HELLO"
+[53]> <font color=blue>(first-n-chars "hello world" 5 :capitalize-first nil)</font>      <font color=red></font>
+"hello"
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+<br><br><br><h2><a name="Lists">Lists and Symbols as Data</h2></a>
+
+<table cellspacing=0 cellpadding=10 border=2>
+<tr><td valign=top>
+
+<p>Lists are normally evaluated as function or macro calls.  Symbols are normally evaluated as variable references.  But they don't have to be.  Lists and symbols are data as well!
+
+<p>The special form <b>quote</b> can be used to <i>bypass the evaluation of its argument</i>.  <b>quote</b> takes a single argument, and instead of evaluating that argument, it simply returns the argument as you had typed it ... as data!
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>(quote (hello world 1 2 3))
+</font>
+(HELLO WORLD 1 2 3)
+[49]> <font color=blue>(quote (what is (going on) here?))</font>      <font color=red></font>
+(WHAT IS (GOING ON) HERE?)
+[50]> <font color=blue>(quote my-symbol)</font>      <font color=red></font>
+MY-SYMBOL
+[51]> <font color=blue>(quote (+ 4 (* 3 2 9)))</font>      <font color=red></font>
+(+ 4 (* 3 2 9))
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>What is a symbol when used in data form?  It's just itself.  The symbol <b>foo</b> is just a thing that looks like <b>foo</b> (case insensitive of course).  It is a data type like any other.  You can set variables to it.
+
+<p>What is a list when used in data form?  A list is a <b>singly-linked list</b>.  It is a data type like any other.  You can set variables to it.  There are a great many functions which operate on lists as well.
+
+<p><b>first</b> returns the first item in a list.  The old name of <b>first</b> is <b>car</b>.
+
+<p><b>rest</b> returns a list consisting of everything <i>but</i> the first item.  It does not damage the original list.  The old name of <b>rest</b> is <b>cdr</b>.
+
+<p><b>append</b> hooks multiple lists together.
+
+<p><b>cons</b> takes an item and a list, and returns a new list consisting of the old list with the item tacked on the front.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>(setf my-variable (quote hello))
+</font>
+HELLO
+[49]> <font color=blue>my-variable</font>    <font color=red>[ stores the symbol HELLO ]</font>
+HELLO
+[50]> <font color=blue>(setf my-variable (quote (hey yo yo)))</font>
+(HEY YO YO)
+[51]> <font color=blue>my-variable</font>      <font color=red></font>
+(HEY YO YO)
+[52]> <font color=blue>(setf var2 (first my-variable))</font>
+HEY
+[53]> <font color=blue>(setf var3 (rest my-variable))</font>
+(YO YO)
+[54]> <font color=blue>(cons 4 (rest my-variable))</font>
+(4 YO YO)
+[55]> <font color=blue>(append my-variable (quote (a b c)) my-variable)</font>
+(HEY YO YO A B C HEY YO YO)
+[56]> <font color=blue>my-variable</font>
+(HEY YO YO)     <font color=red>[ See?  No damage ]</font>
+[57]> <font color=blue>(quote "hello")</font>
+"hello"     <font color=red>[ makes no difference ]</font>
+[58]> <font color=blue>(quote 4.3)</font>
+4.3     <font color=red>[ makes no difference ]</font>
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+
+<p><b>quote</b> is so common that there is a special abbreviation for it...a single quote at the beginning of the item:
+
+<pre><tt><b>'hello-there</b></tt></pre>
+
+<p>...is the same as...
+
+<pre><tt><b>(quote hello-there)</b></tt></pre>
+
+<p>Here's how it's done for lists:
+
+<pre><tt><b>'(a b c d e)</b></tt></pre>
+
+<p>...is the same as...
+
+<pre><tt><b>(quote (a b c d e))</b></tt></pre>
+
+<p>Here's a repeat of some the previous code, but with the abbreviation.  
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>(setf my-variable 'hello)</font>
+HELLO
+[50]> <font color=blue>(setf my-variable '(hey yo yo))</font>
+(HEY YO YO)
+[55]> <font color=blue>(append my-variable '(a b c) my-variable)</font>
+(HEY YO YO A B C HEY YO YO)
+[57]> <font color=blue>'"hello"</font>
+"hello"     <font color=red>[ makes no difference ]</font>
+[58]> <font color=blue>'4.3</font>
+4.3     <font color=red>[ makes no difference ]</font>
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Lists as data can of course contain sublists.
+
+<p>In data form, the first item of a list can be anything -- it's not restricted to be just a symbol.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>'(123.32 "hello" (how are (you there)) a)</font>
+(123.32 "hello" (HOW ARE (YOU THERE)) A)
+[49]> <font color=blue>'(((wow)) a list consisting of a list of a list!)</font>
+(((WOW)) A LIST CONSISTING OF A LIST OF A LIST!)
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+
+<p><b>nil</b> isn't just "false".  It's also the empty list, <b>'()</b> 
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>'()</font>
+NIL
+[49]> <font color=blue>(rest '(list-of-one-thing))</font>
+NIL
+[50]> <font color=blue>(append '(list-of-one-thing) nil)</font>
+(LIST-OF-ONE-THING)
+[51]> <font color=blue>'(a b c () g h i)</font>
+(A B C NIL G H I)
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Lists have a common control structure, <b>dolist</b>, which iterates over a list.  The format of <b>dolist</b> is very similar to <b>dotimes</b>:
+
+<b><tt><pre>
+(dolist (<i>var</i> <i>list-to-iterate-over</i>
+	<i>optional-return-val</i>)
+ <i>expr1</i>
+ <i>expr2</i>
+ ...)</pre></tt></b>
+
+<p><b>dolist</b> evaluates the list-to-iterate-over, then one by one sets <i>var</i> to each element in the list, and evaluates the expressions.  <b>dolist</b> then returns the optional return value, else <b>nil</b> if none is provided.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>(dolist (x '(a b c d e))
+  (print x))</font>
+A 
+B 
+C 
+D 
+E 
+NIL
+[49]> <font color=blue>(defun my-reverse (list)
+  (let (new-list)  <font color=red> [initially nil, or empty list] </font>
+    (dolist (x list)
+      (setf new-list (cons x new-list)))
+    new-list))</font>
+MY-REVERSE
+[50]> <font color=blue>(my-reverse '(a b c d e f g))</font>
+(G F E D C B A)
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Lists and strings share a common supertype, <b>sequences</b>.
+
+<p>There are a great many sequence functions.  All sequence functions work on any kind of sequence (including strings and lists).  Here are two sequence functions we've seen so far.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>(reverse '(a b c d e))</font>
+(E D C B A)
+[49]> <font color=blue>(reverse "abcde")</font>
+"edcba"
+[50]> <font color=blue>(subseq "Hello World" 2 9)</font>
+"llo Wor"
+[51]> <font color=blue>(subseq '(yo hello there how are you) 2 4)</font>
+(THERE HOW)
+</font>
+</pre></tt>
+</td></tr>
+
+
+</table>
+
+<br><br><br><h2><a name="Loading">Loading and Compiling Lisp</h2></a>
+
+<table cellspacing=0 cellpadding=10 border=2>
+<tr><td valign=top>
+
+<p>Lisp is both an <b>interpreter</b> and a <b>compiler</b>.  
+
+<p>If you type in code at the command line, it is (on most Lisp systems) <b>interpreted</b>.
+
+<p>You can compile a function by passing its symbol name (quoted!) to the <b>compile</b> function.
+
+<p>You can time the speed of any expression, and its garbage collection, with the <b>time</b> function.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[48]> <font color=blue>(defun slow-function (a)
+(dotimes (x 100000)
+  (setf a (+ a 1)))
+a)
+</font>
+SLOW-FUNCTION
+[49]> <font color=blue>(time (slow-function 0))</font>
+
+Real time: 1.197806 sec.
+Run time: 1.15 sec.
+Space: 0 Bytes
+100000
+
+[50]> <font color=blue>(compile 'slow-function)</font>
+SLOW-FUNCTION ;
+NIL ;
+NIL
+
+[51]> <font color=blue>(time (slow-function 0))</font>
+
+Real time: 0.066849 sec.
+Run time: 0.07 sec.
+Space: 0 Bytes
+100000
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>You don't have to type all your code in on the command line.  Instead, put it in a file named <b>"myfile.lisp"</b> (or whatever, so long as it ends in ".lisp").  Then load it with the <b>load</b>
+command.
+
+<p><b>load</b> works exactly as if you had typed in the code directly at the command line.
+
+<p>By default, <b>load</b> is fairly silent -- it doesn't print out all the return values to the screen like you'd get if you typed the code in at the command line.  If you'd like to see these return values printed out, you can add the <b>:print t</b> keyword parameter.
+
+<p>You can load and reload files to your heart's content.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[ Make a file called "myfile.lisp", containing this: ]</font>
+<font color=blue>(setf foo 3)
+(defun my-func ()
+(print 'hello))
+foo
+(sin foo)
+(my-func)</font>
+<hr>
+<font color=red>[ At the command line, you type: ]</font>
+
+[49]> <font color=blue>(load "myfile.lisp")</font>
+;; Loading file myfile.lisp ...
+HELLO      <font color=red>[ because we called (my-func), which printed ]</font>
+;; Loading of file myfile.lisp is finished.
+T          <font color=red>[ load returns t ]</font>
+
+<font color=red>[ To get the return values for each item entered in:  ]</font>
+
+[50]> <font color=blue>(load "myfile.lisp" :print t)</font>
+;; Loading file myfile.lisp ...
+3 
+MYFUNC 
+3 
+0.14112 
+HELLO 
+HELLO 
+;; Loading of file myfile.lisp is finished.
+T</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+You can also compile a whole file with the <b>compile-file</b> function.
+
+<p>When a file is compiled, the object file created has a <b>.fas</b> or <b>.fsl</b> or <b>.fasl</b> or <b>.afasl</b> extension.  Depends on the Lisp compiler.
+
+<p>You load object files with the <b>load</b> function as well. 
+
+<p>You can omit the extension (".lisp", ".afasl", etc.) from the filename, but what happens as a result is implementation-dependent.  Some systems load the most recent version (either the source or the .afasl file); others may load the .afasl file always but warn you if there's a more recent .lisp file, etc.  <b>In general, to be safe, always load the full name of the file including the extension.</b>
+
+<p>When the compiler compiles the file, one common thing it will complain of is <b>special variables</b>.  For all intents and purposes, a special variable is a <b>global variable</b>.  With very few exceptions, you should never use global variables when you can use local variables instead.
+
+<p>In our file we had declared a global variable (<b>foo</b>).  Look at the warnings when we compile!
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[18]> <font color=blue>(compile-file "myfile.lisp")</font>
+
+Compiling file myfile.lisp ...
+WARNING in function #:TOP-LEVEL-FORM-1 in line 1 :
+FOO is neither declared nor bound,
+it will be treated as if it were declared SPECIAL.
+WARNING in function #:TOP-LEVEL-FORM-3 in lines 4..5 :
+FOO is neither declared nor bound,
+it will be treated as if it were declared SPECIAL.
+WARNING in function #:TOP-LEVEL-FORM-4 in line 5 :
+FOO is neither declared nor bound,
+it will be treated as if it were declared SPECIAL.
+
+Compilation of file myfile.lisp is finished.
+The following special variables were not defined:
+FOO
+0 errors, 3 warnings
+#P"myfile.fas" ;
+3 ;
+3
+
+[19]> <font color=blue>(load "myfile.fas")</font>
+;; Loading file myfile.fas ...
+HELLO 
+;; Loading of file myfile.fas is finished.
+T</font>
+</pre></tt>
+</td></tr>
+
+
+</table>
+
+
+<br><br><br><h2><a name="Style">Lisp Style</h2></a>
+
+<table cellspacing=0 cellpadding=10 border=2>
+<tr><td valign=top>
+As you can see, Lisp can get quite confusing because of the parentheses.  How tedious it is reading code based on parentheses!  That's why Lisp programmers don't do it.
+
+<p>Lisp programmers don't rely much on the parentheses when reading code.  Instead, they rely heavily on breaking expressions into multiple lines and indenting them in a very peculiar way.  There is a "cannonical" indent format and style for Lisp.  Code which adheres to the standard format can be read very rapidly by Lisp programmers who have developed a "batting eye" for this format.
+
+<p>Important formatting rules:
+
+<ul>
+<li>Put a single space between each item in a list.
+<li>Do NOT put space between the opening parenthesis and the first item in a list.  Similarly, do NOT put space between the closing parenthesis and the last item.
+<li>Never put parentheses all by themselves on lines like a C++/Java brace.  Do not be afraid to pile up parentheses at the end of a line.
+</ul>
+
+<p>Do NOT use simplistic editors like pico or Windows Notepad.  You will regret it.  Deeply.  <b>Use an editor designed for Lisp.</b>  Integrated Lisp systems  (the big three are Franz Allegro Common Lisp, Xanalys Harlequin Common Lisp, and Macintosh Common Lisp) with graphical interfaces have built-in editors which will automatically indent text for you in the official style, will colorize your text, will tell you whether your syntax is right or not, and will match parentheses for you.  
+
+<p>Another good choice, indeed the classic option in Lisp systems, is the editor <b>emacs</b>.  It is written in its own version of Lisp, and is very good at editing Lisp code and working with Lisp systems, especially with an add-on Lisp-editing plug-in called <b>slime</b>.  emacs is the program whose auto-indent facilities established the "cannonical" style of Lisp formatting.
+
+<p>If you can't find an editor which can do the cannonical style, there are still plenty of choices which do a reasonable job.  Any professional-grade code editor will do in a pinch.  Without a good editor, writing large Lisp programs is <b>painful</b>.  GET A CODE EDITOR.  You are an adult now, and will soon be a professional.  Use real tools to get your job done.
+
+
+
+</td><td valign=top>
+<tt><pre><font color=red>[BAD Lisp Style Formatting Examples]</font>
+<font color=blue>
+(if(< (* 3 4)5)(sin(+ 3 x) ) ( - x y ))</font>
+
+<font color=blue>
+(If
+(< 
+(* 3 4)
+5
+)
+(SIN
+(+ 3 x)
+)
+(- x y )
+)</font>
+
+<font color=red>[A reasonably GOOD Lisp Style Formatting Example]</font>
+<font color=blue>
+(if (< (* 3 4) 5)
+(sin (+ 3 x))
+(- x y))</font>
+
+<font color=red>[A more canonical Lisp Indent Format]</font>
+<font color=blue>
+(if (< (* 3 4) 5)    (sin (+ 3 x))  (- x y))
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+
+Comments in Lisp are of three forms.
+
+<p>Winged comments (the equivalent of /* and */ in C++ or Java) begin with a <font color=green><b>#|</b></font> and end with a <font color=green><b>|# </b></font>   They are not commonly used in Lisp except to temporarily eliminate chunks of code, because it's hard to tell they exist by examining your code.
+
+<p>Inline comments (the equivalent of // in C++ or Java) begin with a semicolon <font color=green><b>;</b></font>  and end with a return.
+
+<p>Many Lisp structures have built-in documentation comments.  For example, if the first expression in a <b>defun</b> statement is a string, that string is not part of the code but instead is considered to be the "documentation" for the function.  You can access the documentation for an object with the <b>documentation</b> function.
+
+<p>It is common in Lisp to pile up several semicolons <font color=green><b>;;</b></font> or <font color=green><b>;;;</b></font> to make the comment more visible.
+
+<p>Here is a common approach:
+<ul>
+<li>Use one semicolon for inline code.
+<li>Use two semicolons to comment the head of a function.
+<li>Use three semicolons to comment the head of a file or other big region.
+<li>Use winged comments only to comment-out a region temporarily.
+</ul>
+
+</td><td valign=top>
+<tt><pre><font color=blue>
+<font color=red>[A well-commented file]</font>
+;;; pi-estimation package
+;;; Sean Luke
+;;; Wednesday, 8/21/2002
+
+
+
+;; ESTIMATE-PI will compute the value of pi to
+;; the degree given, maintaining the value as a giant
+;; fraction.  It uses the Leibniz (1674)
+;; formula of pi = 4 * ( 1/1 - 1/3 + 1/5 - 1/7 + ...  )
+;; degree must be an integer > 0.
+
+(defun estimate-pi (degree)  "Estimates pi using Leibniz's formula.degree must be an integer greater than 0."  (let ((sum 0) (inc 1))                ; inc goes 1, 5, 7, ...    (dotimes (x degree (* 4 sum))       ; we return 4*sum         #| (setf sum (+ sum (/ 1 inc))                 (- 0 (/ 1 (+ inc 2)))) |#     ; yucky      (setf sum (+ sum (/ 1 inc) (/ -1 (+ inc 2))))      (setf inc (+ 4 inc)))))
+</font>
+
+<hr>
+<font color=red>[...after estimate-pi has been entered into Lisp...]</font>
+<font color=black>
+[13]> <font color=blue>(documentation 'estimate-pi 'function)</font>
+"Estimates pi using Leibniz's formula.
+degree must be an integer greater than 0."
+[14]> <font color=blue>(describe 'estimate-pi)</font>
+<font color=red>[Get ready for more information than you really need!]</font>
+
+ESTIMATE-PI is the symbol ESTIMATE-PI, lies in 
+#&lt;PACKAGE COMMON-LISP-USER>, is accessible in 
+the package COMMON-LISP-USER, names a function, 
+has the properties SYSTEM::DOCUMENTATION-STRINGS, 
+SYSTEM::DEFINITION.
+
+Documentation as a FUNCTION:
+Estimates pi using Leibniz's formula.
+degree must be an integer greater than 0.
+For more information, evaluate (SYMBOL-PLIST 'ESTIMATE-PI).
+
+#&lt;PACKAGE COMMON-LISP-USER> is the package 
+named COMMON-LISP-USER. It has the nicknames CL-USER, 
+USER.It imports the external symbols of the packages 
+COMMON-LISP, EXT and exports no symbols, but no 
+package uses these exports.
+
+#&lt;CLOSURE ESTIMATE-PI (DEGREE) (DECLARE #) 
+(BLOCK ESTIMATE-PI #)> is an interpreted function.
+argument list: (DEGREE)
+
+</font>
+
+</pre></tt>
+</td></tr>
+
+
+
+
+<tr><td valign=top>
+
+Lisp has important style rules about symbols, used for both variables and function names.
+
+<ul>
+<li>Although Lisp symbols are case-insensitive, <b>ALWAYS use lower-case</b>.  There is a good reason for this.  Keep in mind that Lisp is an interactive system: both you and the system are producing text on the screen.  Lisp systems spit out symbols in UPPER-CASE.  By sticking with lower-case yourself, you can distinguish between the text you typed and the text the Lisp system generated.
+<li>Do NOT use underscores in symbols.  <b>Use hyphens.</b>
+<li>Although the previous examples above didn't do it to avoid confusing you, you should always <b>denote global variables by wrapping them with *asterisks*.</b>  Global variable names should also be self-explanatory.
+<li>Variable names should be nouns.
+<li>Function names should be verbs.
+<li>Though you can always name variables the same names as functions, it's more readable not to do so.
+</ul>
+
+</td><td valign=top>
+<tt><pre><font color=blue>
+<font color=red>[BAD Lisp Style Symbols:]</font>
+my_symbol_name
+mySymbolName
+MySymbolName
+MY_SYMBOL_NAME         
+</font>
+<font color=blue>
+<font color=red>[A GOOD Lisp Style Symbol]</font>
+my-symbol-name
+</font>
+
+<font color=blue>
+<font color=red>[A BAD Global Variable Name]</font>
+aprintf
+</font>
+<font color=blue>
+<font color=red>[A GOOD Global Variable Name]</font>
+*alpha-print-format*
+</font>
+
+</pre></tt>
+</td></tr>
+
+
+
+
+
+<tr><td valign=top>
+
+Lisp is a functional language.  Learn to use functional style.  One way you can tell you're using functional style is if you have <i>very</i> few (or even no) local variables, and rarely if ever use a global variable.  
+
+<p>As Paul Graham says, "treat <b>setf</b> as if there were a tax on its use."
+
+
+</td><td valign=top>
+<tt><pre><font color=blue>
+<font color=red>[HORRIBLE Lisp Style]</font>
+
+(defun do-the-math (x y z)
+   (setf w (+ x y))
+   (setf n (* z w))
+   (+ x n))
+
+</font>
+<font color=blue>
+<font color=red>[MERELY BAD Lisp Style -- no global variables]</font>
+
+(defun do-the-math (x y z)
+    (let (w n)
+        (setf w (+ x y))
+        (setf n (* z w))
+        (+ x n)))
+
+</font>
+<font color=blue>
+<font color=red>[BETTER Lisp Style -- functional style]</font>
+
+(defun do-the-math (x y z)
+    (+ x (* z (+ x y))))	
+
+</font>
+
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+Declare your global variables once with <b>defparameter</b> before you start using them in <b>setf</b> statements. 
+<pre><b><tt>(defparameter <i>var-symbol</i> <i>initial-value</i>
+<i>optional-documentation-string</i>)</tt></b></pre>
+
+<p>Declare global constants with <b>defconstant</b>.
+
+<pre><b><tt>(defconstant <i>var-symbol</i> <i>value</i> 
+<i>optional-documentation-string</i>)</tt></b></pre>
+
+<p>The documentation strings can be accessed via <b>documentation</b>, and of course, <b>describe</b>.
+
+</td><td valign=top>
+<tt><pre><font color=black>
+
+[13]> <font color=blue>(defparameter *tuning-value* 4.0 
+"The tuning value of the amplitude dial")</font>
+*TUNING-VALUE*
+[14]> <font color=blue>(defconstant *low-quality-pi* 3.14159
+"Pi to only six digits")</font>
+*LOW-QUALITY-PI*
+[15]> <font color=blue>(documentation '*tuning-value* 'variable)</font>
+"The tuning value of the amplitude dial"
+[16]> <font color=blue>(describe '*low-quality-pi*)</font>
+
+*LOW-QUALITY-PI* is the symbol *LOW-QUALITY-PI*, 
+lies in #&lt;PACKAGE COMMON-LISP-USER>, is accessible 
+in the package COMMON-LISP-USER, a constant, 
+value: 3.14159, has the property SYSTEM::DOCUMENTATION-STRINGS.
+Documentation as a VARIABLE:
+Pi to only six digits
+For more information, evaluate (SYMBOL-PLIST '*LOW-QUALITY-PI*).
+
+#&lt;PACKAGE COMMON-LISP-USER> is the package named 
+COMMON-LISP-USER. It has the nicknames CL-USER, USER.
+It imports the external symbols of the packages 
+COMMON-LISP, EXT and exports no symbols, but no 
+package uses these exports.
+
+3.14159 is a float with 24 bits of mantissa (single-float).
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+<br><br><br><h2><a name="Arrays">Arrays and Vectors</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+Lisp has many kinds of arrays: multidimensional arrays, variable-length arrays, fixed-length simple arrays, arrays guaranteed to have certain types in them, arrays which can hold anything, etc.
+
+<p>Lisp arrays are created with the function <b>make-array</b>.  The simplest form of this function is:
+
+<p><b><tt>(make-array <i>length</i>)</tt></b>
+
+<p>This form makes a one-dimensional fixed-length array <i>length</i> elements long.  The elements are each initialized to <b>nil</b>.
+
+<p>An array of this form is called a <i>simple-vector</i>.  You don't just have to use <b>make-array</b> to build a simple-vector.  Just as you can make a list of the symbols <i>a b c</i> by typing <b><tt>'(a b c)</tt></b>, you can make a simple vector of the symbols <i>a b c</i> by typing <b><tt>#(a b c)</tt></b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(make-array 4)</font>
+#(NIL NIL NIL NIL)
+[2]&gt; <font color=blue>#(a b c)</font>  
+#(A B C)
+[3]> 
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+A multidimensional array is created as follows:
+
+<p><b><tt>(make-array <i>dimension-list</i>)</tt></b>
+
+<p>This form makes an N-dimensional fixed-length array of the dimensions given by elements in the list.  The elements are each initialized to <b>nil</b>.
+
+<p>You can specify the initial value of the elements with the keyword <b>:initial-element</b>.
+
+<p>The general function for extracting the element of any array is <b>aref</b>.  It takes the form:
+
+<p><b><tt>(aref <i>array</i> <i>index1</i> <i>index2</i> ...)</tt></b>
+
+<p>Simple vectors have a special version, <b>svref</b>, which is slightly faster than <b>aref</b> (in fact, <b>aref</b> just calls <b>svref</b> for simple vectors):
+
+<p><b><tt>(svref <i>simple-vector</i> <i>index</i>)</tt></b>
+
+<p>Lisp arrays are zero-indexed.  This is just like saying (in C++/Java): <b><tt>array[index1][index2]...</tt></b>
+
+<p>Multidimensional arrays can also be specified with <b>#<i>n</i>A(...)</b>, where <i>n</i> is the number of dimensions.  See the example at right.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(make-array '(4 3 8))</font>  <font color=red>[it has to be quoted]</font>
+#3A(((NIL NIL NIL NIL NIL NIL NIL NIL)
+(NIL NIL NIL NIL NIL NIL NIL NIL)
+(NIL NIL NIL NIL NIL NIL NIL NIL))
+((NIL NIL NIL NIL NIL NIL NIL NIL)
+(NIL NIL NIL NIL NIL NIL NIL NIL)
+(NIL NIL NIL NIL NIL NIL NIL NIL))
+((NIL NIL NIL NIL NIL NIL NIL NIL)
+(NIL NIL NIL NIL NIL NIL NIL NIL)
+(NIL NIL NIL NIL NIL NIL NIL NIL))
+((NIL NIL NIL NIL NIL NIL NIL NIL)
+(NIL NIL NIL NIL NIL NIL NIL NIL)
+(NIL NIL NIL NIL NIL NIL NIL NIL)))
+[2]&gt; <font color=blue>(make-array '(2 2) :initial-element 0)</font>  
+#2A((0 0) (0 0))
+[3]> <font color=blue>(setf *j* #2A((1 2 3) (4 5 6)))</font>
+#2A((1 2 3) (4 5 6))
+[4]> <font color=blue>(aref *j* 1 1)</font>
+5
+[5]> <font color=blue>(aref #(a b c d e) 3)</font>
+D
+[6]> <font color=blue>(svref #(a b c d e) 3)</font>  <font color=red>[ faster ]</font>
+D
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+Vectors are one-dimensional arrays.  You've already seen fixed-length vectors (known in Lisp as <i>simple-vectors</i>).  Lisp also has variable-length vectors.
+
+<p>Variable-length vectors are created with the keywords <b>:adjustable</b> and <b>:fill-pointer</b> in the following fashion:
+
+<p><b><tt>(make-array <i>length</i> :fill-pointer t :adjustable t)</tt></b>
+
+<p>You can have a zero-length vector.  It's very common to start a variable-length array at length 0.
+
+<p>You can tack new stuff onto the end of a variable-length vector with the command <b>vector-push-extend</b>.  You can "pop" elements off the end of the variable-length vector with <b>vector-pop</b>.
+
+<p>To use these functions, the vector <i>must</i> be variable-length.  You cannot push and pop to a simple vector.
+
+<p>Multidimensional arrays can also have their sizes adjusted.  We'll just leave it at that -- look it up if you're interested.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *j* (make-array 0 :fill-pointer t :adjustable t))</font>
+#()
+[2]&gt; <font color=blue>(vector-push-extend 10 *j*)</font>  
+0
+[3]> <font color=blue>(vector-push-extend 'hello *j*)</font>
+1
+[3]> <font color=blue>*j*</font>
+#(10 HELLO)
+[3]> <font color=blue>(aref *j* 1)</font>
+HELLO
+[4]> <font color=blue>(vector-pop *j*)</font>
+HELLO
+[5]> <font color=blue>*j*</font>
+#(10)
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+A string is, more or less, a vector of characters.  You can access elements with <b>aref</b>.  But because a string is <i>not</i> a simple vector (oddly enough), you <i>cannot</i> use <b>svref</b>.  I have no idea why.
+
+<p>Although string elements can be accessed via <b>aref</b>, strings have their own special function which does the same thing: <b>char</b>, which takes the form:
+
+<p><b><tt>(char <i>string</i> <i>index</i>)</tt></b> 
+
+<p>In most systems, the two functions are about the same speed.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(aref "hello world" 3)</font>
+#\l
+[2]&gt; <font color=blue>(char "hello world" 6)</font>
+#\w
+</font>
+</pre></tt>
+</td></tr>
+
+
+</table>
+
+<br><br><br><h2><a name="Setf">Setf and Friends</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+<b>setf</b> doesn't just set variables.  In general, <b><tt>(setf <i>foo</i> <i>bar</i>)</tt></b> "sees to it" that <i>foo</i> will evaluate to <i>bar</i>.  <b>setf</b> can "see to" an amazing number of things.
+
+<p>To set the value of an element in an array (I bet you were wondering about that!) you say
+
+<p><b><tt>(setf (aref <i>array</i> <i>indices...</i> ) <i>val</i>)</tt></b>
+
+<p>You can do the same trick with <b>svref</b> and <b>char</b>.
+
+<p>You can also use <b>setf</b> to modify lists.  However, this is dangerous if you don't know what you're doing.  For now, don't do it.  Stick with modifying arrays and strings.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *j* #(a b c d e))</font>
+#(A B C D E)
+[2]&gt; <font color=blue>(setf (svref *j* 3) 'hello)</font>  
+HELLO
+[3]> <font color=blue>*j*</font>
+#(A B C HELLO E)
+[4]> <font color=blue>(setf *k* (make-array '(3 3 3) :initial-element 4))</font>
+#3A(((4 4 4) (4 4 4) (4 4 4))
+((4 4 4) (4 4 4) (4 4 4))
+((4 4 4) (4 4 4) (4 4 4)))[4]> <font color=blue>(vector-pop *j*)</font>
+HELLO
+[5]> <font color=blue>(setf (aref *k* 2 1 1) 'yo)</font>
+YO
+[6]> <font color=blue>*k*</font>
+#3A(((4 4 4) (4 4 4) (4 4 4))
+((4 4 4) (4 4 4) (4 4 4))
+((4 4 4) (4 YO 4) (4 4 4)))
+[7]> <font color=blue>(setf *l* "hello world")</font>
+"hello world"
+[8]> <font color=blue>(setf (char *l* 4) #\B)</font>
+#\B
+[9]> <font color=blue>*l*</font>
+"hellB world"
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+A variant of <b>setf</b> called <b>incf</b> does more or less the same thing as the <b>++</b> operator in C++ or Java, except that it works on all sorts of things (array slots, etc.) in addition to just variables.  The form:
+
+<p><b><tt>(incf <i>expression</i> 4)</tt></b>
+
+<p>...will see to it that <i>expression</i> evaluates to 4 more than it used to (by adding 4 to it).  If you just say:
+
+<p><b><tt>(incf <i>expression</i>)</tt></b>
+
+<p>...this by default sees to it that <i>expression</i> evaluates to 1 more than it used to.
+
+<p>The macro <b>decf</b> does the opposite.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *j* #(1 2 3 4 5))</font>
+#(1 2 3 4 5)
+[2]&gt; <font color=blue>(incf (svref *j* 3) 4)</font>  
+8
+[3]> <font color=blue>*j*</font>
+#(1 2 3 8 5)
+[4]> <font color=blue>(setf *k* 4)</font>
+4
+[5]> <font color=blue>(incf *k*)</font>
+5
+[6]> <font color=blue>*k*</font>
+5
+[7]> <font color=blue>(decf *k* 100)</font>
+-95
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+Another variant of <b>setf</b> called <b>push</b> can be used to "see to it" that an expression (which must evaluate to a list) now evaluates to a list with an element tacked onto the front of it.  If you say:
+
+<p><b><tt>(push <i>val</i> <i>expression</i>)</tt></b>
+
+<p>...this is roughly the same as saying
+
+<p><b><tt>(setf <i>expression</i> (cons <i>val</i> <i>expression</i>))</tt></b>
+
+<p>You can also "see to it" that a list has an element removed from the front of it with <b>pop</b>:
+
+<p><b><tt>(pop <i>expression</i>)</tt></b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *j* #((a b) (c d) (e f)))</font>  <font color=red> [ a simple-vector of lists ]</font>
+#((A B) (C D) (E F))
+[2]&gt; <font color=blue>(push 'hello (svref *j* 1))</font>  
+(HELLO C D)
+[3]> <font color=blue>*j*</font>
+#((A B) (HELLO C D) (E F))
+[4]> <font color=blue>(setf *k* '(yo yo ma))</font>
+(YO YO MA)
+[5]> <font color=blue>(pop *k*)</font>
+YO 
+[6]> <font color=blue>*k*</font>
+(YO MA)
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+Another useful variant, <b>rotatef</b>, can be used to swap several elements.  
+
+<p><b><tt>(rotatef <i>expresion1</i> <i>expression2</i> ... <i>expressionN</i>)</tt></b>
+
+<p>...this is roughly the same as saying
+
+<p><b><tt>(setf <i>tempvar</i> <i>expression1</i>)<br>
+(setf <i>expression1</i> <i>expression2</i>)<br>
+...<br>
+(setf <i>expressionN-1</i> <i>expressionN</i>)<br>
+(setf <i>expressionN</i> <i>tempvar</i>)</tt></b>
+
+<p>A simple use of this is simply <b><tt>(rotatef <i>expression1</i> <i>expression2</i>)</tt></b> which sees to it that the values of <i>expression1</i> and <i>expression2</i> are swapped.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *j* #(gracias senor))</font>
+#(GRACIAS SENOR)
+[2]&gt; <font color=blue>(setf *k* 'hello)</font>
+HELLO
+[3]> <font color=blue>(rotatef (elt *j* 0) (elt *j* 1) *k*)</font>
+NIL
+[4]> <font color=blue>*j*</font>
+#(SENOR HELLO)
+[5]> <font color=blue>*k*</font>
+GRACIAS
+[6]> <font color=blue>(setf *z* #(1 2 3 4 5))</font>
+#(1 2 3 4 5)
+[7]> <font color=blue>(rotatef (elt *z* 1) (elt *z* 4))</font>  <font color=red> [ swap 'em ] </font>
+NIL
+[8]> <font color=blue>*z*</font>
+#(1 5 3 4 2)
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+
+
+
+</table>
+
+<br><br><br><h2><a name="Funcall">Function, Funcall, and Apply</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+In Lisp, pointers to functions are first-class data objects.  They can be stored in variables, passed into arguments, and returned by other functions.
+
+<p>The special form <b>function</b> will return a pointer to a function.  It takes the form <b><tt>(function <i>function-symbol</i>)</tt></b>.  Notice that just like <b>quote</b>, <b>function</b> doesn't evaluate its argument -- instead it just looks up the function by that name and returns a pointer to it.
+
+<p>Also like <b>quote</b>, <b>function</b> is so common that there is a shorthand for it: a pound sign followed by a quote at the beginning of the function name:
+
+<p><b><tt>#'print</tt></b>
+
+<p>...is the same as...
+
+<p><b><tt>(function print)</tt></b>
+
+<p>Keep in mind that you can <i>only</i> get pointers to <i>functions</i>, not macros or special forms.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(function print)</font>
+#&lt;SYSTEM-FUNCTION PRINT&gt;
+[2]&gt; <font color=blue>(function if)</font>  <font color=red>["if" isn't a function -- it's a macro]</font>
+
+*** - FUNCTION: undefined function IF
+1. Break [3]&gt; <font color=blue>:a</font>
+
+[4]&gt; <font color=blue>(setf *temp* (function *))</font>  <font color=red>[the "*" function]</font>
+#&lt;SYSTEM-FUNCTION *>
+[5]&gt; <font color=blue>*temp*</font>
+#&lt;SYSTEM-FUNCTION *>
+[6]> <font color=blue>#'print</font>
+#&lt;SYSTEM-FUNCTION PRINT&gt;
+[7]> <font color=blue>(setf *temp* #'*)</font>
+#&lt;SYSTEM-FUNCTION *>
+[8]&gt; <font color=blue>*temp*</font>
+#&lt;SYSTEM-FUNCTION *>
+
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+A common mistake among Lisp newbies is to think that variables with function pointers stored in them can be used to make a traditional function call by sticking the variable at the beginning of a list.
+
+<p>Remember that the first item in an evaluated list must be a <i>symbol</i> which is <i>not evaluated</i>.  If a variable could be put as the first item, it would have to be evaluated first (to extract the function pointer).
+
+<p>Thus, Common Lisp can associate a <i>function</i> with a symbol (by using <b>defun</b>) and it can <i>also</i> associate a <i>value</i> with the same symbol as a variable (by using <b>setf</b>).  A Lisp which can associate two or more different kinds of things at the same time with a symbol is called a <b>Lisp 2</b>.  Common Lisp is a Lisp 2.  Emacs Lisp is also a Lisp 2.  
+
+<p>Scheme, another popular Lisp dialect, evaluates the first item in the list as a <i>variable</i>, looking up its function-pointer value.  Scheme associates only one thing with a symbol: the item stored in its variable.  Thus Scheme is a <b>Lisp 1</b>.
+
+<p>Lisp 1's are simpler and more intuitive than Lisp 2's.  But it is more difficult to do certain kinds of powerful things with them, like macros.  We'll get to that later on.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[6]> <font color=blue>(setf *new-print* (function print))</font>
+#&lt;SYSTEM-FUNCTION PRINT>
+[7]> <font color=blue>(*new-print* "hello world")></font>
+
+*** - EVAL: the function *NEW-PRINT* is undefined
+1. Break [8]> <font color=blue>:a</font>
+
+[9]> 
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+If you can't just call a function pointer by sticking it in the first spot in a list, how <i>do</i> you call it?
+
+<p>There are a great many functions and macros which use function pointers.  One basic one is <b>funcall</b>.  This function takes the form 
+
+<p><b><tt>(funcall <i>function-pointer</i> <i>arg1 arg2</i> ... )</tt></b>
+
+<p><b>funcall</b> is a function which evaluates <i>function-pointer</i>, which returns a pointer to a function, then it evaluates each of the arguments, then passes the argument values into the function.  <b>funcall</b> returns the value of the function.
+
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[6]> <font color=blue>(setf *new-print* (function print))</font>
+#&lt;SYSTEM-FUNCTION PRINT>
+[7]> <font color=blue>(funcall *new-print* "hello world")></font>
+
+"hello world" 
+"hello world"
+[8]> <font color=blue>(funcall #'+ 1 2 3 4 5 6 7)</font>
+28
+[9]> <font color=blue>(funcall #'funcall #'+ 1 2 3 4 5 6 7)</font> <font color=red>[hee hee!]</font>
+28
+[10]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+Another useful function which takes function pointers is <b>apply</b>.  The simple version of this function takes the form 
+
+<p><b><tt>(apply <i>function-pointer</i> <i>list-arg</i> )</tt></b>
+
+<p><b>apply</b> takes a function pointer, plus one more argument which <b>must evaluate to a list</b>.  It then takes each element in this list and passes them as arguments to the function pointed to by <i>function-pointer</i>.  <b>apply</b> then returns the value the that the function returned.
+
+<p>It so happens that <b>apply</b> can do one additional trick.  Alternatively, <b>apply</b> can look like this:
+
+<b><tt>(apply <i>function-pointer</i> <i>arg1 arg2</i> ... <i>list-arg</i> )</tt></b>
+
+<p>The last argument <b>must evaluate to a list</b>.  Here, <b>apply</b> builds a list before passing it to the function.  This list is built by taking each of the <i>arg1, arg2,</i> arguments and concatenating their values to the front of the list returned by <i>list-arg</i>.  For example, in <b><tt>(apply #'+ 1 2 3 '(4 5 6))</tt></b>, the concatenation results in the list <b><tt>'(1 2 3 4 5 6)</tt></b>.  Thus 
+
+<p><b><tt>(apply #'+ 1 2 3 '(4 5 6))</tt></b> is the same thing as
+
+<p><b><tt>(apply #'+ '(1 2 3 4 5 6))</tt></b> which is the same thing as
+
+<p><b><tt>(apply #'+ 1 2 3 4 5 6 '())</tt></b> which of course is the same thing as
+
+<p><b><tt>(apply #'+ 1 2 3 4 5 6 nil)</tt></b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[6]> <font color=blue>(apply #'+ '(1 2 3 4 5 6))</font>
+21
+[7]> <font color=blue>(apply #'+ 1 2 3 4 5 6 nil)</font>
+21
+[8]> <font color=blue>(apply #'+ 1 2 3 '(4 5 6))</font>
+21
+[9]> <font color=blue>(apply #'apply #'+ '(1 2 3 (4 5 6)))</font>   <font color=red> [woo hoo!] </font>
+21
+[10]><font color=blue> (apply #'funcall #'+ '(1 2 3 4 5 6))</font>  <font color=red> [yee haw!] </font>
+21
+[11]><font color=blue> (funcall #'apply #'+ '(1 2 3 4 5 6))</font>  <font color=red> [hmmmm...] </font>
+21
+
+</font>
+</pre></tt>
+</td></tr>
+</table>
+
+<br><br><br><h2><a name="Mapping">Mapping</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+Lisp uses pointers to functions <i>everywhere</i>.  It's what makes Lisp's built-in functions so powerful: they take optional functions which let you customize the built-in ones in special ways.
+
+<p>One very common use of pointers to functions is <i>mapping</i>.  Mapping applies a function repeatedly over one or more lists, resulting in a new list.  The most common mapping function is <b>mapcar</b>, which in a basic form looks like this:
+
+<p><b><tt>(mapcar <i>function-pointer</i> <i>list</i>)</tt></b>
+
+<p>Since we're providing just one list, <i>function-pointer</i> must be a pointer to a function which can take just one argument, for example, <b>sqrt</b>.
+
+<p>In this form, <b>mapcar</b> repeatedly applies the function to each element in the list.  The return values are then put into a list and returned.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(mapcar #'sqrt '(3 4 5 6 7))</font>
+(1.7320508 2 2.236068 2.4494898 2.6457512)
+[2]&gt; <font color=blue>(mapcar (function print) '(hello there how are you))</font>  
+
+HELLO 
+THERE 
+HOW 
+ARE 
+YOU 
+(HELLO THERE HOW ARE YOU)
+[3]>
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<p><b>mapcar</b> more generally looks like this:
+<p><b><tt>(mapcar <i>function-pointer</i> <i>list1</i> <i>list2</i> ...)</tt></b>
+
+<p>If <i>function-pointer</i> points to a function which takes <i>N</i> arguments, then we must provide <i>N</i> lists.
+
+<p><b>mapcar</b> takes the first element out of each list and passes them as arguments to the function.  <b>mapcar</b> then takes the second element out of each list and passes them as arguments to the function.  And so on.  <b>mapcar</b> then returns a list of the return values of the function.
+
+<p>If any list is shorter than the others, <b>mapcar</b> operates only up to the shortest list and then stops.
+
+<p>Lisp provides a number of other useful mapping functions: <b>map, mapc, mapcan, mapcon ... </b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(mapcar #'/ '(1 2 3 4 5) '(7 8 9 10 11))</font>
+(1/7 1/4 1/3 2/5 5/11)
+[2]&gt; <font color=blue>(mapcar #'* '(1 2 3 4)
+     '(5 6) '(7 8 9))</font>  <font color=red>[one list is only 2 long]</font>
+(35 96)
+[3]>
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<p>A related feature is <i>reduction</i>: composing a function in on itself.  The basic <b>reduce</b> function looks similar to <b>mapcar</b>:
+
+<p><b><tt>(reduce <i>function-pointer</i> <i>list</i>)</tt></b>
+
+<p><i>function-pointer</i> must point to a function which takes exactly <i>two arguments</i>.  If the elements in <i>list</i> are <i>a b c d</i>, and the function <i>func</i> is stored in the function pointer, this is the same thing as doing:
+
+<p><b><tt>(func (func (func a b) c) d)</tt></b>
+
+<p>You can also change the order of operations with the <b>:from-end t</b> keyword argument, resulting in the ordering:
+
+<p><b><tt>(func a (func b (func c d)))</tt></b>
+
+<p><b>reduce</b> has other gizmos available.  Check 'em out.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[Note: (expt a b) computes a ^ b  (a to the power of b) ]</font>
+[1]&gt; <font color=blue>(reduce #'expt '(2 3 4 5))</font>  <font color=red>[((2^3)^4)^5)]</font>
+1152921504606846976
+[2]&gt; <font color=blue>(reduce #'expt '(2 3 4) :from-end t)</font>    <font color=red>[2^(3^4)]</font>
+2417851639229258349412352
+[3]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+</table>
+
+
+
+
+<br><br><br><h2><a name="Lambda">Lambda and Closures</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+<p>A <b>lambda expression</b> is one of the more powerful concepts in Lisp.  A lambda expression is an <i>anonymous function</i>, that is one that doesn't have a name -- just a pointer to it.
+
+<p>Lambda expressions are created using the form:
+
+<p><b><tt>(function (lambda (<i>args...</i>) <i>body...</i>))</tt></b>
+
+<p>Note how similar this is to <b>defun</b>:
+
+<p><b><tt>(defun <i>function-name</i> (<i>args...</i>)<i> body...</i>)</tt></b>
+
+<p>A lambda expression builds a function just like <b>defun</b> would, except that there's no name associated with it. Instead, the lambda expression returns a pointer to the function.
+
+<p>Remember that <b>function</b> has a shorthand of <b>#'</b> so the lambda expression is usually written like this:
+
+<p><b><tt>#'(lambda (<i>args...</i>) <i>body...</i>)</tt></b>
+
+<p>To make things even more confusing, Common Lisp has provided for you an actual <i>macro</i> called <b>lamda</b>, which does exactly the same thing.  Thus if you really want to (but it's not good style) you can write it as just:
+
+<p><b><tt>(lambda (<i>args...</i>) <i>body...</i>)</tt></b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(mapcar #'(lambda (x) (print (* x 2)))
+      '(1 2 3 4 5 6))</font>
+
+2 
+4 
+6 
+8 
+10 
+12 
+(2 4 6 8 10 12)
+[2]&gt; <font color=blue>(reduce #'(lambda (a b) (/ a (* b b)))
+      '(2 3 4))</font>    <font color=red>[(2 / 3^2) / 4^2]</font>
+1/72
+[3]> <font color=blue>(funcall #'(lambda (a b) (/ a (* b b))) 9 7)</font>
+9/49    <font color=red>[Not too useful this one, just an example...]</font>
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<p>Lambda expressions are useful when you need to pass in a quick, short, temporary function.  But there is another very powerful use of lambda expressions: making <b>closures</b>.
+
+<p>A closure is a function bundled together with its own <i>lexical scope</i>.  Usually you can think of this as a closure being a function plus its own personal, private global variables.
+
+<p>When a function is built from a lambda expression, it is usually created in the context of some outer local variables.  After the function is built, these variables are "trapped" with the lambda expression if anything in the lambda expression referred to them.  Since the lambda expression is hanging on to these variables, they're not garbage collected when the local scope is exited.  Instead they become private variables that only the function can see.
+
+<p>We can use this concept to make <b>function-building functions</b>.  Consider:
+<pre><b><tt>(defun build-a-function (x)
+#'(lambda (y) (+ x y)))</tt></b></pre>
+
+<p>...examine this function carefully.  <b>build-a-function</b> takes a value <i>x</i> and then returns a function which adds that amount <i>x</i> to things!
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(defun build-a-function (x)
+#'(lambda (y) (+ x y)))</font>
+BUILD-A-FUNCTION
+[2]&gt; <font color=blue>(setf *+3* (build-a-function 3))</font>
+#&lt;CLOSURE :LAMBDA (Y) (+ X Y)>
+[3]> <font color=blue>(funcall *+3* 9)</font>
+12
+[4]> <font color=blue>(funcall *+3* 2)</font>
+5
+[5]> <font color=blue>(setf *-6* (build-a-function -6))</font>
+#&lt;CLOSURE :LAMBDA (Y) (+ X Y)>
+[6]> <font color=blue>(funcall *-6* 21)</font>
+15
+[7] <font color=blue>(funcall *-6* (funcall *+3* 38))</font>
+35
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<p>Closures are also common when we need to make a quick custom function based on information the user provided.  Consider:
+<pre><b><tt>(defun add-to-list (val list-of-numbers)
+(mapcar #'(lambda (num) (+ val num))
+  list-of-numbers))</tt></b></pre>
+
+<p>...examine this function carefully as well.  <b>add-to-list</b> takes a number <i>val</i> and a list of numbers.  It then maps a custom function on the list of numbers.  This custom function adds <i>val</i> to each one.  The new list is then returned.
+
+<p>Notice that the lambda expression is converted into a function even though it refers to <i>val</i> <b>inside the lambda expression</b>.
+
+<p>Closures are examples of powerful things which <b>C++ simply cannot do.</b>  Java gets there part-way.  Java can do lambda expressions in the form of "anonymous classes".  But it too cannot do real closures, though there are nasty hacks to work around the issue.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(defun add-to-list (val list-of-numbers)
+(mapcar #'(lambda (num) (+ val num)) 
+       list-of-numbers))</font>
+ADD-TO-LIST
+[2]&gt; <font color=blue>(add-to-list 4 '(1 2 3 4 5))</font>
+(5 6 7 8 9)
+<font color=red>[ Here's the more C++ way to do it... ]</font>
+[3]&gt; <font color=blue>(defun icky-add-to-list (val list-of-numbers)
+(let (bag)
+ (dolist (x list-of-numbers)
+   (push (+ val x) bag))
+ (reverse bag)))</font>
+ICKY-ADD-TO-LIST
+[4]> <font color=blue>(icky-add-to-list 4 '(1 2 3 4 5))</font>
+(5 6 7 8 9)
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<p>Closures also occur with <b>defun</b>.  Imagine if <b>defun</b> were called <i>inside</i> a <b>let</b> statement:
+
+<pre><b><tt>(let ((seed 1234))
+(defun rand ()
+(setf seed (mod (* seed 16807) 2147483647))))</tt></b></pre>
+
+<p>Here we defined a local variable called <b>seed</b>.  Inside this local environment, we defined a function called <b>rand</b> which uses <b>seed</b>.  When we leave the <b>let</b>, what happens to <b>seed</b>?  Normally it would get garbage collected.  But it can't here -- because <b>rand</b> is holding on to it.  <b>seed</b> becomes a <i>private global variable</i> of the function <b>rand</b>.  No one else can see it but <b>rand</b>.
+
+<p>You can use this for other interesting purposes.  Imagine that you want to make a private bank account:
+<pre><b><tt>(let ((account 0))
+(defun deposit ($$$)
+(setf account (+ account $$$)))
+(defun withdraw ($$$)
+(setf account (- account $$$)))
+(defun amount ()
+account))
+</tt></b></pre>
+
+<p>The functions <b>deposit</b>, <b>withdraw</b>, and <b>amount</b> share a common private variable called <b>account</b> that no one else can see.
+
+<p>This isn't much different from a Java or C++ object with a private instance variable  and three methods.  Where did you think object-oriented programming came from?  You got it.
+
+<p>In fact, Lisp can be easily modified to do rather OOP built on top of closures.  It comes with an OOP system, CLOS, as part of the language (though I think CLOS is too mammoth, so I usually make my own little OOP language in Lisp instead).
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(let ((seed 1234))
+(defun rand ()
+(setf seed (mod (* seed 16807) 2147483647))))</font>
+RAND
+[2]&gt; <font color=blue>(rand)</font>
+20739838
+[3]&gt; <font color=blue>(rand)</font>
+682106452
+[4]&gt; <font color=blue>(rand)</font>
+895431078
+[5]&gt; <font color=blue>seed</font>
+
+*** - EVAL: variable SEED has no value
+1. Break [6]&gt; <font color=blue>:a</font>
+[7]> <font color=blue>(let ((account 0))
+(defun deposit ($$$)
+(setf account (+ account $$$)))
+(defun withdraw ($$$)
+(setf account (- account $$$)))
+(defun amount ()
+account))</font>
+AMOUNT
+[8]> <font color=blue>(deposit 42)</font>
+42
+[9]> <font color=blue>(withdraw 5)</font>
+37
+[10]> <font color=blue>(amount)</font>
+37
+[11]> <font color=blue>account</font>
+
+*** - EVAL: variable ACCOUNT has no value
+</font>
+
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+<br><br><br><h2><a name="Sequence">Sequence Functions</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+Vectors (both simple and variable-length), lists, and strings are all <b>sequences</b>.  Multidimensional arrays are <i>not</i> sequences.  
+
+<p>A function which works with any kind of sequence is a <b>sequence function</b> (duh).  We've seen some examples of sequence functions before: <b>length</b>, <b>reverse</b>, <b>subseq</b>.
+
+<p>Another common sequence function is <b>elt</b>, of the form:
+
+<p><b><tt>(elt <i>sequence</i> <i>index</i>)</tt></b>
+
+<p><b>elt</b> returns element #<i>index</i> in the sequence.  You can use <b>elt</b> inside <b>setf</b> to set the element (again, don't change elements in lists unless you know what you're doing.  Strings and vectors are fine).
+
+<p><b>elt</b> is an example of a general function: it works with a variety of data types, but as a result is slower than custom-made functions for each data type.  For example, if you know your sequence is a string, <b>aref</b> is probably faster.  If you know your sequence is a simple-vector, <b>svref</b> is much faster.  Lists also have a faster function: <b>nth</b>.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(elt "hello world" 4)</font>
+#\o
+[2]&gt; <font color=blue>(elt '(yo yo yo whats up?) 4)</font>  
+UP?
+[3]> <font color=blue>(elt #(yo yo yo whats up?) 4)</font>
+UP?
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<b>copy-seq</b> makes a duplicate copy of a sequence.  It does not copy the elements (both sequences will point to the same elements).
+
+<p><b>concatenate</b> concatenates copies of sequences together, producing a new sequence of a given type.  The original sequences can be different types.  <b>concatenate</b> looks like this:
+
+<p><b><tt>(concatenate <i>new-sequence-type</i> <i>sequences...</i> )</tt></b>
+
+<p><i>new-sequence-type</i> is a quoted symbol representing the <i>type</i> of the new sequence.  For example, simple vectors use <tt><b>'simple-vector</b></tt> and lists use <tt><b>'list</b></tt> and strings use <tt><b>'string</b></tt>.  
+
+<p><b>make-sequence</b> builds a sequence of a given type and length.  Like <b>elt</b>, it is a general function (it calls faster, more type-specific functions underneath).  It looks like this:
+
+<p><b><tt>(make-sequence <i>sequence-type</i> <i>length</i> )</tt></b>
+
+<p><b>make-sequence</b> has a keyword argument <b>:initial-element</b> which can be used to set the initial element of the sequence.
+
+<p><b>concatenate</b> and <b>make-sequence</b> show the first examples of <b>type symbols</b>.  We'll talk about types more later.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(copy-seq "hello world")</font>
+"hello world"   <font color=red>[ the copied string ]</font>
+[2]&gt; <font color=blue>(concatenate 'string '(#\y #\o) #(#\space) "what's up?")</font>  
+"yo what's up?"
+[3]> <font color=blue>(make-sequence 'string 4 :initial-element #\e)</font>
+"eeee"
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+A host of sequence-manipulative functions have very similar forms.
+
+<p>First off, most sequence-manipulative functions are either <b>destructive</b> or <b>non-destructive</b>.  That is, either they modify or destroy the original sequence to achieve their goals (faster), or they make a copy of the sequence first.  We'll show the non-destructive versions first.
+
+<p>Second, a great many sequence functions have three versions, the function, the <b>-if</b> version, and the <b>-if-not</b> version.  For example, the <b>count</b> function also has <b>count-if</b> and <b>count-if-not</b>.  The forms look like this:
+
+<p><b><tt>(count <i>object</i> <i>sequence</i> <i>keywords...</i>)</tt></b> counts the number of times <i>object</i> appears in <i>sequence</i>.
+
+<p><b><tt>(count-if <i>test-predicate</i> <i>sequence</i> <i>keywords...</i>)</tt></b> counts the number of times in which <i>test-predicate</i> (a function pointer) returns true for elements in <i>sequence</i>.
+
+<p><b><tt>(count-if-not <i>test-predicate</i> <i>sequence</i> <i>keywords...</i>)</tt></b> counts the number of times in which <i>test-predicate</i> (a function pointer) returns false (<b>nil</b>) for elements in <i>sequence</i>.
+
+<p>Third, many such functions take a <i>lot</i> of optional keyword arguments.  Before testing to see if an element is the one we're looking for, these functions give you a chance to "extract" the relevant item out of the element with an optional function passed in with the keyword argument <b>:key</b>.  You can tell the system to scan backwards with <b>:from-end t</b>.  You can tell the system to only scan from a certain location to another location in the sequence with the keywords <b>:start</b> and <b>:end</b>.  There are other keywords as well.
+
+<p>Other functions which follow this pattern include: <b>find</b> (returns the first element matching the pattern) else <b>nil</b>, <b>position</b> (returns the index of the first element matching the pattern) else <b>nil</b>, <b>remove</b> (removes all the elements matching the pattern from a <i>copy</i> of the sequence), and <b>substitute</b> (replaces all the elements matching the pattern with some other element).  <b>substitute</b> has an additional argument indicating the item to replace stuff with, thus its three versions <b>substitute</b>, <b>substitute-if</b>, and <b>substitute-if-not</b> start like this:
+
+<p><b><tt>(substitute[-if[-not]] <i>thing-to-replace-with</i> <i>rest-of-arguments-as-before...</i>)</tt></b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(count #\l "hello world")</font>
+3
+<font color=red>[ count the number of vowels in "hello world" ]</font>
+[2]&gt; <font color=blue>(count-if #'(lambda (i) (find i "aeiou")) "hello world")</font>
+3
+<font color=red>[ count the number of non-alpha-chars in "hello world4" ]</font>
+[3]&gt; <font color=blue>(count-if-not #'alpha-char-p "hello world4")</font>
+2
+<font color=red>[ remove the alpha chars from "hello world4" ]</font>
+[4]&gt; <font color=blue>(remove-if #'alpha-char-p "hello world4")</font>
+" 4"
+<font color=red>[ find the first element &lt; 4 in #(4 9 7 2 1 0 3) ]</font>
+[5]&gt; <font color=blue>(find-if #'(lambda (x) (&lt; x 4)) #(4 9 7 2 1 0 3))</font>
+2
+<font color=red>[ give the index of the first element &lt; 4 in #(4 9 7 2 1 0 3) ]</font>
+[6]&gt; <font color=blue>(position-if #'(lambda (x) (&lt; x 4)) #(4 9 7 2 1 0 3))</font>
+3
+<font color=red>[ replace with NUMBER all the numbers in the list ]</font>
+[7]&gt; <font color=blue>(substitute-if 'number #'numberp '(a b 3 d "yo" 4.2 e))</font>
+(A B NUMBER D "yo" NUMBER E)
+<font color=red>[ replace PI with 3.14159 for elements #4 through #9 ]</font>
+[8]&gt; <font color=blue>(substitute 3.14159 'pi 
+    '(pi a b pi c d e pi f pi pi g h pi)
+    :start 4 :end 10)</font>
+(PI A B PI C D E 3.14159 F 3.14159 PI G H PI)
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Another useful function, <b>search</b>, searches for the first index where one subsequence appears in another sequence.  It takes the form: 
+
+<p><b><tt>(search <i>subsequence</i> <i>sequence</i> <i>keywords...</i>)</tt></b>
+
+<p>Keywords include <b>:key, :test, :test-not, :from-end, :start1, :end1, :start2, :end2</b>.  Try them out and see what they do.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(search "wor" "hello world")</font>
+6
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+
+<p>Many sequence functions have <i>destructive</i> counterparts which are faster but <b>may</b> modify the original sequence rather than making a copy first and modifying the copy.
+
+<p>There are no promises with destructive functions: they may or may not modify the original.  They may or may not modify the original into the form you're hoping for.  The only guarantee they make is that the value they <i>return</i> will be what you're hoping for.  Thus you should only use them on data that you don't care about any more.
+
+<p>The destructive form of <b>remove[-if[-not]]</b> is <b>delete[-if[-not]]</b>.
+
+<p>The destructive form of <b>substitute[-if[-not]]</b> is <b>nsubstitute[-if[-not]]</b>.
+
+<p>The destructive form of <b>reverse</b> is <b>nreverse</b>.
+
+<p><b>sort</b> is destructive.  Its basic form looks like this:
+
+<p><b><tt>(sort <i>sequence</i> <i>predicate</i>)</tt></b> 
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *j* "hello world")</font>
+"hello world"
+[2]&gt; <font color=blue>(substitute #\Q #\l *j*)</font>
+"heQQo worQd"
+[3]&gt; <font color=blue>*j*</font>
+"hello world"
+[4]&gt; <font color=blue>(nsubstitute #\Q #\l *j*)</font>
+"heQQo worQd"
+[5]&gt; <font color=blue>*j*</font>
+"heQQo worQd"
+[6]&gt; <font color=blue>(sort '(4 3 5 2 3 1 3) #'>)</font>
+(5 4 3 3 3 2 1)
+</font>
+</pre></tt>
+</td></tr>
+
+
+</table>
+
+
+<br><br><br><h2><a name="Arguments">Functions With Variable Arguments</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+Now that we have enough functions to extract the elements of a list, we can talk about how to make a function which takes a variable number of arguments.  The special term <b>&amp;rest</b>, followed by an parameter name, can appear at the end of a parameter list in <b>defun</b>, musch as <b>&amp;key</b> and <b>&amp;optional</b> can appear.
+
+<p>If a function call provides any extra arguments beyond those defined in the parameter list, the additional arguments are all placed in a <i>list</i>, which the <b>&amp;rest</b> parameter is set to.  Otherwise it is set to <b>nil</b>.
+
+<p>Though it's possible to have rest-parameters along with keyword parameters and optional parameters in the same function, don't do it.  Ick.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(defun mean (first-num &rest others)   
+<font color=red>[ others will be the list with remaining variable arguments ]</font>
+"Returns the mean of a bunch of numbers.
+There must be at least one number."
+(let ((nums (cons first-num others)))  ; nums is list of the numbers
+  (/ (apply #'+ nums)
+     (length nums))))
+</font>
+MEAN
+[2]&gt; <font color=blue>(mean 10 2 3 4)</font>  
+19/4
+[3]&gt; <font color=blue>(mean 10)</font>  
+10
+[4]&gt; <font color=blue>(mean)</font>  
+
+*** - EVAL/APPLY: too few arguments given to MEAN
+[5]>
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+
+<br><br><br><h2><a name="ListFunctions">List Functions</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+Lisp's primary data type is the <b>list</b>.
+
+<p>A list is a linked list elements.  The linking structures are called <b>cons cells</b>.  A cons cell is a structure with two fields: <b>car</b> and <b>cdr</b>.  The <b>car</b> field points to the element the cons cell is holding.  The <b>cdr</b> field points to the next cons cell, or to <b>nil</b> if the cons cell is at the end of the list.
+
+<p>When you are storing a list, you are really storing a pointer to the first cons cell in the list.  Thus <b>car</b> (<b>first</b>) returns the thing that cons cell is pointing to, and <b>cdr</b> (<b>rest</b>) returns the next cons cell (what the <b>cdr</b> is pointing to).  Similarly, the <b>cons</b> function allocates a new cons cell, sets its <b>cdr</b> to the cons cell representing the original list, and sets its <b>car</b> to the element you're tacking onto the list.  Thus the original list isn't modified at all!  You've just made a new cons cell which reuses the list to "extend" it by one.
+
+<p><b>last</b> returns (as a list) the last <i>n</i> elements in the list.  Really it just marches down the list and finds the appropriate cons and returns that to you.  <b>last</b>'s argument is optional -- if it's not there, it returns (as a list) the last element in the list.
+
+<p><b>butlast</b> returns (as a list) a copy of everything <i>but</i> the last <i>n</i> elements in the list. 
+
+<p><b>list</b> takes some <i>n</i> arguments and makes a list out of them.  It differs from just quoting a list because the arguments are evaluated first (it's a function). 
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(last '(a b c d e))</font>
+(E)
+[2]&gt; <font color=blue>(last '(a b c d e) 3)</font>  
+(C D E)
+[3]&gt; <font color=blue>(butlast '(a b c d e))</font>  
+(A B C D)
+[4]&gt; <font color=blue>(butlast '(a b c d e) 3)</font>  
+(A B)
+[5]&gt; <font color=blue>(list 1 2 (+ 3 2) "hello")</font>  
+(1 2 5 "hello")
+[6]&gt; <font color=blue>'(1 2 (+ 3 2) "hello")</font>  
+(1 2 (+ 3 2) "hello")
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<b>nth</b> works on lists just like <b>elt</b>.  You can use it in <b>setf</b>.  For lists, it's a tiny bit faster than (the more general function) <b>elt</b>.  Note that <b>nth</b>'s arguments are not the same order as those for <b>elt</b>.  This is historical.
+
+<p><b>listp</b> is a predicate which returns true if its argument is a list.
+
+<p><b>atom</b> is a predicate which returns true if its argument is an atom.  Note that <b>nil</b> is both a list and an atom.  It's the only thing which is both.
+
+<p><b>consp</b> is a predicate which is true if its argument is a list but is <i>not</i> nil.
+
+<p><b>null</b> is a predicate which returns true if its argument is <b>nil</b>.
+
+<p>If you think about it, the logical <b>not</b> function is identical to the <b>null</b> function.
+
+<p>There are a great many more list functions.  See "conses" in the text.
+
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(listp '(4 3 8))</font> 
+T
+[2]&gt; <font color=blue>(listp nil)</font>  
+T
+[3]&gt; <font color=blue>(consp '(4 3 8))</font>
+T
+[4]&gt; <font color=blue>(consp nil)</font>
+NIL
+[5]> <font color=blue>(atom 'a)</font>
+T
+[6]> <font color=blue>(atom nil)</font>
+T
+[7]> <font color=blue>(null nil)</font>
+T
+[8]> <font color=blue>(not nil)</font>
+T
+[9]> <font color=blue>(nth 4 '(a b c d e))</font>
+E
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+There are a great many permuations of <b>cdr</b> and <b>car</b>.
+
+<p><b>caar</b> is the same as <tt><b>(car (car ... ))</b></tt>
+
+<p><b>cdar</b> is the same as <tt><b>(cdr (car ... ))</b></tt>
+
+<p><b>caadr</b> is the same as <tt><b>(car (car (cdr ... )))</b></tt>
+
+<p><b>cddddr</b> is the same as <tt><b>(cdr (cdr (cdr (cdr ... ))))</b></tt>
+
+<p><b>second</b> through <b>tenth</b> return the second through the tenth elements of a list.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(caar '((a b c) ((d)) e f g h))</font>
+A
+[2]&gt; <font color=blue>(cdar '((a b c) ((d)) e f g h))</font>  
+(B C)
+[3]> <font color=blue>(caadr '((a b c) ((d)) e f g h))</font>
+(D)
+[4]> <font color=blue>(cddddr '((a b c) ((d)) e f g h))</font>
+(G H)
+[5]> <font color=blue>(fourth '((a b c) ((d)) e f g h))</font>
+F
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+The <b>cdr</b> field of a cons cell doesn't have to point to a list (or to <b>nil</b>).  Technically, it can point to anything you like.  For example, a single cons cell can point to 45 <b>car</b> and "hello" in its <b>cdr</b>.  Such a cons cell is called a <b>dotted pair</b>, because its printed form is <b><tt>(45 . "hello")</tt></b>.  Note the period.
+
+<p>You can construct long lists where the last item doesn't point to <b>nil</b> but instead is a dotted pair.  
+
+<p>If you think about it, the dotted pair can only be at the <i>end</i> of a list.
+
+<p>Dotted pairs qualify as lists as far as <b>listp</b> is concerned.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(cons 45 "hello")</font>
+(45 . "hello")
+[2]&gt; <font color=blue>(cons 'a (cons 'b (cons 45 "hello")))</font>
+(A B 45 . "hello")
+[3]&gt; <font color=blue>(listp '(45 . "hello"))</font>
+T
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<p>Lists are constructed like beads of pearls.  So far we've been careful not to damage them.
+
+<p><b>setf</b> can be used to do evil things to a list.  <p>You can use <b>setf</b> to modify a list.  Since we construct lists which point to original lists, if we modify a list then it might modify other lists which pointed to it.
+
+<p>One particular danger is to use <b>setf</b> to modify cons cells to have circular references.  For example, you could use <b>setf</b> to set the <b>cdr</b> of a cell point to the same cell.
+
+<p>Most Lisp systems are smart enough to detect circular references while printing a list to the screen.  Some (like CLISP) are not!  They'll go into an infinite loop trying to print such beasts.  Try it out on osf1 for some fun as well.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *x* '(a b c d e))</font>
+(A B C D E)
+[2]&gt; <font color=blue>(setf *y* (rest *x*))</font>
+(B C D E)
+[3]&gt; <font color=blue>(setf (rest *y*) '(1 2 3))</font>
+(1 2 3)
+[4]&gt; <font color=blue>*y*</font>
+(B 1 2 3)
+[5]&gt; <font color=blue>*x*</font>
+(A B 1 2 3)    <font color=red> [ hey, wait a minute! ]</font>
+[6]&gt; <font color=blue>(setf *x* '(a))</font>
+(A)
+[7]&gt; <font color=blue>(setf (cdr *x*) *x*)</font>
+(A A A A A A A A A A A A A A A A A A A A A A A A 
+A A A A A A A A A A A A A A A A A A A A A A A A
+A A A A A A A A A A A A A A A A A A A A A A A A 
+A A A A A A A A A A A A A A A A A A A A A A A A
+A A A A A A A A A A A A A A A A A A A A A A A A
+A A A A A A A A A A A A A A A A A A A A A A A A
+A A A A A A A A A A A A A A A A A A A A A A A A
+A A A A A A A A A A A A A A A A A A A A A A A A
+A A A A A A A A A A A A A A A A A A A A A A A A 
+... <font color=red> [ ad nauseum ] </font>
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<p>There are a number of destructive versions of list functions.  Just as in applying the destructive sequence functions to list, the same warning applies: destructive functions are faster and use much less memory, but because lists are strung together like beads of pearls, make sure you know what you're doing if you choose to use them!  Here are two common ones:
+
+<p><b>nconc</b> is the destructive version of <b>append</b>.
+
+<p><b>nbutlast</b> is the destructive version of <b>butlast</b>.  
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *x* '(a b c d e))</font>
+(A B C D E)
+[2]&gt; <font color=blue>(setf *y* '(1 2 3 4 5))</font>
+(1 2 3 4 5)
+[3]&gt; <font color=blue>(nconc *x* *y*)</font>
+(A B C D E 1 2 3 4 5)
+[4]&gt; <font color=blue>*x*</font>
+(A B C D E 1 2 3 4 5)   <font color=red>[ what the ... ]</font>
+[5]&gt; <font color=blue>(nbutlast 4 *x*)</font>
+(A B C D E 1)
+[6]&gt; <font color=blue>*x*</font>
+(A B C D E 1) <font color=red> [ it keeps modifying *x*! ] </font>
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+<br><br><br><h2><a name="Predicates">Predicates and Types</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+
+<p>Lisp has a number of predicates to compare equality.  Here are some type-specific ones.
+
+<p><tt><b>(= <i>num1</i> <i>num2</i>)</b></tt> compares two numbers to see if they are equal.  2.0 and 2 are considered <b>=</b>.  Also, -0 and 0 are <b>=</b>.  
+
+<p><tt><b>(char= <i>char1</i> <i>char2</i>)</b></tt> compares two characters.  (can you guess what <b>char&gt;</b>, <b>char&lt;=</b>, etc. do?)
+
+<p><tt><b>(char-equal <i>char1</i> <i>char2</i>)</b></tt> compares two characters in a case-insensitive way.  
+
+<p><tt><b>(string= <i>str1</i> <i>str2</i>)</b></tt> compares two strings.  
+
+<p><tt><b>(string-equal <i>str1</i> <i>str2</i>)</b></tt> compares two strings in a case-insensitive way.
+
+<p>There are also general equality predicates.  These predicates vary in strength.  Here are some loose descriptions.
+
+<p><tt><b>(eq <i>obj1</i> <i>obj2</i>)</b></tt> is true if <i>obj1</i> and <i>obj2</i> are <i>the exact same thing in memory</i>.  Symbols and same-type numbers are the same thing: <b>(eq 'a 'a)</b> is true for example.  But complex objects made separately aren't the same thing: <b>(eq '(1 2 3) '(1 2 3))</b> is false.  Neither are integers and floats <b>eq</b> with one another: <b>(eq 0 0.0)</b> is false.  <b>eq</b> is fast (it's a pointer comparison).
+
+<p><tt><b>(eql <i>obj1</i> <i>obj2</i>)</b></tt> is is like <b>eq</b> but also allows integers and floats to be the same (as in <b>(eq 0 0.0)</b> is true).  <b>eql</b> is the default comparator for most stuff.
+
+<p><tt><b>(equal <i>obj1</i> <i>obj2</i>)</b></tt> says two objects are equal if they are <b>eql</b> or if they "look equal" and are lists, strings and pathnames, or bit-vectors.
+
+<p><tt><b>(equalp <i>obj1</i> <i>obj2</i>)</b></tt> says two objects are equal if they look equal.  <b>equalp</b> compares nearly every kind of Lisp thing, including all sorts of numbers, symbols, characters, arrays, strings, lists, hash tables, structures, files, you name it.  <b>equalp</b> is the slowest comparator predicate, but you will generally find it to be the most useful.
+
+<p>Some numbers <i>should</i> be <b>=</b> but may not be due to numeric precision.  
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(eql '(a b) '(a b))</font>
+NIL
+[2]&gt; <font color=blue>(equalp '(a b) '(a b))</font>  
+T
+[3]&gt; <font color=blue>(= 0.25 1/4)</font>  
+T
+[4]&gt; <font color=blue>(eq (setf *q* '(a b)) *q*)</font>  <font color=red>[ remember the function rule ]</font>
+T
+[5]&gt; <font color=blue>(string-equal "hello" "HelLo")</font>  
+T
+[6]&gt; <font color=blue>(= 1/5 .2)</font>  
+NIL       <font color=red> [ what the ... ? ] </font>
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Lisp also has predicates to determine the <b>type</b> of objects.  You've already seen some such predicates: <b>atom</b>, <b>null</b>, <b>listp</b>.
+
+<p><tt><b>(numberp <i>obj</i>)</b></tt> is true if <i>obj</i> is a number.  There are a number of useful numerical predicates as well: <b>oddp</b> is true if the number is odd (see also <b>evenp</b>).  <b>zerop</b> is true if the number is zero.  <b>plusp</b> is true if the number is &gt; 0.  Etc.
+
+<p><b>characterp</b> is true if <i>obj</i> is a character.  There are a number of subpredicates, such as <b>alphanumericp</b> which is true if the character is a letter or a number.  
+
+<p><b>symbolp</b> is true if it's a symbol.  <b>stringp</b> is true if it's a string.  <b>arrayp</b> is true if it's an array.  <b>vectorp</b> and <b>simple-vector-p</b> are...well you get the idea.  There's a lot of this stuff. 
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(numberp 'a)</font>
+NIL
+[2]&gt; <font color=blue>(stringp "hello")</font>  
+T
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+
+<p>Lisp has a general type-determination predicate called <b>typep</b>.  It looks like this:
+
+<p><b><tt>(typep <i>expression</i> <i>type</i>)</tt></b>
+
+<p>A type is (usually but not always) a symbol representing the type (you have to quote it -- it's evaluated).  Example types include <b>number, list, simple-vector, string,</b> etc.  
+
+<p>Types are organized into a hierarchy: thus types can have subtypes (simple-vector is a subtype of vector, which is a subtype of array, for example).  The root type is <b>t</b>.   The <b>typep</b> function returns true if the expression has the type that as its base type or as a supertype. 
+
+<p>Numeric types in particular have quite a lot of subtypes, such as <b>fixnum</b> (small integers), <b>bignum</b> (massive integers), <b>float</b>, <b>double-float</b>, <b>rational</b>, <b>real</b>, <b>complex</b>, etc.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(typep 'a 'symbol)</font>
+T
+[2]&gt; <font color=blue>(typep "hello" 'string)</font>  
+T
+[3]&gt; <font color=blue>(typep 23409812342341234134123434234 'bignum)</font>  
+T
+[4]&gt; <font color=blue>(typep 23409812342341234134123434234 'rational)</font>  
+T
+[5]&gt; <font color=blue>(typep 1/9 'rational)</font>  
+T
+[6]&gt; <font color=blue>(typep 1/9 'list)</font>  
+NIL
+[7]&gt; <font color=blue>(typep 1/9 'foo)</font>  
+
+*** - TYPEP: invalid type specification FOO
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+
+<p>You can get the type of any expression with <b><tt>(type-of <i>expr</i>)</tt></b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(type-of 'float)</font>
+SYMBOL
+[2]&gt; <font color=blue>(type-of 1/3)</font>  
+RATIO
+[3]&gt; <font color=blue>(type-of -2)</font>  
+FIXNUM
+[4]&gt; <font color=blue>(type-of "hello")</font>  
+(SIMPLE-BASE-STRING 5) <font color=red>[ types can be lists starting with a symbol ] </font>
+[5]&gt; <font color=blue>(type-of (make-array '(3 3)))</font>  
+(SIMPLE-ARRAY T (3 3))
+[6]&gt; <font color=blue>(type-of nil)</font>  
+NULL
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Many objects may be <i>coerced</i> into another type, using the <b>coerce</b> function:
+
+<p><b><tt>(coerce <i>expression</i> <i>type</i>)</tt></b>
+
+<p>Vectors and lists may be coerced into one another.
+
+<p>Strings may be coerced into other sequences, and lists or vectors of characters can be coerced into strings.
+
+<p>Integers may be coerced into floats.  To convert a float or other rational into an integer, use one of the functions <b>floor</b>, <b>round</b>, <b>truncate</b> (round towards zero), or <b>ceiling</b>.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(coerce 4 'float)</font>
+4.0
+[2]&gt; <font color=blue>(coerce "hello world" 'list)</font>  
+(#\h #\e #\l #\l #\o #\Space #\w #\o #\r #\l #\d)
+[3]&gt; <font color=blue>(coerce '(#\h #\e #\l #\l #\o #\Space #\w #\o #\r #\l #\d)
+     'string)</font>  
+"hello world"
+[4]&gt; <font color=blue>(floor -4.3)</font>  
+-5
+[5]&gt; <font color=blue>(coerce '(a b c) 'simple-vector)</font>  
+#(A B C)
+[6]&gt; <font color=blue>(coerce '(a b c) 'string)</font>  
+
+*** - SYSTEM::STORE: A does not fit into "", bad type
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>While we're on the subject of the four rounding functions (<b>floor</b>, <b>round</b>, <b>truncate</b>, <b>ceiling</b>), these are how you do integer division.  Each function takes an optional argument, and divides the first argument by the second, then returns the appropriate rounding as an integer.
+
+<p>If you're used to C++ or Java's integer division, probably the most obvious choice is <b>truncate</b>.
+
+<p>Lisp functions can actually return more than one item.  For example, integer division functions return both the divided value and the remainder.  Both are printed to the screen.  The primary return value (in this case, the divided value) is returned as normal.  To access the "alternate" return value (in this case, the remainder), you need to use a macro such as <b>multiple-value-bind</b> or <b>multiple-value-list</b> (among others).
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(floor 9 4)</font>
+2;   <font color=red> [ the primary return value ]</font>
+1    <font color=red> [ the alternative return value ]</font>
+[2]&gt; <font color=blue>(floor -9 4)</font>  
+-3 ;
+3
+[3]&gt; <font color=blue>(truncate -9 4)</font>  
+-2 ;
+-1
+[4]&gt; <font color=blue>(* 4 (truncate -9 4))</font>  
+-8   <font color=red> [ 4 mulplied against the primary return value ]</font>
+[5]&gt; <font color=blue>(multiple-value-list (truncate -9 4))</font>  
+(-2 -1)
+[6]&gt; <font color=blue>(multiple-value-bind (x y) (truncate -9 4)
+  (* x y))</font>
+2
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+<br><br><br><h2><a name="HashTables">Hash Tables</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+
+<p>Hash tables are created with <b>make-hash-table</b>.  You can hash with anything as a key.  Hash tables by default use <b>eql</b> as a comparison predicate.  This is almost always the wrong predicate to use: you usually would want to use <b>equal</b> or <b>equalp</b>.  To do this for example, you type:
+
+<p><b><tt>(make-hash-table :test #'equalp)</tt></b>
+
+<p>Elements are accessed with <b>gethash</b>.  If the element doesn't exist, <b>nil</b> is returned.  An alternative return value indicates whether or not the element exists (returning T or NIL).  If you stored <b>nil</b> as the value, then we have a problem!  Instead of having to look up the alternate return value, you can supply an optional return value (instead of <b>nil</b>) to return if the slot really <i>is</i> empty.
+
+<p><b><tt>(gethash <i>key</i> <i>hashtable</i> <i>&optional</i> return-if-empty)</tt></b>
+
+<p>Use <b>setf</b> to set hashed values.
+
+<p><b><tt>(setf (gethash <i>key</i> <i>hashtable</i>) <i>value</i>)</tt></b>
+
+<p>Remove elements with <b>remhash</b>.
+
+<p><b><tt>(remhash <i>key</i> <i>hashtable</i>)</tt></b>
+
+<p>Although it's not very efficient, you can map over a hashtable with <b>maphash</b>.
+
+<p><b><tt>(maphash <i>function</i> <i>hashtable</i>)</tt></b>
+
+<p><i>function</i> must take two arguments (the key and the value).
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf *hash* (make-hash-table :test #'equalp))</font>
+#S(HASH-TABLE EQUALP)
+[2]&gt; <font color=blue>(setf (gethash "hello" *hash*) '(a b c))</font>  
+(A B C)
+[3]&gt; <font color=blue>(setf (gethash 2 *hash*) 1/2)</font>  
+1/2
+[4]&gt; <font color=blue>(setf (gethash 2.0 *hash*) 9.2)</font>  <font color=red>[ 2.0 is equalp to 2 ]</font>
+9.2
+[5]&gt; <font color=blue>(gethash 2 *hash*)</font>  
+9.2   <font color=red>[ because we're using equalp as a test ]</font>
+T     <font color=red>[ T because the slot exists in the hashtable ]</font>
+[6]&gt; <font color=blue>(setf (gethash #\a *hash*) nil)</font>   <font color=red> [ store NIL as the value ] </font>  
+NIL
+[7]&gt; <font color=blue>(gethash #\b *hash*)</font> 
+NIL;   <font color=red> [ No such key #\b in *hash* ] </font> 
+NIL
+[8]&gt; <font color=blue>(gethash #\a *hash*)</font> 
+NIL;  <font color=red> [ uh... wait a minute... -- NIL is returned! ] </font> 
+T
+[9]&gt; <font color=blue>(gethash #\b *hash* 'my-empty-symbol)</font> 
+MY-EMPTY-SYMBOL ;
+NIL
+[10]&gt; <font color=blue>(gethash #\a *hash* 'my-empty-symbol)</font> 
+NIL;   <font color=red> [ that's better! ] </font>
+T
+[11]&gt; <font color=blue>(maphash #'(lambda (key val) (print key)) *hash*)</font> 
+
+2 
+"hello" 
+NIL
+
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+</table>
+
+
+
+<br><br><br><h2><a name="Printing">Printing and Reading</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+
+<p><tt><b>(terpri)</b></tt> prints a linefeed.
+
+<p><tt><b>(print <i>obj</i>)</b></tt> of course prints a linefeed followed by <i>obj</i> (in a computer readable fashion).  Unlike Java's <b>System.println("foo")</b> or C's <b>printf("foo\n")</b>, in Lisp it's traditional to print the newline <i>first</i>.
+
+<p><tt><b>(prin1 <i>obj</i>)</b></tt> prints <i>obj</i> (in a computer readable fashion)  -- no prior linefeed.
+
+<p><tt><b>(princ <i>obj</i>)</b></tt> prints <i>obj</i> in a <i>human</i> readable fashion -- no prior linefeed.  Strings are printed without "quotes", for example.  Such printed elements aren't guaranteed to be readable back into the intepreter.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(progn (terpri) (terpri) (terpri) (print 'hello))</font>
+
+
+
+
+HELLO 
+HELLO
+[2]&gt; <font color=blue>(progn (prin1 2) (prin1 '(a b c)) (prin1 "hello"))</font>  
+2(A B C)"hello"
+"hello"
+[3]&gt; <font color=blue>(progn (princ 2) (princ '(a b c)) (princ "hello"))</font>  
+2(A B C)hello
+"hello"
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<p><tt><b>(prin1-to-string <i>obj</i>)</b></tt> is like <b>prin1</b>, but the output is into a string.
+
+<p><tt><b>(princ-to-string <i>obj</i>)</b></tt> is like <b>princ</b>, but the output is into a string.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(prin1-to-string 4.324)</font>
+"4.324"
+[2]&gt; <font color=blue>(prin1-to-string "hello world")</font>
+"\"hello world\""
+[3]&gt; <font color=blue>(princ-to-string "hello world")</font>
+"hello world"
+[4]&gt; <font color=blue>(prin1-to-string '(a b "hello" c))</font>
+"(A B \"hello\" C)"
+[5]&gt; <font color=blue>(princ-to-string '(a b "hello" c))</font>
+"(A B hello C)"
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<p><tt><b>(read)</b></tt> reads in an expression from the command line.
+
+<p><b>read</b> is a complete Lisp parser: it will read any expression.
+
+<p><tt><b>(read-from-string <i>string</i>)</b></tt> reads in an expression from a string, and returns the expression plus an integer indicating at what point reading was completed.
+
+<p><tt><b>(yes-or-no-p)</b></tt> waits for the user to type in the word YES or NO, then returns it.   The way the question is presented the user (graphical interface, printed on screen, etc.) is up to the Lisp system.  <b>yes-or-no-p</b> is a predicate.   (There's also <b>y-or-n-p</b>, which just requires the user to type Y or N, but it's got a misfeature: if you type YAAS#W$ASDF, that's interpreted as a "Y")
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(read)</font>    <font color=red>[ Lisp waits for you to type an expression ]</font>
+<font color=blue>'(a b c d)</font>
+(A B C D)
+[2]&gt; <font color=blue>(read-from-string "'(a b c d)")</font>
+'(A B C D) ;   <font color=red>[ Or equivalently (QUOTE (A B C D)) ]</font>
+10     <font color=red>[ Reading the expression finished before the tenth character ]</font>
+[3]&gt; <font color=blue>(yes-or-no-p)</font>   <font color=red>[ clisp waits for you to type yes or no ]</font>
+<font color=blue>TRUE</font>      <font color=red>[ I tried to type in TRUE ]</font>
+
+Please answer with yes or no : <font color=blue>yes</font>  <font color=red> [ oh, okay! ]</font>
+T
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<p><b>format</b> is a much more sophisticated printing facility.  It is somewhat similar to C's <b>printf</b> command plus formating string.  But <b>format</b>'s formatting string is much more capable.  Generally, <b>format</b> looks like:
+
+<p><tt><b>(format <i>print-to-where</i> <i>format-string</i> <i>obj1</i> <i>obj2</i> ...)</b></tt>
+
+<p><i>print-to-where</i> can be <b>t</b> (print to the screen) or <b>nil</b> (print to a string).
+
+<p>Formatting sequences begin with a tilde (~).  The simplest sequences include:  <b>~a</b> (princ an element);  <b>~%</b> (print a linefeed); <b>~s</b> (prin1 an element).  Much more complex formatting includes very complex numerical printing, adding spaces and buffers, printing through lists, even printing in roman numerals!  <b>format</b> has its own little programming language.  It's astounding what <b>format</b> can do.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(format t "~%My name is ~a and my ID is ~a" "Sean" 1231)</font>
+
+My name is Sean and my ID is 1231
+NIL
+[2]&gt; <font color=blue>(format nil "~%~%~%~a~a~s    ~a" '(a b c) 
+ #(1 2 3) "yo" 'whatever)</font>
+"
+
+
+(A B C)#(1 2 3)\"yo\"    WHATEVER"
+[3]&gt; <font color=blue>(format t "~% ~a ~R ~:R ~@R ~:@R ~$ ~E" 4 4 4 4 4 4 4)</font>
+
+4 four fourth IV IIII 4.00 4.0E+0    <font color=red>[ hee hee hee! ]</font>
+NIL
+</font>
+</pre></tt>
+</td></tr>
+
+
+</table>
+
+
+
+
+<br><br><br><h2><a name="MoreControl">More Control Structures</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+
+<p><tt><b>(when <i>test</i> <i>expr1</i> <i>expr2</i> ...)</b></tt> evaluates the expressions (and returns the last) only if <i>test</i> is true, else it returns <b>nil</b>.
+
+<p><tt><b>(unless <i>test</i> <i>expr1</i> <i>expr2</i> ...)</b></tt> evaluates the expressions (and returns the last) only if <i>test</i> is <b>nil</b>, else it returns <b>nil</b>.
+
+<p><tt><b>(case <i>test-object</i> <i>case1</i> <i>case2</i> ... )</b></tt> goes through the cases one by one and returns the one which "matches" the <i>test-object</i>.  A case looks like this:
+
+<p><tt><b>(<i>obj</i> <i>expr1</i> <i>expr2</i> ... )</b></tt>
+
+<p>If <i>obj</i> (not evaluated, so you shouldn't quote it) is an object which is <b>eql</b> to <i>test-object</i>, or is a list in which <i>test-object</i> appears, then the case "matches" <i>test-object</i>.  In this case, the expressions are evaluated left-to-right, and the last one is returned.   <i>obj</i> can also be <b>t</b>, which matches anything.  This is the "default" case.
+
+<p>If no case matches, then <b>case</b> returns nil.
+
+<p><b>case</b> is a lot like the Java/C++ <b>switch</b> statement.  There are other versions: <b>ecase</b>, <b>ccase</b>.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(unless (y-or-n-p) (print "you picked no!") 
+	 (print "good for you!"))
+n</font>
+
+"you picked no!" 
+"good for you!" 
+"good for you!"
+[2]&gt; <font color=blue>(defun type-discriminator (obj)
+"Prints out a guess at the type"
+(let ((typ (type-of obj)))
+(when (consp typ) (setf typ (first typ)))
+(case typ
+ ((fixnum rational ratio complex real bignum) 
+    (print "a number perhaps?"))
+ ((simple-vector vector string list) 
+    (print "some kind of sequence?"))
+ (hash-table (print "hey, a hash table..."))
+ (nil (print "it's nil!"))
+ (t (print "beats me what this thing is.  It says:")
+    (print (type-of obj))))))
+</font>  
+TYPE-DISCRIMINATOR
+[3]&gt; <font color=blue>(type-discriminator 42)</font>  
+
+"a number perhaps?" 
+"a number perhaps?"
+[4]&gt; <font color=blue>(type-discriminator "hello")</font>  
+
+"beats me what this thing is.  It says:" 
+(SIMPLE-BASE-STRING 5) 
+(SIMPLE-BASE-STRING 5)
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<b>cond</b> is a powerful generalization of <b>case</b>.  It takes the form:
+
+<pre><b><tt>(cond (<i>test1</i> <i>expr</i> <i>expr</i> ... )
+(<i>test2</i> <i>expr</i> <i>expr</i> ... )
+(<i>test3</i> <i>expr</i> <i>expr</i> ... )
+... )</tt></b></pre>
+
+<p><b>cond</b> works like this.  First, <i>test1</i> is evaluated.  If this is true, the following expressions are evaluated and the last one is returned.  If not, then <i>test2</i> is evaluated.  If this is true, its following expressions are evaluated and the last one is true.  And so on.  If no test evaluates to true, then <b>nil</b> is returned.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[ Previously, type-discriminator didn't work for string.
+let's get it working right. ]</font>
+[2]&gt; <font color=blue>(defun type-discriminator (obj)
+"Prints out a guess at the type"
+(cond
+((find-if #'(lambda (x) (typep obj x)) 
+   '(fixnum rational ratio complex real bignum))
+ (print "a number perhaps?"))
+((find-if #'(lambda (x) (typep obj x)) 
+   '(simple-vector vector string list))
+ (print "some kind of sequence?"))
+((typep obj 'hash-table) (print "hey, a hash table..."))
+((typep obj null) (print "it's nil!"))
+(t (print "beats me what this thing is.  It says:")
+ (print (type-of obj)))))
+</font>  
+TYPE-DISCRIMINATOR
+[3]&gt; <font color=blue>(type-discriminator "hello")</font>  
+
+"some kind of sequence?" 
+"some kind of sequence?"
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<b>do</b> is a general iterator.  It takes the form:
+
+<pre><b><tt>(do (<i>initial-variable-declarations</i>)
+(<i>test</i> <i>res-expr1</i> <i>res-expr2</i> ... )
+<i>expr1</i>
+<i>expr2</i>
+... )</tt></b></pre>
+
+<p><b>do</b> works like this.  First, local variables are declared in a way somwhat similarly to <b>let</b> (we'll get to that).  Then <i>test</i> is evaluated.  If it is true, then the <i>res-expr</i>'s are evaluated and the last one is returned (if there are none, then <b>nil</b> is returned).
+
+<p>If <i>test</i> returned false, then <i>expr</i>'s in the body are evaluated.  Then <b>do</b> iterates again, starting with trying <i>test</i> again.  And so on.
+
+<p>A variable declaration is either a variable name (a symbol), just as in <b>let</b>, or it is a list of the form <b><tt>(<i>var</i> <i>optional-init</i> <i>optional-update</i>)</tt></b>  The <i>optional-init</i> expression initializes the variable (else it's <b>nil</b>).  The <i>optional-update</i> expression specifies the new value of <i>var</i> each iteration.  <i>optional-update</i> is evaluated in the context of the variables of the previous iteration.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[ generate some random numbers ]</font>
+[2]&gt; <font color=blue>(defun generate (num)
+(do ((y 0 (1+ y))
+    (x 234567 (mod (* x 16807) 2147483647)))
+   ((>= y num) "the end!")
+   (print x)))</font>
+GENERATE
+[3]&gt; <font color=blue>(generate 20)</font>  
+
+234567 
+1794883922 
+911287645 
+158079111 
+398347238 
+1315501367 
+1287329304 
+245868803 
+558435193 
+1116751361 
+233049547 
+2001047948 
+2018950016 
+103812665 
+1022739291 
+720153249 
+397821451 
+1068533846 
+1590093508 
+1415085688 
+"the end!"
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<b>loop</b> is a very powerful, complex iteration macro which can do nearly anything.  Literally.  It has its own language built into it.  <b>loop</b> is one of the few things in Lisp more complex than <b>format</b>.
+
+<p><b>loop</b> has an idiosyncratic syntax that is very un-lisp-like.  It is also so complex that few people understand it, and it is not recommended for use.  We will not discuss <b>loop</b> except to mention that its very simplest form: <b><tt>(loop <i>expressions</i> ... )</tt></b> makes a very nice infinite loop.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[2]&gt; <font color=blue>(loop (print 'hello) (print 'yo))</font>
+HELLO
+YO
+HELLO
+YO
+HELLO
+YO
+HELLO
+YO
+<font color=red> [ ... ad nauseum until you press Control-C ]</font>
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+<p>A <b>block</b> is a sequence of expressions.  Blocks appear in lots of control structures, such as <b>let</b>, all iterators (<b>do</b>, <b>dotimes</b>, <b>dolist</b>, <b>loop</b>, etc.), many conditional statements (<b>cond</b>, <b>case</b>, <b>when</b>, etc.), <b>progn</b>, etc.
+
+<p>Blocks have <b>labels</b> (names).  In control structures, the implicit blocks are all named <b>nil</b>.
+
+<p>Functions created with <b>defun</b> have an implicit block whose label is the same name as the function.  Functions created with <b>lambda</b> have an implicit block whose label is <b>nil</b>.
+
+<p><b><tt>(return-from <i>label</i> <i>optional-value</i>)</tt></b> will exit prematurely from a block whose label is <i>label</i> (not evaluated -- don't quote it).  This is somewhat like Java/C++'s <b>break</b> statement.  The return value of the block is <i>optional-value</i> (or <b>nil</b> if no value provided).
+
+<p>Because so many blocks are named <b>nil</b>, the simpler <b><tt>(return <i>optional-value</i>)</tt></b> is the same thing as <b><tt>(return-from nil <i>optional-value</i>)</tt></b>
+
+<p>Use <b>return</b> and <b>return-from</b> sparingly.  They should be rare.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(dotimes (x 100) 
+ (print x) 
+ (if (> x 10) (return 'hello)))</font>
+
+0 
+1 
+2 
+3 
+4 
+5 
+6 
+7 
+8 
+9 
+10 
+11 
+HELLO
+[2]&gt; <font color=blue>(defun differents (list &key (test #'eql))
+"Returns the first different pair in list"
+ (dolist (x list)
+   (dolist (y list)
+     (unless (funcall test x y)
+       (return-from differents (list x y))))))</font>
+DIFFERENTS
+[3]&gt; <font color=blue>(differents '(a a a b c d))</font>
+(A B)
+[4]&gt; <font color=blue>(differents '(a a a a a a))</font>
+NIL
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+<p> Another way to escape is with <b>catch</b> and <b>throw</b>.  <b>catch</b> looks like this:
+
+<p><b><tt>(catch <i>catch-symbol</i> <i>expressions</i> ... )</tt></b>
+
+<p><b>throw</b> looks like:
+
+<p><b><tt>(throw <i>catch-symbol</i> <i>return-value</i>)</tt></b>
+
+<p>Normally, <b>catch</b> works just like <b>progn</b>.  But if there is a <b>throw</b> statement inside the <b>catch</b> whose <i>catch-symbol</i> matches the <b>catch</b>'s, then we prematurely drop out of the <b>catch</b> and the <b>catch</b> returns the return value of the <b>throw</b>.
+
+<p>This works even if the <b>throw</b> appears in a subfunction called inside the <b>catch</b>.  
+
+<p>In C++ such a thing is done with <b>longjump</b>.  In Java such a thing is done with an exception.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[ another way to do the differents function ]</font>
+[2]&gt; <font color=blue>(defun differents (list &key (test #'eql))
+"Returns the first different pair in list"
+ (catch 'my-return-value 
+   (dolist (x list)
+     (dolist (y list)
+       (unless (funcall test x y)
+	 (throw 'my-return-value (list x y)))))))</font>
+DIFFERENTS
+[3]&gt; <font color=blue>(differents '(a a a b c d))</font>
+(A B)
+[4]&gt; <font color=blue>(differents '(a a a a a a))</font>
+NIL
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+<br><br><br><h2><a name="LispInLisp">Writing Lisp in Lisp</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+
+<p>Lisp has a built-in interpreter.  It is called <b>eval</b>, and looks like this:
+
+<p><tt><b>(eval <i>data</i>)</b></tt>
+
+<p><b>eval</b> takes <i>data</i> and submits it to the Lisp interpreter to be executed.
+
+<p>The data submitted to the interpreter is not evaluated in the context of any current local variables.
+
+<p><b>eval</b> is powerful.  You can assemble lists and then have them executed as code.  Thus <b>eval</b> allows you to make lisp programs which generate lisp code on-the-fly.  C++ and Java can only do this in truly evil ways (like writing machine code to an array, then casting it into a function, yikes!).
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(list '+ 4 7 9)</font>
+(+ 4 7 9)
+[2]&gt; <font color=blue>(eval (list '+ 4 7 9))</font>
+20
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>Lisp has an interpreter <b>eval</b>, a full-featured printer <b>print</b>, and a full-featured parser <b>read</b>.  Using these tools, we can create our own Lisp command line!
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(loop (format t "~%my-lisp --> ")
+   (print (eval (read))))</font>
+
+my-lisp --> <font color=blue>(dotimes (x 10) (print 'hi))</font>
+
+HI 
+HI 
+HI 
+HI 
+HI 
+HI 
+HI 
+HI 
+HI 
+HI 
+NIL
+my-lisp -->
+</font>
+</pre></tt>
+</td></tr>
+
+</table>
+
+
+<br><br><br><h2><a name="Debugging">Debugging</h2></a>
+<table cellspacing=0 cellpadding=10 border=2>
+
+<tr><td valign=top>
+
+<p><tt><b>(break)</b></tt> signals an error, just as if the user pressed Control-C.
+
+<p>You can continue from a break.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(defun foo (x)
+(print (+ x 3))
+(break)
+(print (+ x 4)))
+</font>
+FOO
+[2]&gt; <font color=blue>(foo 7)</font>
+
+10 
+** - Continuable Error
+Break
+If you continue (by typing 'continue'): Return from BREAK loop
+2. Break [4]> <font color=blue>continue</font>  <font color=red>[in clisp, anyway]</font>
+
+11 
+11
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p><tt><b>(trace <i>function-symbol</i>)</b></tt> turns on tracing of a function.  <i>function-symbol</i> is not evaluated (don't quote it or sharp-quote it).
+
+<p>When a trace function is entered, the function and its arguments are printed to the screen.  When the trace function exits, its return value is printed to the screen.
+
+<p>You can trace multiple functions at the same time.
+
+<p>You turn off tracing of a function with <b><tt>(untrace <i>function-symbol</i>)</tt></b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(defun factorial (n)
+  (if (&lt;= n 0)
+    1
+    (* n (factorial (- n 1)))))</font>
+FACTORIAL
+[2]&gt; <font color=blue>(trace factorial)</font>
+(FACTORIAL)
+[3]&gt; <font color=blue>(factorial 15)</font>
+
+1. Trace: (FACTORIAL '15)
+2. Trace: (FACTORIAL '14)
+3. Trace: (FACTORIAL '13)
+4. Trace: (FACTORIAL '12)
+5. Trace: (FACTORIAL '11)
+6. Trace: (FACTORIAL '10)
+7. Trace: (FACTORIAL '9)
+8. Trace: (FACTORIAL '8)
+9. Trace: (FACTORIAL '7)
+10. Trace: (FACTORIAL '6)
+11. Trace: (FACTORIAL '5)
+12. Trace: (FACTORIAL '4)
+13. Trace: (FACTORIAL '3)
+14. Trace: (FACTORIAL '2)
+15. Trace: (FACTORIAL '1)
+16. Trace: (FACTORIAL '0)
+16. Trace: FACTORIAL ==> 1
+15. Trace: FACTORIAL ==> 1
+14. Trace: FACTORIAL ==> 2
+13. Trace: FACTORIAL ==> 6
+12. Trace: FACTORIAL ==> 24
+11. Trace: FACTORIAL ==> 120
+10. Trace: FACTORIAL ==> 720
+9. Trace: FACTORIAL ==> 5040
+8. Trace: FACTORIAL ==> 40320
+7. Trace: FACTORIAL ==> 362880
+6. Trace: FACTORIAL ==> 3628800
+5. Trace: FACTORIAL ==> 39916800
+4. Trace: FACTORIAL ==> 479001600
+3. Trace: FACTORIAL ==> 6227020800
+2. Trace: FACTORIAL ==> 87178291200
+1. Trace: FACTORIAL ==> 1307674368000
+1307674368000
+[4]&gt; <font color=blue>(untrace factorial)</font>
+(FACTORIAL)
+[5]&gt; <font color=blue> (factorial 15)</font>
+1307674368000
+</font>
+</pre></tt>
+</td></tr>
+
+
+<tr><td valign=top>
+
+<p>You can step through an expression's evaluation, just as in a debugger, using <b><tt>(step <i>expression</i>)</tt></b>.  The features available within the <b>step</b> environment are implementation-dependent.
+
+<p>In clisp, the <b>step</b> function lets you interactively type, among other things, <b>:s</b> (to step into an expression), <b>:n</b> (to complete the evaluation of the expression and step out), and <b>:a</b> (to abort stepping)
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(defun factorial (n)
+  (if (&lt;= n 0)
+    1
+    (* n (factorial (- n 1)))))</font>
+FACTORIAL
+[2]&gt; <font color=blue>(step (factorial 4))</font>
+(step (factorial 4))
+step 1 --> (FACTORIAL 4)
+Step 1 [26]> <font color=blue>:s</font>
+step 2 --> 4
+Step 2 [27]> <font color=blue>:s</font>
+
+step 2 ==> value: 4
+step 2 --> (IF (&lt;= N 0) 1 (* N (FACTORIAL #)))
+Step 2 [28]> <font color=blue>:s</font>
+step 3 --> (&lt;= N 0)
+Step 3 [29]> <font color=blue>:n</font>
+
+step 3 ==> value: NIL
+step 3 --> (* N (FACTORIAL (- N 1)))
+Step 3 [30]> <font color=blue>:s</font>
+step 4 --> N
+Step 4 [31]> <font color=blue>:s</font>
+
+step 4 ==> value: 4
+step 4 --> (FACTORIAL (- N 1))
+Step 4 [32]> <font color=blue>:s</font>
+step 5 --> (- N 1)
+Step 5 [33]> <font color=blue>:n</font>
+
+step 5 ==> value: 3
+step 5 --> (IF (&lt;= N 0) 1 (* N (FACTORIAL #)))
+Step 5 [34]> <font color=blue>:n</font>
+
+step 5 ==> value: 6
+step 4 ==> value: 6
+step 3 ==> value: 24
+step 2 ==> value: 24
+step 1 ==> value: 24
+24
+</font>
+</pre></tt>
+</td></tr>
+
+<tr><td valign=top>
+<p> The <b>apropos</b> function can be used to find all the defined symbols in the system which match a given string. Ordinarily, <b>apropos</b> will return <i>everything</i>, including private system symbols.  That's not what you'd want.  But the following will do the trick:
+
+<p><b><tt>(apropos <i>matching-string</i> 'cl-user)</tt></b>
+
+<p>Notice that there are five items at right whose name has the word "random" in them:
+
+<ul>
+<li>*RANDOM-STATE*, a global variable, the current state of the random number generator
+<li>MAKE-RANDOM-STATE, a function which builds a new random number generator
+<li>RANDOM, a function which gives a new random number
+<li>RANDOM-STATE, a type class.  Random number generators are of this type.
+<li>RANDOM-STATE-P, a function which indicates if the thing passed to is in fact a random number generator
+</ul>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[ in clisp  ] </font>
+[1]&gt; <font color=blue>(apropos "random" 'cl-user)</font>
+*RANDOM-STATE*                             variable
+MAKE-RANDOM-STATE                          function
+RANDOM                                     function
+RANDOM-STATE                               type   class
+RANDOM-STATE-P                             function
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+<tr><td valign=top>
+
+<p>Let's look a little more closely at the function RANDOM.  We can ask for more details about the nature of RANDOM by typing:
+
+<p><b><tt>(describe 'random)</tt></b>
+
+<p>Note the single quote.  Also beware that on clisp on zeus, the DESCRIBE function attempts to connect with an HTTP server at MIT to provide you with nice documentation: but it doesn't work right now.  So at right we have first executed a command to prevent that from happening.
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+[1]&gt; <font color=blue>(setf custom:*browser* nil)</font>
+NIL
+[2]&gt; <font color=blue>(describe 'random)</font>
+
+RANDOM is the symbol RANDOM, lies in #&lt;PACKAGE COMMON-LISP&gt;, is 
+accessible in 11 packages CLOS, COMMON-LISP, COMMON-LISP-USER, EXPORTING, EXT,
+FFI, POSIX, READLINE, REGEXP, SCREEN, SYSTEM, names a function, has 1 property
+SYSTEM::DOC.
+
+ANSI-CL Documentation is at
+"http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/Body/fun_random.html"
+For more information, evaluate (SYMBOL-PLIST 'RANDOM).
+
+ #&lt;PACKAGE COMMON-LISP&gt; is the package named COMMON-LISP. It has 2 
+ nicknames LISP, CL.  It imports the external symbols of 1 package CLOS and 
+ exports 978 symbols to 10 packages READLINE, REGEXP, POSIX, EXPORTING, FFI, 
+ SCREEN, CLOS, COMMON-LISP-USER, EXT, SYSTEM.
+
+ #&lt;SYSTEM-FUNCTION RANDOM&gt; is a built-in system function.
+ Argument list: (#:ARG0 &amp;OPTIONAL #:ARG1)
+ For more information, evaluate (DISASSEMBLE #'RANDOM).
+
+Documentation:
+CLHS:
+"Body/fun_random.html"
+
+</font>  
+</pre></tt>  
+</td></tr>  
+
+
+<tr><td valign=top>
+
+Lisp systems can either be interpreters or compilers, though most modern Lisp systems are compilers and automaticall compile your code as soon as you enter it.  However <i>how</i> they compile the code varies.  For example, CLISP compiles to a P-code rather than to machine code (kind of like how javac compiles to .class files rather than to machine code).  SBCL and LispWorks compile to machine code.  
+
+<p>If you're interested in seeing what the resulting compiled code looks like, you can disassemble a function with <b><tt>(disassemble <i>function-pointer</i>)</tt></b>
+
+</td><td valign=top>
+<tt><pre>
+<font color=black>
+<font color=red>[CLISP on zeus...]</font>
+[1]&gt; <font color=blue>(defun factorial (n)
+          (if (&lt;= n 0)
+            1
+            (* n (factorial (- n 1)))))</font>
+FACTORIAL
+[3]&gt; <font color=blue>(disassemble #'factorial)</font>
+
+Disassembly of function FACTORIAL
+(CONST 0) = 1
+1 required argument
+0 optional arguments
+No rest parameter
+No keyword parameters
+11 byte-code instructions:
+0     L0
+0     (LOAD&amp;PUSH 1)
+1     (CALLS2&amp;JMPIFNOT 174 L14)           ; MINUSP
+4     (LOAD&amp;PUSH 1)
+5     (LOAD&amp;DEC&amp;PUSH 2)
+7     (JSR&amp;PUSH L0)
+9     (CALLSR 2 57)                       ; *
+12    (SKIP&amp;RET 2)
+14    L14
+14    (CONST 0)                           ; 1
+15    (SKIP&amp;RET 2)
+NIL
+
+<hr>
+<tt><pre>
+<font color=black>
+<font color=red>[SBCL on your laptop...]</font>
+* <font color=blue>(defun factorial (n)
+          (if (&lt;= n 0)
+            1
+            (* n (factorial (- n 1)))))</font>
+FACTORIAL   
+* <font color=blue>(disassemble #'factorial)</font>
+
+; disassembly for FACTORIAL
+; Size: 158 bytes. Origin: #x1004B55BFD
+; BFD:       498B4C2460       MOV RCX, [R12+96]               ; thread.binding-stack-pointer
+                                                              ; no-arg-parsing entry point
+; C02:       48894DF8         MOV [RBP-8], RCX
+; C06:       488B4DF0         MOV RCX, [RBP-16]
+; C0A:       8D41F1           LEA EAX, [RCX-15]
+; C0D:       A801             TEST AL, 1
+; C0F:       750E             JNE L0
+; C11:       3C0A             CMP AL, 10
+; C13:       740A             JEQ L0
+; C15:       A80F             TEST AL, 15
+; C17:       7575             JNE L4
+; C19:       8079F11D         CMP BYTE PTR [RCX-15], 29
+; C1D:       776F             JNBE L4
+; C1F: L0:   488B55F0         MOV RDX, [RBP-16]
+; C23:       31FF             XOR EDI, EDI
+; C25:       B930040020       MOV ECX, 536871984              ; GENERIC-&gt;
+; C2A:       FFD1             CALL RCX
+; C2C:       7E0B             JLE L3
+; C2E: L1:   BA02000000       MOV EDX, 2
+; C33: L2:   488BE5           MOV RSP, RBP
+; C36:       F8               CLC
+; C37:       5D               POP RBP
+; C38:       C3               RET
+; C39: L3:   488B55F0         MOV RDX, [RBP-16]
+; C3D:       31FF             XOR EDI, EDI
+; C3F:       B9B0040020       MOV ECX, 536872112              ; GENERIC-=
+; C44:       FFD1             CALL RCX
+; C46:       74E6             JEQ L1
+; C48:       488B55F0         MOV RDX, [RBP-16]
+; C4C:       BF02000000       MOV EDI, 2
+; C51:       41BB40020020     MOV R11D, 536871488             ; GENERIC--
+; C57:       41FFD3           CALL R11
+; C5A:       488D5C24F0       LEA RBX, [RSP-16]
+; C5F:       4883EC18         SUB RSP, 24
+; C63:       488B0536FFFFFF   MOV RAX, [RIP-202]              ; #&lt;FDEFINITION for FACTORIAL&gt;
+; C6A:       B902000000       MOV ECX, 2
+; C6F:       48892B           MOV [RBX], RBP
+; C72:       488BEB           MOV RBP, RBX
+; C75:       FF5009           CALL QWORD PTR [RAX+9]
+; C78:       480F42E3         CMOVB RSP, RBX
+; C7C:       488BFA           MOV RDI, RDX
+; C7F:       488B55F0         MOV RDX, [RBP-16]
+; C83:       41BBB0020020     MOV R11D, 536871600             ; GENERIC-*
+; C89:       41FFD3           CALL R11
+; C8C:       EBA5             JMP L2
+; C8E: L4:   488B45F0         MOV RAX, [RBP-16]
+; C92:       0F0B0A           BREAK 10                        ; error trap
+; C95:       02               BYTE #X02
+; C96:       13               BYTE #X13                       ; OBJECT-NOT-REAL-ERROR
+; C97:       1B               BYTE #X1B                       ; RAX
+; C98:       0F0B10           BREAK 16                        ; Invalid argument count trap
+
+NIL
+<hr>
+<font color=red>[LispWorks running on mason / osf1...]</font>
+
+CL-USER 39 >  <font color=blue>(defun factorial (n)
+          (if (&lt= n 0)
+            1
+            (* n (factorial (- n 1)))))</font>
+FACTORIAL
+
+CL-USER 40 > <font color=blue>(disassemble #'factorial)</font>
+.L00:   ld      [%g1 + 692], %g3
+4       cmp     %o5, %g3
+8       bleu    .L01
+12      noop    
+16      cmp     %g5, 1
+20      be,a    .L02
+24      ld      [%o4 + 6], %o4
+.L01:   jmp     [%g1 + eb6]    ;;  global fun: SYSTEM::*%INTERNAL-WRONG-NUMBER-OF-ARGUMENTS
+32      noop    
+36      ld      [%o4 + 6], %o4
+.L02:   andn    %o5, 7, %g2
+44      save    %g2, -40, %o6
+48      sub     %g2, 40, %o5
+52      ld      [%i4 + 1d], %g3    ;;  call counter
+56      add     %g3, 4, %g3
+60      st      %g3, [%i4 + 1d]
+64      andcc   %i0, 3, %g3
+68      bne,a   .L13
+72      mov     %g0, %o1
+76      cmp     %i0, 0
+80      bge,a   .L14
+84      mov     1, %g5
+88      tsubcc  %i0, 4, %g6
+.L03:   bvs,a   .L15
+96      mov     4, %o1
+100     mov     %g6, %o0
+104     ld      [%i4 + 2d], %o4     ;;  FACTORIAL
+.L04:   ld      [%o4 + 2], %g2
+112     jmpl    [%g2 + 5], %o7
+116     mov     1, %g5
+120     or      %i0, %o0, %g6
+124     andcc   %g6, 3, %g3
+128     bne,a   .L16
+132     mov     %o0, %i1
+136     sra     %i0, 2, %g5
+140     andncc  %o0, 3ff, %g0
+144     bne     .L08
+148     wr      %o0, %g0, %y
+152     mov     %g5, %o0
+156     noop    
+160     noop    
+164     rd      %y, %g5
+168     andcc   %g0, %g0, %g2
+172     call    .L07
+176     mulscc  %g2, %o0, %g2
+180     mulscc  %g2, %g0, %g2
+184     mov     %o0, %g3
+188     mov     %g5, %o0
+192     mov     %g3, %g5
+.L05:   rd      %y, %g3
+200     sll     %g2, a, %o4
+204     srl     %g3, 16, %g3
+208     orcc    %o4, %g3, %o4
+212     sra     %g2, 16, %g2
+216     bge,a   .L11
+220     addcc   %g2, %g0, %g0
+224     ba      .L11
+228     cmp     %g2, -1
+.L06:   mulscc  %g2, %o0, %g2
+.L07:   mulscc  %g2, %o0, %g2
+240     mulscc  %g2, %o0, %g2
+244     mulscc  %g2, %o0, %g2
+248     mulscc  %g2, %o0, %g2
+252     mulscc  %g2, %o0, %g2
+256     mulscc  %g2, %o0, %g2
+260     mulscc  %g2, %o0, %g2
+264     jmp     [%o7 + 4]
+268     mulscc  %g2, %o0, %g2
+.L08:   andncc  %g5, 3ff, %g0
+276     wr      %g5, %g0, %y
+280     bne     .L09
+284     andcc   %g0, %g0, %g2
+288     call    .L07
+292     mulscc  %g2, %o0, %g2
+296     ba      .L05
+300     mulscc  %g2, %g0, %g2
+.L09:   call    .L06
+308     mulscc  %g2, %o0, %g2
+312     call    .L06
+316     mulscc  %g2, %o0, %g2
+320     call    .L07
+324     mulscc  %g2, %o0, %g2
+328     mulscc  %g2, %g0, %g2
+332     orcc    %g5, %g0, %g0
+336     rd      %y, %o4
+340     bge     .L10
+344     orcc    %o4, %g0, %g0
+348     sub     %g2, %o0, %g2
+.L10:   bge     .L11
+356     addcc   %g2, %g0, %g2
+360     cmp     %g2, -1
+.L11:   bne,a   .L16
+368     mov     %o0, %i1
+372     mov     1, %g5
+.L12:   mov     %o4, %i0
+380     jmp     [%i7 + 8]
+384     restore %g0, %g0, %g0
+388     noop    
+392     mov     %g0, %o1
+.L13:   jmpl    [%g1 + b6e], %o7    ;;  global fun: SYSTEM::*%>=$ANY-STUB
+400     mov     %i0, %o0
+404     cmp     %o0, %g1
+408     be,a    .L03
+412     tsubcc  %i0, 4, %g6
+416     mov     1, %g5
+.L14:   ba      .L12
+424     mov     4, %o4
+428     mov     4, %o1
+.L15:   jmpl    [%g1 + c8e], %o7    ;;  global fun: SYSTEM::*%-$ANY-STUB
+436     mov     %i0, %o0
+440     ba      .L04
+444     ld      [%i4 + 2d], %o4     ;;  FACTORIAL
+448     mov     %o0, %i1
+.L16:   jmp     [%g1 + cd6]    ;;  global fun: SYSTEM::*%*$ANY-STUB
+456     restore %g0, %g0, %g0
+115
+
+</font>
+</pre></tt>
+</td></tr>
+
+
+
+
+
+</table>
+
+</body>
+</html>

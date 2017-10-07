@@ -1,0 +1,438 @@
+<html>
+
+<head>
+<title>Real-world Application Use Review: 2007 Trip with N800</title>
+
+<STYLE TYPE="text/css">
+body {
+                margin :0px;
+                font-family:Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+                background-color: #ffffff;
+        }
+.text { font-family:Verdana,Helvetica,Geneva,Arial,Sans-Serif; font-size:12px; }
+.mainbody
+        {
+        margin-left:10px;
+        margin-right:10px;
+        }
+.header {
+        margin: 0px 0px 0px 0px
+        font: 36px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    font-weight: 900;
+        background-color : #303050;
+        color : white;
+        padding-left : 20px;
+        padding-bottom : 20px;
+        padding-top : 20px;
+        }
+
+.headertext     {
+        font: 24px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight: 900;
+        background-color : #303050;
+        color : white;
+        }
+.smallheadertext        {
+        font: 14px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    font-weight: 900;
+        background-color : #303050;
+        color : white;
+        }
+.bullettext     {
+        font: 12px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        padding-left : 15px;
+        padding-right:  35px;
+        padding-bottom: 12px;
+        }
+
+.bullettitle    {
+        color : #303050;
+        font: 12px Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight:900;
+        padding-bottom: 12px;
+        width:130px;
+        left:5px;
+        }
+
+H1
+	{
+        font: 160% Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+    	font-weight: 900;
+        background-color : #303050;
+        color : white;
+	text-align: center;
+	margin-top: 50px;
+        padding-bottom : 20px;
+        padding-top : 20px;
+	}
+H2
+        {
+        margin-top: 3em;
+        border-bottom: solid 5px #303050;
+        font-size: 140%;
+        font-name: Verdana,Helvetica,Geneva,Arial,Sans-Serif;
+        font-weight: 900;
+	padding-bottom: 3px;
+        }
+
+H3
+        {
+        padding-top: 20px;
+        font-size: 120%;
+        }
+
+TH
+    {
+    text-align: left;
+    padding-right: 20px;
+    }
+
+TD
+    {
+    padding-right: 20px;
+    padding-bottom: 10px;
+    }
+    
+   DIV.sidebar
+        {
+     float: left;
+     margin-right: 10px;
+     padding: 10px; 
+     width: 300px;
+     border: 1px solid black;
+        }
+ 
+</STYLE>
+
+</head>
+<body>
+
+<iframe align=right style="width: 200px; height:400px; padding-left:10px; padding-bottom:10px; border:0px;" src="../nav.html" scrolling="no"></iframe>
+
+<div class="header">
+<div class="headertext">
+A Wrapper Toolkit for pymaemo
+</div>
+<div class="smallheadertext">And a sample application</div>
+</div>
+
+<div class="mainbody">
+
+<div class="sidebar"><b>Table of Contents</b>
+<ul>
+<li><a href="index.html#implemented">Implemented Components</a>
+<li><a href="index.html#planned">Soon to be Implemented Components</a>
+</ul>
+<p><b>Download Toolkit Version 2</b> as <a href="toolkit.py">toolkit.py</a> (fancier name later). Try loading this code and then running the testLibrary() function.
+
+<p><b>Flashcards Application</b>
+I recently used the toolkit to build a <a href="flashcards.py">simple Flashcards Application</a> which dynamically changes the probability of certain cards in the stack based on how often you view them.  I use it to <a href="flashcards.tar.gz">study words in Italian.</a>  It's designed to be used with your thumbs.
+</div>
+
+
+<p>This toolkit is <b>exploratory</b>, to try out new ideas and see what works and what doesn't.  I built it to explore how to fix some of the more grievous bugs and misfeatures I've been discovering in GTK.  The toolkit is a <b>wrapper toolkit</b> over pygtk, <i>not</i> a replacement for it.  This means that the components largely exist to clean up and compose together various lower-level GTK widgets, and so when you build an application with the toolkit, at the end what you have is not something formed from the components in the toolkit but rather something formed with raw GTK components.  There are disadvantages to this approach but one advantage is that it lets me freely interoperate with GTK widgets as I see fit.  One side effect is that, for the moment, there's no hierarchy among the toolkit components since they share rather little.
+
+<p>It'll quickly become obvious that though I'm an experienced coder (Java, Lisp, NewtonScript, Objective C) I'm a total Python newbie.  The kit reveals my idiosyncratic style, Lisp tendencies, and misinformed approach to learning Python as I built the toolkit.
+
+<p>You'll also note that the toolkit is extremely rudimentary.  The idea (for now) is to provide a few functions which are very common, and assume you can dip into GTK to get the remaining functionality if you need it.  The big item not in the toolkit: unhooking and removing widgets.
+
+<p>Last, I'm playing with some style features in GTK, so if things look funky, consider commenting out the "STYLE FIXES" section of the library.
+
+<p>Here's some principles behind the toolkit.
+
+<ul>
+<p><li><b>Object Persistence&nbsp;&nbsp;&nbsp;&nbsp;</b>All stateful widgets (Split, Slider, Spinner, Button, Text, etc.) are optionally persistent, meaning that their state is preserved after the application is quit and restarted.  This is done by calling <b>loadPersistenceData</b> at the beginning of your program, assigning each of your desired stateful widgets a unique <b>name</b>, and then calling <b>savePersistenceData</b> at the end of your program.  I've tried to handle database corruption gracefully, but we'll see.
+
+<p><li><b>Simplification&nbsp;&nbsp;&nbsp;&nbsp;</b>A number of components do a lot of things automatically so you don't have to type so much as you do in GTK.  A small example: all widgets automatically show themselves except for MainWindow.
+
+<p><li><b>Composition and Consolidation&nbsp;&nbsp;&nbsp;&nbsp;</b>GTK is broken out way too much.  Many of the toolkit's components construct compositions of underlying GTK widgets to provide common functionality in a single component.
+
+<p>
+<li><b>Hooks&nbsp;&nbsp;&nbsp;&nbsp;</b>Instead of using signals, many widgets provide certain methods which you may override to receive information.  For example, to hook into <b>MainWindow</b>'s <b>willClose()</b> method to print out a message, you could do any of the following:
+
+<small>
+<ol>
+<p><li>
+<div style="border: 1px solid #00DDDD; padding: 10px;"><tt>class MyMainWindow(MainWindow):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def willClose(self): print "I am closing!"<br>
+<br>
+window = MyMainWindow()<br>
+</tt></div>
+<p><li>
+<div style="border: 1px solid #00DDDD; padding: 10px;"><tt>def doThePrintThing(str): print str<br>
+<br>
+window = MainWindow()<br>
+window.willClose = lambda : doThePrintThing("I am closing!")<br>
+</tt></div>
+<p><li>
+<div style="border: 1px solid #00DDDD; padding: 10px;"><tt>def doAnotherPrintThing(): print "I am closing!"<br>
+<br>
+window = MainWindow()<br>
+window.willClose = doAnotherPrintThing<br>
+</tt></div>
+</ol>
+</small>
+
+<p>As a lisp guy, I myself am partial to #2.  Sadly, Python's lambda expression mechanism is horribly broken compared to a real functional language like Lisp: you can only provide a single expression to the lambda, rather than treat it (as it should be) as a fully-formed anonymous function with closure.  I'm very dissapointed in Guido here.
+
+<p>Another Python ugliness arises in the fact that you can create per-instance <i>functions</i> (as we're doing in #2 and #3), but you can't make per-instance <i>methods</i>, as you can in a good dynamic OO language like, say, NewtonScript.  Guido, shame on you.
+
+<p><li><b>Definition by Construction&nbsp;&nbsp;&nbsp;&nbsp;</b>Most GUI widgets are created once and then left alone by the developer.  This is doubly true for persistent widgets.  Thus here my constructors tend to (optionally) accept every feature under the sun, and in many cases set them in a way that cannot be changed later.  I'll get to adding more setters and getters later on if the toolkit evolves.
+
+<p><li><b>Access to Lower-level GTK&nbsp;&nbsp;&nbsp;&nbsp;</b>These are cover component classes, not widgets in themselves.  Thus you'll probably need to access GTK at some point here and there.  To do this, the toolkit provides various items:
+
+<ol>
+<li><b>getBasicComponent()</b> will return the GTK widget that the toolkit component had wrapped (or the outermost of several composed GTK widgets used by the component).
+
+<li><b>getUnderlying...()</b>Various methods of this type will return specific GTK widget elements in that composistion as appropriate.
+
+<li><b>The Wrap clas</b> is a generic wrapper for any GTK widget, allowing you to use that widget in conjunction with these toolkit components.
+</ol>
+
+<p><li><b>Bug Fixes in GTK and maemo&nbsp;&nbsp;&nbsp;&nbsp;</b> I'm flabbergasted at the number of bugs I've come across while working on just these few cover widget classes; I have not ever dealt with a toolkit as buggy and ill-considered.  Among the major widgets with major bugs or awful design that had (or have) to be modified: gtk.Paned, gtk.Image, gtk.Spinbutton (horrible), gtk.Scale (horrible), gtk.TreeView (nine errors already reported), gtk.ToolBar, hildon.ControlBar, gtk.Notebook,  gtk.SplitView.  And that's just so far in the toolkit contruction; I expect to find much more.  :-(
+
+</ul>
+
+<a name="implemented"></a>
+<h1>Implemented Components</h1>
+
+In all cases, I've indicated things I have yet to do, and also GTK bugs that the component had to work around.  If it's in bugs but not to-do, the work-around has been successful.
+
+<h2>Persistence Facility</h2> (functions)
+<p>Provides basic object state persistence across application invocations.  Osso <a href="http://www.maemo.org/platform/docs/api-bora/libosso/group__Statesave.html">supposedly provides such functionality</a>, but it is broken beyond repair: it doesn't survive power-cycling (!); it's not automatic in widgets, but rather puts the burden on the developer; and it's strongly limited in its memory capacity, being stored, for no apparent reason, in RAM.  This toolkit fixes all that, making widget state persistence automatic but optional, saving data to flash, and allowing any arbitrary storage.
+
+<h2>Class Wrap</h2>
+<p>A generic holder for (typically) a gtk.Widget.
+
+<h2>Class Strut</h2>
+<p>An empty widget which exists solely to enforce a minimum width or height.  The defaults are all 0.
+
+<h2>Class Pack</h2> (composition of gtk.Alignment and gtk.Frame)
+<p>A container widget which allows you to specify the location of its contained wiget, and to optionally stretch it in the X or Y dimension.  Pack can also take a text string which appears as the label of an optional frame around the container.  
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>gtk.Frame's y_align property does nothing -- thus you can't change the y-dimension position of the frame label; and hildon's default position of the label is screwed up, with descenders colliding with the frame.
+</ul>
+
+<h2>Class MainWindow</h2> (composition of hildon.Window and gtk.Alignment)
+<p>A container widget which represents the primary, full-size window of an application; the contained widget may be aligned as is done in the Pack class.  The window is automatically a member of the hildon.Program.  Automatically quits the application when the close box is closed.    
+
+<p><b>To Do.</b>
+<ul>
+<li>hildon.Window has huge borders which look bad <i>and</i> are a gross waste of space.  I'm still struggling to figure out how (or if) I can reduce them.
+<li>A reference count for MainWindows so that the app is quit only when all of them are closed.
+<li>For no good reason, hildon.Window's menu title bar is actually a composition of two strings: the window "title" and some other "title", typically the python file name!  I need to figure out how to allow the user to set that other "title", rather than having it be a "." as it is now. 
+</ul>
+
+
+<h2>Class Box</h2> (composition of gtk.VBox or gtk.HBox and optional gtk.Frame)
+<p>A container widget into which you can add many widgets in either a horizontal (default) or vertical row.  A Box may also have a text string, which appears as the label of a frame around the box.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>GTK doesn't seem to have a way to specify padding on one but not the other side of a widget (or likewise top but not bottom), reducing gtk.HBox's functionality by a considerable amount.
+<li>gtk.Frame's y_align property does nothing -- thus you can't change the y-dimension position of the frame label; and hildon's default position of the label is screwed up, with descenders colliding with the frame.
+</ul>
+
+<h2>Class Split</h2> (composition of gtk.HPaned or gtk.VPaned and optional gtk.Frame)
+<p>A container widget into which you can add two widgets in either a horizontal (default) or vertical row, with a divider-bar between them.
+
+<P><b>Persistence.</b> 
+Split's divider bar location is persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>GTK doesn't have a hook for determining that the slider bar has been moved.
+<li>GTK won't properly set the slider bar location until <i>after gtk.main() has been called!</i>  Holy crap!  I had to do an ugly hack for that one.
+<li>gtk.Frame's y_align property does nothing -- thus you can't change the y-dimension position of the frame label; and hildon's default position of the label is screwed up, with descenders colliding with the frame.
+</ul>
+
+
+<h2>Class Image</h2>
+<p>A widget which displays an image.  The image may be specified as a gtk Stock image (one of the constants in <a href="http://www.pygtk.org/docs/pygtk/gtk-stock-items.html">http://www.pygtk.org/docs/pygtk/gtk-stock-items.html</a> ), or loaded from a file with the given fileName, or given as an array of Strings representing XPM Image data.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>gtk.image isn't unified; it's just an amalgam of different storage formats: you have to extract the data in the same exact format that you inserted it into the image.  This makes for a lot of ugly if/elif/elif/else nonsense.
+</ul>
+
+<p><b>To Do.</b>
+<ul>
+<li>Maybe include pixmap in addition to pixbuf.
+<li>Need to allow more control over icon size.
+</ul>
+
+
+
+<h2>Class Label</h2> (composition of gtk.Label, gtk.Image, and gtk.HBox)
+<p>A widget which displays a read-only textual label with an optional Image.  The text can be right or left justified and the image moves as appropriate.  The text can take up mutiple lines and may be specified as wrappable to the label width.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>Because you can't specify padding on on but not the other side of a widget, it's nontrivial to create a spacer between the text and the image, much less one which comes and goes depending on whether or not an image is provided.  At present I'm using a Strut.
+</ul>
+
+
+<h2>Class Text</h2> (composition of gtk.HBox, gtk.TextView, and gtk.ScrolledWindow)
+
+<p>A widget which displays read/write multiple-line, scrollable text. and may wrap around if so specified.  Like Label, Text may also have an image.
+
+<p><b>Persistence.</b> Both Text's text information and scroll position are persistent, and you can turn off persistence in either one independently.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>gtk.TextView is extremely slow (several seconds for a few paragraphs) at figuring its wrapping.
+<li>gtk.TextView in combination with a gtk.ScrolledWindow and a gtk.HPaned (probably the single most common combination!) propagates repeated resize rules to the gtk.HPaned as the gtk.TextView changes its wrapping.  This in turn causes gtk.TextView to change its wrapping AGAIN.  This goes on until the system has converged (if it can).
+</ul>
+
+<h2>Class Slider</h2> (composition of gtk.Scale with an optional attached gtk.Label)
+<p>A horizontal or vertical sliding widget which permits the user to choose from a set of numerical or other values.  You can specify the location of the text label or provide a separate label of your own for it to update.  Slider has three modes: first, it can slide smoothly among floating-point values from a minimum to a maximum; second, it can move by increments between a minimum and a maximum; third, it can slide from choice to choice in a provided list.  You may also override a method to further customize display of information -- perhaps to create a logarithmic scale.
+
+<P><b>Persistence.</b> Slider's current numerical value is persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>Slider does not use hildon.Controlbar because of serious bugs (I've reported some) in Controlbar's resizing and its incapability of using real-valued sliding.
+<li>Amazingly, gtk.Scale can only set ticks in powers of ten -- thus you can't make ticks of the form 0, 2, 4, 6, etc.
+<li>gtk.Scale cannot provide arbitrarily-named ticks.
+<li>gtk.Scale does not properly round floating-point values.
+<li>gtk.Scale does not give you the ability to specify the width of your label (!).
+<li>gtk.Scale improperly ties the precision of your slider's position to the precision of the displayed label.
+<li>I wound up having to write my own truncator: python cannot truncate numbers when printing to strings.  Instead, it rounds them (very wrong behavior for a slider).
+<li>If gtk.Scale.set_draw_value() is false, then gtk.Scale.set_digits() has no effect.
+</ul>
+
+
+<h2>Class Button</h2>
+<p>A pushbutton with text and/or icon images.  The Button has some N number of states, and can display different text/images for each state, and also depending on whether or not the Button is presently being pushed or not.  You can remove the background and the border.
+     
+<p><b>Persistence.</b>  Button's current state is persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>Button's displacement is a style property.  Stupidly, GTK does not give you any way to set style properties programmatically.
+<li>GTK buttons cannot distinguish between RELIEF_NORMAL and RELIEF_HALF
+<li>GTK buttons cannot easily remove images
+<li>GTK buttons cannot have their border completely removed -- if you click on them the border comes back.  Eliminating focus on click has no effect. 
+<li>GTK buttons do not resize to properly fit around their subsidiary component.  You are forced to hard-code a size.
+<li>GTK buttons can EITHER have text OR an image but not both.
+</ul>
+
+<p><b>To Do.</b>
+<ul>
+<li>Figure out a way to optionally eliminate displacement.
+<li>Figure out how to allow total removal of the border.
+</ul>
+
+<h2>Class Spinner</h2> (composition of gtk.Label, gtk.Button, and gtk.HBox)
+
+<p>A replacement for gtk.SpinButton and hildon.NumberEditor.  Spinner provides increase, decrease, and reset buttons.  Unlike hildon.NumberEditor, the behavior of the increase and decrease buttons can be customized: typically either we add/subtract or multiply/divide (for scaling, for example).  And there is not necessarily a minimum or maximum.  The reset button resets to the original value.  Unlike gtk.SpinButton, these buttons are large and easy to access.  You can completely customize the display of the number, even including choosing strings from an array.
+
+<p><b>Persistence.</b>  Spinner's current value is persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>gtk.SpinButton is very close to unusable.  It has poorly-drawn, tiny increase/decrease buttons totally inapproprate for a PDA.
+<li>hildon.NumberEditor requires a minimum and maximum value for no reason.
+<li>gtk.SpinButton and hildon.NumberEditor cannot customize their display.
+</ul>
+
+
+<h2>Class Notebook</h2> (composition of gtk.Notebook and optional gtk.Frame)
+
+<p>A cover for gtk.Notebook.
+
+<p><b>Persistence.</b>  Notebook's current displayed tab is persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>Notebook does not propagate the 'destroy' signal to its children.
+<li>gtk.Frame's y_align property does nothing -- thus you can't change the y-dimension position of the frame label; and hildon's default position of the label is screwed up, with descenders colliding with the frame.
+</ul>
+
+
+<h2>Class Table</h2> (composition of gtk.Table and optional gtk.Frame)
+
+<p>A simplified cover for gtk.Table.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>gtk.Table does not dynamically increase the number of rows or columns as you add data.
+<li>gtk.Frame's y_align property does nothing -- thus you can't change the y-dimension position of the frame label; and hildon's default position of the label is screwed up, with descenders colliding with the frame.
+</ul>
+
+<h2>Class TextField</h2> (composition of gtk.ComboBox and optional gtk.Image)
+
+<p>A generally one-line text field entry which maintains a list of previously entered items so you can choose them from a pop-up list instead of re-entering them.  The developer can also specify items in the list as well.  Has an optional Image like Label and Text do.
+
+<p><b>Persistence.</b>  TextField's current text value and history of entered items (in the pop-up list) are all persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>ComboBoxes do not copy arrays passed to them: thus if you give a ComboBox an empty array and give another the same empty array, Bad Things happen.  This is of course totally undocumented.
+</ul>
+
+
+<a name="planned"></a>
+<h1>Soon-to-Be Implemented Components</h1>
+
+<h2>Class TreeView</h2> (likely a composition of gtk.TreeView and gtk.ScrolledWindow)
+
+<p>Under Development.  A wrapper for gtk.TreeView which fixes a large number of bugs.  We'll include the ability for the user to customize what columns are being displayed, what order they're displayed, and to always be able to change the column widths.
+
+<p><b>Persistence.</b> TreeView's current configuration, including its hierarchy hide/show values and column settings, will all be persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>Quite a swarm of GTK bugs.  See <a href="https://garage.maemo.org/tracker/?func=browse&group_id=40&atid=229">here</a> for some I've reported.
+</ul>
+
+<h2>Class ScrollView</h2>
+
+<p>A wrapper for gtk.ScrollView
+
+<p><b>Persistence.</b> ScrollView's current scrolled values will be persistent.
+
+<h2>Class Window</h2>
+
+<p>A <b>movable, resizable, miniaturizable</b> window which floats over the main window.
+
+<p><b>Persistence.</b> Window's current location and size are persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>hildon doesn't allow movable or resizable windows.
+</ul>
+
+<h2>Class List</h2>
+
+<p>A scrollable list of options.
+
+<p><b>Persistence.</b> The current selected item(s) in the list, and its scroll position, will be persistent.
+
+<h2>Class MenuItem</h2>
+
+<p>Under Development.  A menu item.  Can take an image to provide to Toolbar (see below).
+
+<p><b>Persistence.</b> MenuItem's state, if it's a checkbox menu item, will be persistent.
+
+<h2>Class Menu</h2>
+
+<p>Under development.  A menu or submenu.  Can be popped attached to a Button and popped up next to it, or attached to a MainWindow either as a per-window menu or as a per-application menu.
+
+<h2>Class Toolbar</h2>
+
+<p>Under Development.  A replacement for gtk.Toolbar which is totally user-customizable.  My current strategy is to pop up a dialog box which lets the user assign any menu item to a button on the toolbar, and to delete or rearrange buttons as he prefers.  The user should also be able to assign whole menus to buttons on the toolbar so if you click on that button the menu pops up.  The application will have control of the left portion of the ToolBar to force certain items to be there always if necessary.  The Toolbar will also have much larger icons and closer-spaced buttons.  I might look into a way for the Toolbar to be called forth or made to go away using a button press (perhaps holding down the screen-maximize button).  I'll also try to get rid of some of the wasted border space, but I suspect that's not immediately possible given certain style settings.
+
+<p><b>Persistence.</b> The current toolbar settings will be persistent.
+
+<p><b>GTK Bugs and Misfeatures.</b>
+<ul>
+<li>gtk.Toolbar is totally uncustomizable.
+<li>hildon's icons are horrible and tiny and must be replaced.
+</ul>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+default partial
+xkb_symbols "basic" {
+
+  key <RALT> {
+    type[Group1]="ONE_LEVEL",
+    symbols[Group1] = [ ISO_Level3_Shift ]
+    };
+
+  key <LALT> {                                                                                                      
+    type[Group1]="ONE_LEVEL",                                                                                       
+    symbols[Group1] = [ ISO_Level3_Shift ]                                                                          
+    };                                                                                                              
+
+   modifier_map Mod1 { <RALT>, <LALT> };
+
+    name[Group1]= "U.S. English (Sean)";
+
+// alphanumeric_keys modifier_keys
+
+    // Alphanumeric section
+    key <TLDE> {    [    grave,	asciitilde, NoSymbol, NoSymbol 	]	};
+    key <AE01> {    [    1, exclam, exclamdown, NoSymbol 		]	};
+    key <AE02> {    [    2, at, trademark, EuroSign ] 	};
+    key <AE03> {    [    3, numbersign, sterling, NoSymbol	]	};
+    key <AE04> {    [    4, dollar, cent, currency		]	};
+    key <AE05> {    [    5, percent, infinity, U2030		]	};
+    key <AE06> {    [    6, asciicircum, section, NoSymbol	]	};
+    key <AE07> {    [    7, ampersand, paragraph, doubledagger	]	};
+    key <AE08> {    [    8, asterisk, enfilledcircbullet, degree	]	};
+    key <AE09> {    [    9, parenleft, ordfeminine, periodcentered	]	};
+    key <AE10> {    [    0, parenright, masculine, NoSymbol	]	};
+    key <AE11> {    [    minus, underscore, endash, emdash	]	};
+    key <AE12> {    [    equal, plus, notequal, plusminus		]	};
+
+    key <AD01> {    [    q, Q, oe, OE	]	};
+    key <AD02> {    [    w, W, Greek_SIGMA, doublelowquotemark		]	};
+    key <AD03> {    [    e, E, egrave, Egrave		]	};
+    key <AD04> {    [    r, R, registered, numerosign		]	};
+    key <AD05> {    [    t, T, latincross, caron		]	};
+    key <AD06> {    [    y, Y, yen, NoSymbol		]	};
+    key <AD07> {    [    u, U, ugrave, Ugrave		]	};
+    key <AD08> {    [    i, I, igrave, Igrave		]	};
+    key <AD09> {    [    o, O, ograve, Ograve	]	};
+    key <AD10> {    [    p, P, Greek_pi, Greek_PI		]	};
+    key <AD11> {    [    bracketleft, braceleft, leftdoublequotemark, rightdoublequotemark	]	};
+    key <AD12> {    [    bracketright, braceright, leftsinglequotemark, rightsinglequotemark	]	};
+    key <AD13> {    [    backslash, bar, guillemotleft, guillemotright	]	};
+
+    key <AC01> {    [    a, A, agrave, Agrave 		]	};
+    key <AC02> {    [    s, S, ssharp, NoSymbol		]	};
+    key <AC03> {    [    d, D, Greek_delta, Greek_DELTA	]	};
+    key <AC04> {    [    f, F, eacute, Eacute		]	};
+    key <AC05> {    [    g, G, copyright, acute		]	};
+    key <AC06> {    [    h, H, enopensquarebullet, filledrectbullet		]	};
+    key <AC07> {    [    j, J, enfilledsqbullet, enopencircbullet		]	};
+    key <AC08> {    [    k, K, NoSymbol, NoSymbol		]	};
+    key <AC09> {    [    l, L, notsign, Lstroke		]	};
+    key <AC10> {    [    semicolon, colon, ellipsis, NoSymbol		]	};
+    key <AC11> {    [    apostrophe, quotedbl, ae, AE	]	};
+
+    key <AB01> {    [    z, Z, Greek_omega, Greek_OMEGA 		]	};
+    key <AB02> {    [    x, X, approxeq, multiply	]	};
+    key <AB03> {    [    c, C, ccedilla, Ccedilla		]	};
+// I think I can do unicode for lozenge (25CA)
+    key <AB04> {    [    v, V, squareroot, U25CA		]	};
+    key <AB05> {    [    b, B, integral, NoSymbol		]	};
+    key <AB06> {    [    n, N, filledtribulletup, leftarrow		]	};
+    key <AB07> {    [    m, M, filledtribulletdown, rightarrow		]	};
+    key <AB08> {    [    comma, less, lessthanequal, breve		]	};
+    key <AB09> {    [    period, greater, greaterthanequal, macron		]	};
+    key <AB10> {    [    slash,	question, division, questiondown	]	};
+
+    // End alphanumeric section
+
+    key <FK10> {    [    Home, onesuperior, oneeighth, onequarter ] };
+    key <FK11> {    [    End, twosuperior, threeeighths, onehalf ] };
+    key <FK12> {    [    Page_Up, threesuperior, fiveeighths, threequarters ] };
+    key <FK13> {    [    Page_Down, NoSymbol, seveneighths, NoSymbol ] }; 
+
+// map the command keys to control so I can do cut paste etc.
+    key <LWIN> {	[  Control_L			]	};
+    key <RWIN> {        [  Control_R                    ]       };
+    modifier_map Control{ Control_L, Control_R, <LWIN>, <RWIN> };
+
+};
+
+
+

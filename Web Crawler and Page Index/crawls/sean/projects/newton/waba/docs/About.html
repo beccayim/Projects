@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>Waba for the Newton</title>
+</head>
+<body bgcolor=white>
+<!-- <img valign=top align=right src="screenshots/wabanewton.gif">-->	<p>	
+<img valign=top align=right src="GetWabaMP2K.gif"><img valign=top align=right src="GetWabaEmate.gif">
+		<H2>Waba for the Newton<br>
+		<font size="+1">Release 4 (Beta)</font>
+	</h2>
+	<p><b>By <a href="mailto:sean@cs.gmu.edu">Sean Luke</a></b> (Waba for Newton Virtual Machine)<br>
+	<b>And <a href="mailto:weyer@kagi.com">Steve Weyer</a></b> (Waba Newton Class Loader)<br>
+	<b>Contributors: </b> <a href="mailto:pguyot@kallisys.net">Paul Guyot</a>, Harri Hohteri, and Victor Rehorst
+
+<p><b><font color=red>Please send us feedback!</b></font>
+
+	<p><b>New in Beta 4</b>
+	<p>Beta 4 includes some bug-fixes to Beta 3.  Only the VM has been updated -- all other files are the same.  Bug fixes include: a serious memory leak in the VM which shows up notably in WaGo stealing heap space even after it's quit; and some minor Catalog fixes.
+
+	<p><b>New in Beta 3</b>
+<p>Be sure to update the VM as well as <b>all</b> the libraries.  New in the beta includes: windows that go all the way to the screen edge, rotation fixes, graphics improvements, up/down key fixes, reading catalogs from PDF files, improvements to the NSWabaAPI.
+
+	<p><b>What Is Waba?</b>
+	<p>Waba is a stripped-down implementation of the Java Virtual Machine. By 'stripped down', we mean that it does not support doubles, longs, exceptions, finalizers, threading, reflection, custom class loaders, security or class verification, and the entire Java class library. Waba comes with its own library of small but useful classes -- the only classes Waba has in common with Java's class suite are Object, String, and StringBuffer, and Waba's implementations have only the bare minimum of methods.
+	<p>As long as you use Waba's class libraries, and stay away from exceptions, finalizers, doubles, and longs, then (here comes the nifty part) you can use <i>any</i> Java development environment to write a Waba application which will, with the help of a few minor conversion tools, automagically run on the Newton, Palm Pilot, Windows CE, Windows 98/2000/NT, or even in your web browser.
+	<p>
+		There are two places you should go for more Waba information in general. First, check out <a href="http://www.wabasoft.com">Wabasoft.com</a>, the makers of Waba. Second, see <a href="http://www.wabaworkbench.com/">WabaWorkbench.com</a>, a developer's site.
+	<p><b>What Does Waba for the Newton run on?</b>
+	<p>Any 2.0 or 2.1 NewtOS machine.
+	<p><b>Does it really work on the Newton?</b>
+	<p>Yep. As a matter of fact, you can even run multiple Waba applications simultaneously. On the MP2K (the Newton with the smallest C++ heap space) we're able to open up to 4 Waba applications and have them running at the same time.
+	<p>Waba also works in either grayscale or black-and-white. In grayscale, it uses widgets that resemble WindowsCE widgets. In black-and-white, it uses widgets that resemble Palm Pilot widgets. Newtons with grayscale support can display either mode.  Don't want your newly-developed Waba app to use WinCE or PalmOS controls? The beta version of Waba also provides full access to the Newton toolbox and the NewtonScript interpreter.
+	<p><b>What's the downside?</b>
+	<p>The downside is mostly drawing speed. The WabaVM is written in C++, but to access any Newton drawing commands, it has to request them of the NewtonScript interpreter. Thus you have one interpreter (Java running on the VM) making requests of a <i>second</i> interpreter (the NewtonScript Interpreter) just to draw a line. Still, on an MP2K, it's not bad at all. On an MP120, drawing is rather slow, but it still works!	<p>
+		<p>Waba also doesn't expect text to be entered in the, um, unique way that the Newton provides.  We've given the best work-arounds we can.
+	<p><b>Why Port Waba? Why not the KVM?</b>
+	<p>Sun makes the KVM, which is also a stripped-down implementation of the Java Virtual Machine, a little more powerful than Waba. It's also much more popular than Waba is. But Sean chose to port Waba instead for two reasons. First, the KVM's philosophy is to be entirely implementation-dependent, that is, KVM programs on the Palm Pilot won't necessarily run elsewhere. In contrast, Waba makes a good-faith effort to be highly portable, so we can grab lots of apps made for the Palm or WinCE and run them immediately on the Newton. Second, the KVM is very difficult to grok. But Waba has an elegant suite for porting, that made porting to the Newton relatively painless. Okay, highly painful. But much less painful than the KVM would have been. Basically, Waba was the only way to get the project completed in the time Sean had.
+	<p><b>License Issues</b> 
+	<p>Sean has received (non-written) permission from Rick Wild and WabaSoft to distribute the Waba for the Newton under the BSD license rather than the GNU GPL.  This should eliminate any open-source license conflicts that had arisen.  One file in the distribution, utf8.cp, is under the IBM Public License.
+		<br>
+		<br>
+		<br>
+		<br>
+</body>
+</html> 
+

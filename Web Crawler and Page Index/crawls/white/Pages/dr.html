@@ -1,0 +1,161 @@
+<HTML>
+<title>Research Project Descriptions -  Dynamic Reconfiguration</title>
+<BODY BGCOLOR="#eeffff"> <!-- white -->
+   <CENTER>
+      <H2>
+         <Resarch Project Descriptions>
+      </H2>
+   </CENTER>
+   </HEAD>
+<HR>
+<P>
+
+<CENTER>
+ <H2>
+  Research Project Description <BR>
+ </H2>
+</CENTER>
+
+<HR>
+
+<P>
+<CENTER>
+General Strategies for Dynamic Reconfiguration
+
+ <BR>
+  Dr. Liz White<BR>
+  white@cs.gmu.edu <BR>
+</CENTER>
+
+
+<P>
+
+
+In recent years there has been a great deal of attention in the software engineering community on the 
+development of techniques and tools that provide support for the design and implementation of 
+applications to be distributed across networks of workstations.  Some of this focus has been on support 
+for initial development and configuration of applications.  Other research has focused on techniques to 
+support these types of applications at run-time.  One novel aspect of this type of environment is that the 
+number of available resources tends to grow and shrink over time and this aspect has caused increased 
+interest in dynamic reconfiguration techniques that allow applications to adapt at runtime to their 
+changing environment.
+<P>
+Dynamic reconfiguration techniques are interesting for other reasons as well.  Very few distributed 
+applications are static in their structure – clients enter and leave the system, additional computational 
+resources are needed at different loads on the software or at different times in the processing, and 
+different mechanisms of interaction may be more appropriate depending on the current computational 
+load.  The ability to change the structure of applications at runtime by adding and removing 
+components and bindings and by changing the characteristics of the relationships has wide use.  My 
+work in this area, funded by a NSF CAREER award, has focused both on software support for dynamic 
+reconfiguration and on frameworks and static software analysis techniques for determining the validity 
+of component-level adaptations in the context of dynamic reconfiguration.  
+<P>
+<OL>
+<li><B> Software Support for Dynamic Reconfiguration</B> [1][2][3][4]
+<P>
+ Iterative grid-based parallel applications consist of 
+some number of identical processes, each executing on its own processor and responsible for 
+performing a computation over some portion of the grid. The processes are interconnected so that each 
+can exchange information with processes operating on adjacent portions of the grid. For this style of 
+application to be efficient, there needs to be a single processor for each process.  There is a great deal of 
+interest in running these types of applications on non-dedicated workstation clusters; however, this is 
+difficult because the set of available workstations fluctuates over time.  Dynamic reconfiguration offers 
+a potential solution because we move processes and can change the level of parallelism to mirror the 
+size of the set of available processors.
+<P>
+There are many issues that need to be addressed to allow this type of adaptive behavior.  When the level 
+of parallelism changes, the way the partitioning of the grid must be recomputed for the new number of 
+processors and then the data needs to be moved to mirror this partition. The configuration needs to be 
+modified as well so that each process can communicate with the process that is operating on adjacent 
+portions of the grid.  Any new processes need to be started, given data and initialized.  Old processes 
+that are leaving are removed once their data has been given to another process.
+<P>
+While the details of how data is partitioned and repartitioned is necessarily application specific, some 
+aspects of the tasks are similar across different applications.  With Sanjeev Setia, I have been working 
+on the development of a toolkit, DyRecT, for iterative grid-based parallel applications intended to run 
+on non-dedicated workstation clusters.  The primary goal of this toolkit is to provide dynamic 
+reconfiguration support for this type of application without requiring programmers to change the model 
+used to implement the original (non dynamic) application.  This toolkit provides default behaviors that 
+work for a large class of applications and a low-level set of routines that allow the details to be 
+implemented directly if the default behavior is not adequate.  
+<P>
+One of the issues we are currently addressing development of a high-level mechanism for transparently 
+integrating the required synchronization in synchronous applications.  Another interesting issue, 
+discussed in section 3.2 is how to allow this type of application to reconfigure when inside function or 
+procedure calls.  Allowing reconfiguration outside the main program means that we may have to deal 
+with capturing and restoring activation record stack both to update variables associated with the change 
+and to create runtime stacks for processes that are being added to the system.  This software has been 
+under construction since late 1997 and is near completion.  A number of Ph.D. and Masters students 
+have been involved with this implementation effort.
+
+
+<P>
+<li><B> Analysis of Component Adaptation</b> [5][6]
+<P>
+
+ One aspect of dynamic reconfiguration that has received little 
+attention is the participation that is required of the individual components when a dynamic 
+reconfiguration change is needed.  Component participation can include divulging information to the 
+runtime system, using information from the system to change internal state, to change the algorithms 
+use, or to initialize state if a new process.  The details for a given component and reconfiguration are 
+necessarily application and change specific.  
+<P>
+We differentiate dynamic reconfiguration, a change to the application structure, from adaptation, a 
+change done to a component to accommodate the needed reconfiguration.  These adaptation changes 
+are orthogonal to the computations done as part of the application; however, if done incorrectly can 
+mean that the application no longer works once a reconfiguration is done.  A simple example is a 
+component of a parallel application that is adaptive using techniques described in the previous section.  
+When the level of parallelism changes at runtime, the individual components are going to operate on a 
+different size data set.  In addition to updating the internal grid of a component , program variables that 
+are tied to the size of the data set must be changed to reflect this new size.  If this change is done 
+incompletely, a application will no longer work after a dynamic reconfiguration.
+<P>
+The goal of this research is to use static program analysis techniques to detect situations such as this.  
+The user of the analysis tools are responsible for informing the tools where in the source code 
+adaptations can take place and what changes to the state will be made when an adaptation is needed.  
+Returning to the grid-based parallel program example, changes to the grid as well as to the variables 
+associated with the starting and ending row number will be made.  The points at which this could 
+potentially happen are marked.  
+<P>
+Our analysis technique is based on a new technique for partitioning the program variables into three 
+sets: adaptable variables which are changed with an adaptation, conserved variables which are 
+completely independent of the adaptation, and inconsistant variables, variables with characteristics of 
+both adaptable and conserved.  I use static backwards slicing to find the subset of the program on which 
+the value of each live variable depends.  This subset is examined to do the final classification.  
+Adaptable and conserved variables are provably consistent after a runtime adaptation. Inconsistent 
+variables must be evaluated by the programmer to determine if a problem will result at runtime.  The 
+analysis we do is limited to static program variables and static variables on the runtime stack.
+<P>
+I started working on these ideas during the summer of 1998 and have a prototype tool built that 
+performs the analysis described above and performs some source to source transformation to deal with 
+adaptive variables on the runtime activation record stack.  
+
+</ol>
+<P><P>
+<I> This work is supported by the National Science Foundation
+under contract CCR-9625202.</I>
+ 
+<H2>References</h2>
+ 
+<ul>
+<li>[1] Hofmeister, C., E. White and J. Purtilo.
+ SURGEON:  A Packager for Dynamically
+Reconfigurable Distributed Applications.
+ <I> IEE Software Engineering Journal</I>, Vol. 8, No. 2 (March 1993),
+pp. 95-101.
+<li>[2] Chowdhary, A., L. Nicklas, S. Setia, E. White.  Supporting Dynamic Space Sharing on Clusters of Non-dedicated Workstations, 17th International Conference on Distributed Computing Systems, May 1997.
+<LI> [3] Sanjeev Setia, Abdur Chowdury, Lisa Nicklas, Elizabeth White, Support for Dynamic 
+Reconfiguration of Parallel Applications on Non-dedicated Workstation Clusters, in 
+Proceedings of the 8th SIAM Conference on Parallel Processing for Scientific  Computing, 
+March 1997.
+<li>[4] Matos, G., E. White. Application of Dynamic Reconfiguration in the Design of Fault Tolerant Productions Systems, 4th International Conference on Configurable Distributed Systems, May 1998.
+<li> [5] White, E. Using Slicing to Analyze the Validity of Component
+State Adaptations, GMU TR 99-01, March 1999, Submitted to PASTE '99.
+<li> [6] White, E., A Formal Framework for Valid Component-Level Adaptations,
+GMU TR 99-02, July 1999, Submitted to the Journal of Automated Software Engineering.
+</ul>
+
+<P>
+<P></BODY>
+</HTML>
+

@@ -1,0 +1,73 @@
+<TITLE>DIS Reference Page</TITLE>
+<H1>DIS Reference Page</H1>
+ 
+
+
+To support large-scale Distributed Interactive Simulation (DIS) exercises effectively, scalable 
+approaches to supporting information flow among the individual distributed simulators must be found.  
+The issue of interest here is whether DIS should be supported by a single homogeneous mode of 
+multicast across all participating local area networks (LAN) and wide area networks (WAN) or by 
+separate multicasting schemes on LAN and WAN.
+<P>
+In conjunction with Dr. Mark Pullen, I investigated an approach called Dual-Mode Multicast that uses 
+multicast at the global (WAN) level on a group-per-exercise basis to minimize WAN traffic, while 
+using multicast at the local (LAN) level to limit the number of PDUs delivered to each simulation. This 
+combines the benefits of multicasting with simplicity at the global (WAN) level of the system and is 
+supportable under existing and projected COTS multicast WAN technologies. To evaluate this 
+approach, we have constructed various scenarios and determined PDU rates in various parts of the 
+system for these scenarios. These scenarios have given us insights into the computational demands of 
+this technique, as well as previously described multicast approaches. 
+<P>
+We constructed simulations to study the network level characteristics of this approach on both small 
+(500 entities) and large (50,000 entities) simulations.  These simulations provided insight into the 
+computational and communications demands of this technique, including the rate at which incoming 
+PDUs are filtered at the application gateways, the PDU traffic expected on the individual LANs, and the 
+effect of the grid size used for the multicast groupings. We also built simulations using data (terrain, 
+entity distributions and physical distributions) from a real exercise, STOW-97, to get a more accurate 
+picture of what happens in an exercise that uses this techniques.
+<P>
+The emergence of command forces (CFORs) as a simulated entity within a DIS simulation requires 
+effective interfaces between existing learning systems and simulation applications.  Existing methods 
+utilize programmers and knowledge engineers to encode the knowledge of a subject matter expert 
+(SME) into a knowledge base.  However, there are no interfaces that integrate existing learning systems 
+with a DIS application that would provide effective and efficient knowledge acquisition by allowing the 
+SME to directly instruct the learning system.
+<P>
+We integrated Disciple, a machine learning system, with ModSAF to provide this direct interface for 
+the SME.  This integration extends the familiar graphical interface of ModSAF to include the tools 
+necessary for the SME to instruct an agent through demonstration.  A new experimental PDU was 
+developed to provide the communication mechanism and common data format for the two applications 
+to communicate.  
+<h2>Associated Publications</h2>
+
+<UL>
+<li>
+<A HREF="http://cs.gmu.edu/~white/Papers/dis12.ps"> Dual-Mode Multicast in Distributed Interactive
+Simulation.</A> <BR> <i> with</i> J. Mark Pullen
+Proceedings of the 12th Workshop on Distributed Interactive Simulation,
+March 1995.
+<P>
+<li>
+<A HREF="http://cs.gmu.edu/~white/Papers/dis13.ps"> Analysis of Dual-Mode Multicast for Large Scale
+DIS Exercises.</A><BR>  <i>with</i> J. Mark Pullen
+Proceedings of the 13th Workshop on Distributed Interactive Simulation,
+September 1995.
+<P>
+<li><A href="http://cs.gmu.edu/~white/Papers/dis14.ps">Simulation of Dual-Mode Multicast Using
+Real-World Data.</a><BR>  <i>with</i> J.M. Pullen
+Proceedings of the 14th Workshop on Distributed Interactive Systems, March 1996. 
+<P>
+<li><a href="http://cs.gmu.edu/~white/Papers/cgf6.ps">Interfacing External Decision Processes to
+DIS Applications.</a><BR>
+              <i>with</i> M. Hieb, K. Frosch, V. Laviano, J.M. Pullen
+Proceedings of the 6th Conference on Computer Generated Forces, July 1996.
+<P>
+<li> <A href="http://nac.gmu.edu/~kfrosch/96-15-012.ps"> A Protocol Data Unit
+for Training Simulated Command Forces.</a><BR>
+              <i>with</i> K. Frosch, J.M. Pullen
+Proceedings of the 15th Workshop on Distributed Interactive Simulation,
+September 1996.
+<P>
+</UL>
+ 
+

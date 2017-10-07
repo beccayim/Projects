@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>About Cons Cells</title>
+</head>
+<body bgcolor=white>
+<H2>About Cons Cells</H2>
+
+<p>Lisp represents lists internally as singly linked lists.  Each node in a Lisp list is called a <b>cons cell</b>.  A cons cell consists of two parts: a <b>car</b> and a <b>cdr</b> (pronounced "could-er").  The car points to the element the node is holding.  The cdr points to the next cons cell in the list, or else it points to <b>nil</b>, which represents the end of the list.  Here's a picture of a cons cell:
+
+<p><img src="cons/cons.GIF">
+
+<p>The most important three functions which operate on cons cells are: <b>cons</b> which allocates a cons cell, <b>car</b> (otherwise known as <b>first</b>) which gives you the item the car is pointing to, and <b>cdr</b> (otherwise known as <b>rest</b>) which gives you the item the cdr is pointing to.  Let's use them to create a simple list, namely <tt>(b)</tt> :
+
+<p><tt>(setf x (cons 'b nil))&nbsp;&nbsp;&nbsp;&nbsp; ;;; can also be done with (setf x '(b))</tt>
+
+<p><img src="cons/xb.GIF">
+
+<p>Now <tt>x</tt> is pointing to the first (and only) cons cell in a list.  The only item in the list is <tt>b</tt>.  The car of our cons cell is pointing to b.  The cdr of the cons cell is pointing to nil.  What do we get if we call <tt>(car x)</tt>?  We get <tt>b</tt>.  What do we get if we call <tt>(cdr x)</tt>?  We get <tt>nil</tt>.  By the way, <tt>(car nil)</tt> always returns <tt>nil</tt> and <tt>(cdr nil)</tt> always returns nil.
+
+<p>Here's a bigger list:
+
+<p><tt>(setf x (cons 'a (cons 'b nil)))&nbsp;&nbsp;&nbsp;&nbsp; ;;; or (setf x '(a b)) or (setf x (list 'a 'b))
+</tt>
+
+<p><img src="cons/xab.GIF">
+
+<p>How do you do sublists?  By pointing the car at the first cons cell in the sublist.  For example:
+
+<p><tt>(setf x '(a (r t) b))</tt>
+
+<p><img src="cons/xartb.GIF">
+
+<p>Let's go back to <tt>(setf x '(a b))</tt>.  What happens if we cons something onto that?  As in:
+
+<p><tt>(setf x '(a b))<br>
+(setf y (cons d x))&nbsp;&nbsp;&nbsp;&nbsp; ;;; y should now be '(d a b)</tt>
+
+<p><img src="cons/ydxab.GIF">
+
+<p>Notice that <tt>x</tt>'s original list is unaffected.  We've just set up <tt>y</tt> to share it, along with an additional cons cell pointing to <tt>d</tt>.
+
+<p>You can modify cons cells using various destructive operators (most famously <b>rplaca</b> and <b>rplacd</b>).  But the best way to do it is using <b>setf</b>.  Remember that setf takes an expression and a value and "sees to it" that the expression returns the value.  The way it does this for lists is by modifying the cons cells appropriately.  For example, let's say we want to change it so that the first item in <tt>x</tt>'s list points to <tt>'(r t)</tt>, not <tt>'a</tt>.  Assuming that <tt>x</tt> and <tt>y</tt> are set up as they were before,
+
+<p><tt>(setf (first x) '(r t))&nbsp;&nbsp;&nbsp;&nbsp; ;;; or (setf (car x) '(r t))</tt>
+
+<p><img src="cons/ydxrtb.GIF"> 
+
+<p>Notice that <tt>x</tt> now reads <tt>((r t) b)</tt>.  But <tt>y</tt> has also changed because it was sharing that list!  Now <tt>y</tt> reads <tt>(d (r t) b)</tt>.  Be careful with setf, it's a destructive operator with side effects that you have to think about first.
+
+<p>What happens if you have the cdr point to something other than another cons cell or nil?  For example, what happens if you have the cdr point to, say, <tt>c</tt>?  You could do this with cons, or by using setf to modify a list.  For example:
+
+<p><tt>(cons 'b 'c)&nbsp;&nbsp;&nbsp;&nbsp; ;;; WHOA, c is not a list! Also: (setf (rest '(b)) c)</tt>
+<p><img src="cons/b.c.GIF">
+<p>This is called a <b>dotted pair</b>.  It's called this because of the way it prints out:
+
+<p><tt>---> (b . c)</tt>
+
+<p>The item after the dot is what the last cdr in a list is pointing to, if not <tt>nil</tt>.  What do you get if you call <tt>(cdr (cons 'b 'c))</tt>?  You get the thing that the cdr is pointing to, namely, <tt>c</tt>.  Same thing if you use rest instead of cdr of course.  You can enter a dotted pair on the command line as well, as in:  <tt>'(b . c)</tt>  You can also have longer lists which end in a dotted pair:
+
+<p><tt>'(a b . c)</tt>
+
+<p><img src="cons/ab.c.GIF">
+
+<p>If you think about it, you'll realize that the only place where a dotted pair can appear is at the end of a list.  So after the period there will be only one atom.
+
+<p>Lastly, you should be aware that you can use setf to do some funky stuff to cons cells.   In class I showed how to use setf to manage queues. So some of this funky stuff is useful.  Some of it is not.  :-)  Here's an example that's not all that useful:
+
+<p><tt>(setf x '(b))<br>(setf (rest x) x)</tt>
+<p><img src="cons/xbrepeat.GIF">
+
+<p>That's right.  You can make circular references.  setf doesn't care.  So be careful!  How do you think Lisp prints this out for you?  Try it out on osf1, but let's just say you'll want to be able to press control-C soon.  :-) 
+<br>
+<br>
+<br>
+</body>
+</html>

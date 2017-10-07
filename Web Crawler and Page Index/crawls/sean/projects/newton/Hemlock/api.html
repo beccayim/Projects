@@ -1,0 +1,125 @@
+<HTML>
+<HEAD>
+<TITLE>Hemlock API</TITLE>
+</HEAD>
+<BODY bgcolor=white>
+<H1>Hemlock API</H1>
+
+<p>Hemlock's API functions are accessible by calling them directly in Hemlock.
+For example, to use <b>APIDoSimpleSearch("Hello World")</b>, you'd call:
+
+<p><tt><xmp>GetRoot().|Hemlock:seanl|:APIDoSimpleSearch("Hello World");</xmp></tt>
+
+<H3>APIDoFullSearch(<i>searchentries,terms,options</i>)</H3>
+<p>Opens Hemlock and performs a search.
+<dl>
+  <dt><b>searchentries</b><dd> An array of entries of search engines selected from
+       <tt>APISearchEngineCursor().</tt> Only entries will do -- no entry aliases or clones.
+  <dt><b>terms</b><dd> String of search terms separated by spaces.
+  <dt><b>options</b><dd> A frame of additional options.  Possible option slots:
+       <dl>
+	 <dt><b>overwrite</b><dd>If non-nil, old search results are overwritten.<br>
+	      If nil, old search results are appended to.<br>
+	      If not set, this slot defaults to non-nil.
+       </dl>
+</dl>
+
+
+<H3>APIDoSearch(<i>searchentries,terms</i>)</H3>
+<p>Opens Hemlock and performs a search. The equivalent of
+
+<p><tt><xmp>APIDoFullSearch(searchentries,terms,{overwrite:'true});</xmp></tt>
+
+<H3>APIDoSimpleSearch(<i>terms</i>)</H3>
+<p>Opens Hemlock and puts terms on the search line, but does not perform a search yet.
+
+<H3>APISearchEngineCursor()</H3>
+<p>Returns a cursor of all the search engine entries.  Entry frames appear ordered alphabetically
+by name, and may have the following slots:
+
+<dl>
+  <dt><b>name</b><dd> Displayable name of the search engine.
+  <dt><b>method</b><dd> "GET" or "POST"
+  <dt><b>action</b><dd> The Query URL
+  <dt><b>update</b><dd> The URL to update the search frame
+  <dt><b>updateCheckDays</b><dd> (<i>Unused</i>) The number of days to wait before updating (default 30)
+  <dt><b>description</b><dd> Search engine description
+  <dt><b>bannerImage</b><dd> (<i>Unused</i>) banner image.
+  <dt><b>bannerLink</b><dd> Advertising banner URL
+  <dt><b>bannerText</b><dd> (<i>Special to Hemlock</i>) Advertising banner text, if any.  This is displayed in the advertisement position,
+       and takes precedence over any other advertisement text.
+  <dt><b>resultListStart</b><dd> String indicating the start of a list of results.
+  <dt><b>resultListEnd</b><dd> String indicating the end of a list of results.
+  <dt><b>resultItemStart</b><dd> String indicating the start of a result in a list.
+  <dt><b>resultItemEnd</b><dd> String indicating the end of a result in a list.
+  <dt><b>bannerStart</b><dd> String indicating the start of an advertising banner.
+  <dt><b>bannerEnd</b><dd> String indicating the end of an advertising banner.
+  <dt><b>relevanceStart</b><dd> String indicating the start of the relevance value for a result in a list.
+  <dt><b>relevanceEnd</b><dd> String indicating the end of the relevance value for a result in a list.
+  <dt><b>skipLocal</b><dd> (<i>Unused</i>) Usually "TRUE" or "FALSE", indicating if links from the same host as the web page URL should be ignored when parsing.
+  <dt><b>charset</b><dd> (<i>Unused</i>) A string giving the expected character set, according to some list of Macintosh character
+       encoding rules.
+  <dt><b>resultEncoding</b><dd> (<i>Unused</i>) A string containing an integer defining the result encoding, as defined in some <TextCommon.h> file Apple has
+  <dt><b>resultTranslationEncoding</b><dd> (<i>Unused</i>) A string containing an integer defining the encoding the results should be translated to (also in "<TextCommon.>")
+  <dt><b>resultTranslationFont</b><dd> (<i>Unused</i>) The preferred Macintosh font of the translated text
+  <dt><b>input</b><dd> An array of frames which define the query parameters tacked onto the query URL.  These frames may have the following slots:
+       <dl>
+	 <dt><b>name</b><dd> The name part (before the "=").
+	 <dt><b>value</b><dd> The value part (after the "=").
+	 <dt><b>user</b><dd> If non-nil, the value is not used but instead is replaced by the user's search terms.
+	 <dt><b>mode</b><dd> Either "browser" or "results" (the default).  If "browser", this query parameter is only used
+	      if the user will actually see the results in a web browser, instead of having them parsed in Hemlock for him.
+       </dl>
+</dl>
+
+<H4>How Hemlock Submits a Query</H4>
+
+<p>To submit a query, Hemlock begins by forming the URL.  It starts with the <tt>action</tt> slot, which is a URL.  It then tacks on a "?", followed by a string of items of the form <i>name</i>=<i>value</i>, determined from the <tt>input</tt> slot, according to the standard rules for issueing HTTP queries.  Hemlock takes care to form only valid URLs.  The actual search terms take the "value" position for any entry where <tt>user</tt> is non-nil.
+
+<H4>How Hemlock Parses</H4>
+
+<p>Hemlock uses slots in its search engine entries to determine how to properly parse the results of a query.
+
+<dl>
+  <dt><b>List starts and List ends.</b><dd> If the List start is not specified, there's assumed to be only one list, whose start is the beginning of the file.  If the List end is missing, it's assumed that there's only one list, whose end is the end of the file.  Otherwise, it's perfectly fine for there to be more than one list in an HTML file.
+  <dt><b>Item starts and Item ends.</b><dd>  These tell Hemlock where list items are located inside lists.  If the Item end is not specified, an Item begins with an Item start and ends with the next Item start or with the list end.
+       Hemlock looks for the next Item, then grabs all text between the first &lt;a ...&gt;...&lt;/a&gt; it finds; this becomes the boldface text in Hemlock's results list, and the URL link is the link in the list.  Then Hemlock continues grabbing text until the next item begins; the remaining text forms the discussion text (the non-boldface text in Hemlock's results list).  Any text between the Item start and the first &lt;a ...&gt; tag forms the ``prediscussion'' text, which is not displayed, but is shown when the user requests seeing all the text in the list item.  In all cases, text is grabbed except for text surrounded by relevance delimiters (see below), which forms the relevance bar if any.  If the Item Start is missing, items are simply elements delimited with &lt;a ...&gt;...&lt;/a&gt; tags within a list.  There is no discussion text.
+  <dt><b>Relevance starts and Relevance ends</b><dd>These delimiters define the section in an item which gives its relevance (an integer from 0 to 100).  Hemlock extracts the first number it finds inside a relevance area.
+  <dt><b>Advertising banner starts and ends</b><dd>These delimiters define the start and end of the advertising area.       
+       <ul><li>If the entry uses the <tt>&lt;bannerStart&gt;</tt> and <tt>&lt;bannerEnd&gt;</tt> tags, Hemlock will use the <tt>alt</tt> attribute of the first <tt>&lt;img&gt;</tt> tag after the first <tt>&lt;a&gt;</tt> tag after the banner start, for its advertising text.  The aforementioned <tt>&lt;a&gt;</tt> tag provides the link URL.
+       <li>If the entry uses the <tt>bannerImage</tt> and <tt>bannerLink</tt> attributes of the <tt>&lt;search&gt;</tt>tag, Apple unwisely forgot to include a text alternative to <tt>bannerImage</tt>.  Hemlock adds to the .src format the following <tt>&lt;search&gt;</tt> attribute:  <tt><b>bannerText</b></tt>.  Anything in <tt>bannerText</tt> will be displayed as an advertisement.  <tt>bannerText</tt> takes precedence over <tt>&lt;bannerStart&gt;</tt> and <tt>&lt;bannerEnd&gt;</tt>.
+     </ul>
+</dl>
+
+<p>Note that the one place where Sherlock is more powerful than Hemlock is in handling foreign encodings and fonts.  Hemlock ignores a number of encoding and translation entries listed above, and currently will handle no special encodings specified by the plug-in.  Hemlock will currently display text as translated by Newt's Cape using the default encoding the user has provided.  However, Hemlock is set to display only in the <tt>Simple</tt> font (Geneva) at 9 point; this font does not provide Chinese or Japanese characters, sorry.
+
+<H3>APIAddSearchEngine(<i>srctext</i>)</H3>
+
+<p>This function submits a .src file, stored as plain text in the string <i>srctext</i>, to Hemlock to add to its search engines.  Nothing is returned.
+
+<H3>APIResultsCursor()</H3>
+<p>Returns a cursor of all the search results.  Search results are of two forms: Header entries, which
+display the search engine name, search terms, and advertising, and non-header entries, which display
+actual parsed query results.  Search results are displayed in Hemlock in exactly
+the order in which they appear in the soup by default (the order in which they were entered into
+the soup).  Result frames have the following slots:
+
+<dl>
+  <dt><b>site</b><dd> Name of the search engine.  Only appears in header entries.
+  <dt><b>terms</b><dd> search terms.  Only appears in header entries.
+  <dt><b>url</b><dd>  URL to jump to when clicking on the entry.
+  <dt><b>ad</b><dd> Advertising text for search engine.  Only appears in header entries.
+  <dt><b>adurl</b><dd> URL to jump to when clicking on the advertisement.  Only appears in header entries.
+  <dt><b>text</b><dd> Text of the results.  Only appears in non-header entries.
+  <dt><b>discussion</b><dd>  Further discussion of the results.  Only appears in non-header entries.
+  <dt><b>prediscussion</b><dd> Text that appeared prior to <tt>text</tt>, but after the item start.  Only appears in non-header entries.
+  <dt><b>relevance</b><dd> Relevance of the results.  Only appears in non-header entries.
+  <dt><b>otherurls</b><dd> an array of frames of the form<tt> { text:"the text", url:"the url" } </tt>which contain the additional urls and related hyperlink text found when parsing.  This slot may be nil.  Only appears in non-header entries.
+</dl>
+
+
+</BODY>
+</HTML>
+
+
+
